@@ -10,6 +10,7 @@ import { AuditTrailPage } from './components/AuditTrailPage';
 import { FailureSimulationPage } from './components/FailureSimulationPage';
 import { BenchmarkRunner } from './components/BenchmarkRunner';
 import { RevenueGrowthPage } from './components/RevenueGrowthPage';
+import { AmazonAdvisorPage } from './components/AmazonAdvisorPage';
 import { WireTraceModal } from './components/WireTraceModal';
 import { CommandPalette } from './components/CommandPalette';
 import { StepUpModal } from './components/StepUpModal';
@@ -234,6 +235,15 @@ export const App: React.FC = () => {
               lastOutcome={lastOutcome}
               loading={loading}
               onOpenStepUpModal={() => setIsStepUpOpen(true)}
+            />
+          )}
+
+          {currentSection === 'amazon' && (
+            <AmazonAdvisorPage
+              onBuyItem={(prompt) => {
+                setCurrentSection('agent');
+                handleRunTransaction(prompt, { autoAcceptBundles: true });
+              }}
             />
           )}
 
