@@ -15,9 +15,11 @@ import { CommandPalette } from './components/CommandPalette';
 import { StepUpModal } from './components/StepUpModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { RazorpayLogo } from './components/RazorpayLogo';
+import { DemoTourModal } from './components/DemoTourModal';
+import { playPaymentSuccessChime } from './utils/soundEffects';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
-import { Menu, Zap, Search, Command } from 'lucide-react';
+import { Menu, Zap, Search, Command, Play } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
@@ -31,6 +33,7 @@ export const App: React.FC = () => {
   const [isWireTraceOpen, setIsWireTraceOpen] = useState<boolean>(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
+  const [isDemoTourOpen, setIsDemoTourOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const fetchEnclaveData = async () => {
@@ -71,7 +74,9 @@ export const App: React.FC = () => {
       setLastOutcome(outcome);
       await fetchEnclaveData();
 
-      if (outcome.status === 'STEP_UP_REQUIRED') {
+      if (outcome.status === 'COMPLETED') {
+        playPaymentSuccessChime();
+      } else if (outcome.status === 'STEP_UP_REQUIRED') {
         setIsStepUpOpen(true);
       }
       return outcome;
@@ -94,6 +99,9 @@ export const App: React.FC = () => {
     try {
       const res = await api.approveStepUp(approvalId, signature);
       setLastOutcome(res.outcome);
+      if (res.outcome.status === 'COMPLETED') {
+        playPaymentSuccessChime();
+      }
       setIsStepUpOpen(false);
       await fetchEnclaveData();
     } catch (err: any) {
@@ -161,6 +169,14 @@ export const App: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-3 text-xs">
+            <button
+              onClick={() => setIsDemoTourOpen(true)}
+              className="px-3 py-1 rounded-md bg-[#0c83ff] hover:bg-[#0270e0] text-white font-bold text-xs flex items-center space-x-1.5 shadow-sm transition-all animate-pulse"
+            >
+              <Play className="w-3 h-3 fill-current" />
+              <span>2-Min Demo Tour</span>
+            </button>
+
             <button
               onClick={() => setIsWireTraceOpen(true)}
               className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] text-slate-300 font-mono text-[11px] transition-all"
@@ -278,6 +294,13 @@ export const App: React.FC = () => {
       )}
 
       {isApiDocsOpen && <ApiDocsModal onClose={() => setIsApiDocsOpen(false)} />}
+
+      <DemoTourModal
+        isOpen={isDemoTourOpen}
+        onClose={() => setIsDemoTourOpen(false)}
+        onNavigate={setCurrentSection}
+        onRunTransaction={handleRunTransaction}
+      />
 
       <CommandPalette
         isOpen={isCommandPaletteOpen}

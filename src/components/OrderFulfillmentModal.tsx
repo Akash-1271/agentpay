@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { AgentTransactionOutcome } from '../types';
 import { RazorpayLogo } from './RazorpayLogo';
+import { TaxInvoiceViewModal } from './TaxInvoiceViewModal';
 
 interface OrderFulfillmentModalProps {
   outcome: AgentTransactionOutcome;
@@ -39,6 +40,7 @@ interface DeliveryCheckpoint {
 export const OrderFulfillmentModal: React.FC<OrderFulfillmentModalProps> = ({ outcome, onClose }) => {
   const [currentStep, setCurrentStep] = useState(2); // In Transit by default
   const [copiedAWB, setCopiedAWB] = useState(false);
+  const [isInvoicePreviewOpen, setIsInvoicePreviewOpen] = useState(false);
 
   const fulfillment = outcome.fulfillment || {
     orderId: 'AMZ-IN-882910',
@@ -358,13 +360,23 @@ export const OrderFulfillmentModal: React.FC<OrderFulfillmentModalProps> = ({ ou
 
         {/* Modal Bottom Footer */}
         <div className="p-4 border-t border-white/[0.08] bg-[#090d16] flex items-center justify-between">
-          <button
-            onClick={handleDownloadInvoice}
-            className="px-4 py-2 bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 text-xs font-bold rounded-lg border border-white/[0.08] flex items-center space-x-1.5 transition-all"
-          >
-            <Download className="w-3.5 h-3.5 text-[#0c83ff]" />
-            <span>Download Tax Invoice</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setIsInvoicePreviewOpen(true)}
+              className="px-3.5 py-2 bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 text-xs font-bold rounded-lg border border-white/[0.08] flex items-center space-x-1.5 transition-all"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#0c83ff]" />
+              <span>Print Tax Invoice</span>
+            </button>
+            <button
+              onClick={handleDownloadInvoice}
+              className="px-3.5 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-slate-400 hover:text-slate-200 text-xs font-bold rounded-lg border border-white/[0.05] flex items-center space-x-1.5 transition-all"
+              title="Download JSON Proof"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>JSON Proof</span>
+            </button>
+          </div>
 
           <button
             onClick={onClose}
@@ -375,6 +387,19 @@ export const OrderFulfillmentModal: React.FC<OrderFulfillmentModalProps> = ({ ou
         </div>
 
       </div>
+
+      {isInvoicePreviewOpen && (
+        <TaxInvoiceViewModal
+          invoiceId={fulfillment.taxInvoiceId}
+          orderId={fulfillment.orderId}
+          paymentId={fulfillment.razorpayPaymentId}
+          productName={fulfillment.items[0]?.name || 'Autonomous Purchase'}
+          amount={fulfillment.totalAmount}
+          customerName={fulfillment.customerName}
+          deliveryAddress={fulfillment.deliveryAddress}
+          onClose={() => setIsInvoicePreviewOpen(false)}
+        />
+      )}
     </div>
   );
 };

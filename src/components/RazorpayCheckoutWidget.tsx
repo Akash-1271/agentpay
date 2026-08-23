@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { CreditCard, CheckCircle2, ShieldCheck, Sparkles, ExternalLink } from 'lucide-react';
+import { CreditCard, CheckCircle2, ShieldCheck, QrCode } from 'lucide-react';
 import { AgentTransactionOutcome } from '../types';
+import { RazorpayUpiQrModal } from './RazorpayUpiQrModal';
+import { RazorpayLogo } from './RazorpayLogo';
+import { playPaymentSuccessChime } from '../utils/soundEffects';
 
 interface RazorpayCheckoutWidgetProps {
   outcome: AgentTransactionOutcome;
@@ -20,6 +23,7 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
   const [loading, setLoading] = useState(false);
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [paymentId, setPaymentId] = useState<string | null>(null);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
 
   const loadRazorpayScript = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -46,17 +50,19 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
       }
 
       const options = {
-        key: 'rzp_test_AgentPayLiveDemo2026', // High-fidelity test key
-        amount: (outcome.quote?.netAmount || 1899) * 100, // paise
+        key: 'rzp_test_AgentPayLiveDemo2026',
+        amount: (outcome.quote?.netAmount || 1709) * 100,
         currency: outcome.quote?.currency || 'INR',
         name: 'AgentPay Autonomous Commerce',
         description: `Order for ${outcome.selectedProduct?.name || 'Item'}`,
         order_id: outcome.razorpayOrder?.id,
         handler: function (response: any) {
           setPaymentCompleted(true);
-          setPaymentId(response.razorpay_payment_id || `pay_${Date.now()}`);
+          const pId = response.razorpay_payment_id || `pay_${Date.now()}`;
+          setPaymentId(pId);
+          playPaymentSuccessChime();
           if (onPaymentSuccess) {
-            onPaymentSuccess(response.razorpay_payment_id || `pay_${Date.now()}`);
+            onPaymentSuccess(pId);
           }
         },
         prefill: {
@@ -81,39 +87,69 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
     }
   };
 
+  const handleQrSuccess = (pId: string) => {
+    setPaymentCompleted(true);
+    setPaymentId(pId);
+    setIsQrModalOpen(false);
+    playPaymentSuccessChime();
+    if (onPaymentSuccess) {
+      onPaymentSuccess(pId);
+    }
+  };
+
   return (
     <div className="p-4 rounded-xl bg-[#090d16] border border-blue-500/20 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <CreditCard className="w-4 h-4 text-[#0c83ff]" />
-          <span className="text-xs font-bold text-white">Razorpay Standard Checkout Modal</span>
+          <RazorpayLogo variant="icon" height={18} />
+          <span className="text-xs font-bold text-white">Razorpay Test Gateway</span>
         </div>
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/15 text-[#38bdf8] border border-blue-500/20">
-          SDK Popup Mode
-        </span>
+        <RazorpayLogo variant="badge" height={14} />
       </div>
 
       <p className="text-xs text-slate-400">
-        In addition to autonomous background settlement, you can launch the official Razorpay test payment modal to test real-world card/UPI payments.
+        In addition to autonomous background settlement, you can launch the official Razorpay test popup or scan a live UPI QR code.
       </p>
 
       {paymentCompleted ? (
-        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between text-xs">
+        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between text-xs animate-in zoom-in-95">
           <div className="flex items-center space-x-2 text-emerald-300">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>Razorpay Payment Verified: <strong>{paymentId}</strong></span>
+            <span>Payment Captured: <strong className="font-mono">{paymentId}</strong></span>
           </div>
-          <span className="font-mono text-emerald-400 font-bold">CAPTURED</span>
+          <span className="font-mono text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+            HMAC VERIFIED
+          </span>
         </div>
       ) : (
-        <button
-          onClick={handleLaunchCheckout}
-          disabled={loading}
-          className="w-full py-2.5 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all"
-        >
-          <CreditCard className="w-3.5 h-3.5" />
-          <span>{loading ? 'Launching Razorpay Sheet...' : 'Launch Official Razorpay Popup Modal'}</span>
-        </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <button
+            onClick={handleLaunchCheckout}
+            disabled={loading}
+            className="py-2.5 px-3 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
+          >
+            <CreditCard className="w-3.5 h-3.5" />
+            <span>{loading ? 'Opening...' : 'Razorpay SDK Sheet'}</span>
+          </button>
+
+          <button
+            onClick={() => setIsQrModalOpen(true)}
+            className="py-2.5 px-3 bg-white/[0.05] hover:bg-white/[0.09] text-slate-200 text-xs font-bold rounded-lg border border-white/[0.08] flex items-center justify-center space-x-2 transition-all"
+          >
+            <QrCode className="w-3.5 h-3.5 text-[#38bdf8]" />
+            <span>Pay with UPI QR</span>
+          </button>
+        </div>
+      )}
+
+      {isQrModalOpen && (
+        <RazorpayUpiQrModal
+          amount={outcome.quote?.netAmount || 1709}
+          orderId={outcome.razorpayOrder?.id || 'order_bcbf54c1cef2cc'}
+          productName={outcome.selectedProduct?.name || 'Nike Air Zoom Pegasus 40'}
+          onSuccess={handleQrSuccess}
+          onClose={() => setIsQrModalOpen(false)}
+        />
       )}
     </div>
   );
