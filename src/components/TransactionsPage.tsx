@@ -6,9 +6,12 @@ import {
   XCircle,
   ChevronRight,
   ShoppingBag,
+  Truck,
 } from 'lucide-react';
 import { DisplayTransaction, TransactionDetailModal } from './TransactionDetailModal';
-import { AuditRecord } from '../types';
+import { OrderFulfillmentModal } from './OrderFulfillmentModal';
+import { RazorpayLogo } from './RazorpayLogo';
+import { AuditRecord, AgentTransactionOutcome } from '../types';
 
 interface TransactionsPageProps {
   auditLedger: AuditRecord[];
@@ -80,6 +83,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
   const [filter, setFilter] = useState<'ALL' | 'COMPLETED' | 'STEP_UP_REQUIRED' | 'BLOCKED'>('ALL');
   const [search, setSearch] = useState('');
   const [selectedTx, setSelectedTx] = useState<DisplayTransaction | null>(null);
+  const [trackingOutcome, setTrackingOutcome] = useState<AgentTransactionOutcome | null>(null);
 
   const filtered = DEFAULT_TRANSACTIONS.filter((t) => {
     if (filter !== 'ALL' && t.status !== filter) return false;
@@ -93,15 +97,98 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
     return true;
   });
 
+  const handleTrackDelivery = (e: React.MouseEvent, item: DisplayTransaction) => {
+    e.stopPropagation();
+    const outcome: AgentTransactionOutcome = {
+      status: 'COMPLETED',
+      selectedProduct: {
+        id: item.id,
+        name: item.productName,
+        price: item.amount,
+        currency: item.currency,
+        category: 'Athletics & Apparel',
+        stock: 12,
+        merchantId: item.merchantId,
+        merchantName: item.merchantName,
+        rating: 4.8,
+        specifications: {},
+      },
+      quote: {
+        quoteId: `quote_${item.id}`,
+        productId: item.id,
+        merchantId: item.merchantId,
+        merchantName: item.merchantName,
+        originalPrice: item.amount,
+        discountApplied: 0,
+        netAmount: item.amount,
+        currency: item.currency,
+        merchantSignature: 'sig_verified',
+        expiresAt: new Date(Date.now() + 3600000).toISOString(),
+      },
+      policyResult: {
+        isAllowed: true,
+        mandateId: 'mandate_active',
+        requiresStepUp: false,
+        enclaveHash: item.enclaveHash,
+        checkedRules: ['Budget limit', 'Merchant whitelist'],
+      },
+      razorpayOrder: {
+        id: item.orderId,
+        amount: item.amount * 100,
+        currency: 'INR',
+        receipt: `rcpt_${item.id}`,
+        status: 'created',
+      },
+      receipt: {
+        paymentId: item.paymentId || 'pay_live_01',
+        orderId: item.orderId,
+        amount: item.amount,
+        currency: 'INR',
+        status: 'CAPTURED',
+        timestamp: item.timestamp,
+        auditEnclaveHash: item.enclaveHash,
+      },
+      fulfillment: {
+        orderId: `AMZ-IN-${item.id.slice(-6).toUpperCase()}`,
+        razorpayOrderId: item.orderId,
+        razorpayPaymentId: item.paymentId || 'pay_97bd9c9c40fd72',
+        merchantName: item.merchantName,
+        merchantId: item.merchantId,
+        customerName: 'Akash M (Verified Buyer)',
+        deliveryAddress: 'Flat 402, Prestige Tech Park, Outer Ring Road, Bangalore 560103',
+        courierPartner: 'Amazon Logistics Express',
+        trackingNumber: `AWB-${item.id.slice(-6).toUpperCase()}-IN`,
+        estimatedDelivery: 'Tomorrow by 2:00 PM (Guaranteed)',
+        items: [
+          {
+            name: item.productName,
+            quantity: 1,
+            price: item.amount,
+            asinOrSku: item.id,
+          },
+        ],
+        totalAmount: item.amount,
+        taxInvoiceId: `INV-2026-${item.id.slice(-5).toUpperCase()}`,
+      },
+      reasoningTrail: [],
+    };
+    setTrackingOutcome(outcome);
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-200 max-w-5xl">
       
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-extrabold text-white">Purchase History</h1>
-        <p className="text-sm text-slate-400 mt-1">
-          Review all orders, payments, and approvals.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center space-x-3">
+            <h1 className="text-2xl font-extrabold text-white">Purchase History</h1>
+            <RazorpayLogo variant="badge" height={16} />
+          </div>
+          <p className="text-sm text-slate-400 mt-1">
+            Review all orders, live delivery tracking, and Razorpay payment proofs.
+          </p>
+        </div>
       </div>
 
       {/* Filters & Search Bar */}
@@ -190,10 +277,21 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
                 </div>
 
                 {item.status === 'COMPLETED' && (
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs flex items-center space-x-1">
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Paid</span>
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs flex items-center space-x-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Paid</span>
+                    </span>
+
+                    <button
+                      onClick={(e) => handleTrackDelivery(e, item)}
+                      className="px-2.5 py-1 rounded-lg bg-[#0c83ff]/15 hover:bg-[#0c83ff]/25 text-[#38bdf8] border border-[#0c83ff]/30 text-xs font-bold flex items-center space-x-1 transition-all"
+                      title="Track Order Delivery"
+                    >
+                      <Truck className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Track Delivery</span>
+                    </button>
+                  </div>
                 )}
 
                 {item.status === 'STEP_UP_REQUIRED' && (
@@ -221,6 +319,13 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
         <TransactionDetailModal
           tx={selectedTx}
           onClose={() => setSelectedTx(null)}
+        />
+      )}
+
+      {trackingOutcome && (
+        <OrderFulfillmentModal
+          outcome={trackingOutcome}
+          onClose={() => setTrackingOutcome(null)}
         />
       )}
 
