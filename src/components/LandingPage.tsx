@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
-  Bot,
   CheckCircle2,
   ChevronRight,
   CreditCard,
   LockKeyhole,
+  Package,
   Play,
   Search,
   ShieldCheck,
-  Sparkles,
-  Zap,
+  ShoppingBag,
+  TrendingUp,
 } from 'lucide-react';
 import { NavSection } from './Sidebar';
 
@@ -32,62 +32,58 @@ interface FlowStep {
 const flowSteps: FlowStep[] = [
   {
     label: '01 · Intent',
-    title: 'Understand the request',
-    detail: 'The buyer agent turns a natural-language ask into a bounded shopping intent.',
-    value: 'Running shoes · under ₹2,000',
-    status: 'Intent captured',
-    icon: Sparkles,
-  },
-  {
-    label: '02 · Discovery',
-    title: 'Find the best eligible option',
-    detail: 'Machine-readable catalogs surface inventory, merchant details, and dynamic bundle options.',
-    value: 'Nike Pegasus 40 · ₹1,899',
-    status: 'In stock',
+    title: 'Parse Order Query',
+    detail: 'Autonomous buyer extracts structured product parameters and maximum price limits.',
+    value: 'Nike Pegasus 40 · Under ₹2,000',
+    status: 'Query Parsed',
     icon: Search,
   },
   {
+    label: '02 · Discovery',
+    title: 'Query Semantic Catalog',
+    detail: 'Canonical UAP Catalog identifies in-stock inventory and requests AP2 signed quotes.',
+    value: 'Nike Pegasus 40 · ₹1,709 (15% VIP)',
+    status: 'Quote Verified',
+    icon: Package,
+  },
+  {
     label: '03 · Guardrail',
-    title: 'Enforce the policy',
-    detail: 'The enclave checks the merchant, budget, and single-transaction limit before payment.',
-    value: '3 policy checks passed',
-    status: 'Approved',
+    title: 'Validate Enclave Bounds',
+    detail: 'Spending Enclave verifies single-tx limit (≤ ₹2,000) and authorized merchant whitelist.',
+    value: '5 policy conditions verified',
+    status: 'Enclave Authorized',
     icon: ShieldCheck,
   },
   {
-    label: '04 · Payment',
-    title: 'Create a verifiable transaction',
-    detail: 'Razorpay creates the order while the audit trail records exactly why it was allowed.',
-    value: 'Razorpay order · signed',
+    label: '04 · Settlement',
+    title: 'Razorpay Test Settlement',
+    detail: 'Generates Razorpay Order, confirms webhook settlement, and dispatches courier tracking.',
+    value: 'Order Captured · AWB Dispatched',
     status: 'Settled',
     icon: CreditCard,
   },
 ];
 
-const principles: Array<{ title: string; detail: string; icon: LucideIcon; tone: string }> = [
+const pillars: Array<{ title: string; detail: string; icon: LucideIcon }> = [
   {
     title: 'Discover',
-    detail: 'Catalogs that agents can actually reason over.',
+    detail: 'Machine-readable UAP 1.0 JSON-LD schemas and Amazon catalog adapters.',
     icon: Search,
-    tone: 'text-blue-200 bg-blue-400/10 border-blue-300/15',
   },
   {
-    title: 'Decide',
-    detail: 'Negotiation and bundles, kept visible and explainable.',
-    icon: Bot,
-    tone: 'text-violet-200 bg-violet-400/10 border-violet-300/15',
+    title: 'Negotiate',
+    detail: 'AP2 cryptographic quotes with dynamic bundle and yield optimization.',
+    icon: TrendingUp,
   },
   {
     title: 'Control',
-    detail: 'Limits, allowlists, and step-up approval where it matters.',
+    detail: 'Cryptographic Spending Enclave enforcing hard daily ceilings and step-ups.',
     icon: ShieldCheck,
-    tone: 'text-amber-100 bg-amber-300/10 border-amber-200/15',
   },
   {
-    title: 'Verify',
-    detail: 'Payments and audit records that can be independently checked.',
-    icon: CheckCircle2,
-    tone: 'text-teal-100 bg-teal-300/10 border-teal-200/15',
+    title: 'Settle',
+    detail: 'Razorpay test-mode settlement, double-entry FinOps ledger, and courier dispatch.',
+    icon: CreditCard,
   },
 ];
 
@@ -96,106 +92,117 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onRunLiveD
   const activeFlow = flowSteps[activeStep];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 pb-6 pt-2 sm:space-y-14 sm:pt-6 animate-in">
-      <section className="grid items-center gap-8 lg:grid-cols-[1.12fr_0.88fr] lg:gap-12">
-        <div className="max-w-2xl">
-          <div className="eyebrow">Autonomous commerce, intentionally bounded</div>
-          <h1 className="mt-5 text-4xl font-extrabold tracking-[-0.055em] text-white sm:text-5xl lg:text-[4.1rem] lg:leading-[1.02]">
-            Let agents move fast.
-            <span className="block bg-gradient-to-r from-blue-200 via-cyan-100 to-teal-200 bg-clip-text text-transparent">
-              Keep every rupee in control.
+    <div className="mx-auto max-w-6xl space-y-12 pb-8 animate-in fade-in duration-200">
+      
+      {/* Hero Section */}
+      <section className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 pt-4">
+        <div className="space-y-5 max-w-2xl">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0c83ff]" />
+            <span>Razorpay AI Buildathon 2026 · Track 01</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.1]">
+            Autonomous commerce,
+            <span className="block text-[#0c83ff]">
+              mathematically bounded.
             </span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
-            AgentPay is the operating layer for trusted AI purchases—discovery, policy checks, and payment orchestration in one explainable flow.
+
+          <p className="text-sm sm:text-base leading-relaxed text-slate-400 max-w-xl">
+            AgentPay is the financial operating infrastructure for agentic commerce—connecting merchant catalogs to autonomous buyers with enclave governance and Razorpay test-mode settlement.
           </p>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <button
               type="button"
-              onClick={() => onRunLiveDemo('Buy running shoes under ₹2,000')}
-              className="premium-button px-5 py-3 text-sm font-semibold"
+              onClick={() => onRunLiveDemo('Search Amazon for running shoes under ₹2,000')}
+              className="px-5 py-3 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all"
             >
-              <Play className="h-4 w-4 fill-current" />
-              Run guided demo
+              <ShoppingBag className="h-4 w-4" />
+              <span>Run Guided Order Demo</span>
             </button>
+
             <button
               type="button"
               onClick={() => onNavigate('overview')}
-              className="premium-button-secondary px-5 py-3 text-sm font-semibold"
+              className="px-5 py-3 bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-bold rounded-lg border border-white/[0.08] flex items-center justify-center space-x-2 transition-all"
             >
-              Open command center
+              <span>Open Console</span>
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-400">
-            <span className="inline-flex items-center gap-2">
-              <CheckCircle2 className="h-3.5 w-3.5 text-teal-300" />
-              No card details exposed to agents
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-xs text-slate-500 font-mono">
+            <span className="flex items-center gap-1.5 text-slate-400">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+              No plaintext payment credentials exposed
             </span>
-            <span className="inline-flex items-center gap-2">
-              <CheckCircle2 className="h-3.5 w-3.5 text-teal-300" />
-              Every decision is auditable
+            <span className="flex items-center gap-1.5 text-slate-400">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+              Every action HMAC signed & auditable
             </span>
           </div>
         </div>
 
-        <aside className="fintech-card overflow-hidden p-1.5">
-          <div className="rounded-[0.9rem] border border-white/[0.045] bg-slate-950/20 p-5 sm:p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="eyebrow">Live policy posture</div>
-                <h2 className="mt-3 text-xl font-bold tracking-[-0.035em] text-white">Ready for safe autonomous spend</h2>
-              </div>
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-teal-200/15 bg-teal-300/10 text-teal-200">
-                <LockKeyhole className="h-4 w-4" />
-              </span>
+        {/* Right Side: Posture Card */}
+        <div className="fintech-card p-6 space-y-5 bg-[#090d16]">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.07]">
+            <div>
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">Security Enclave Posture</div>
+              <h3 className="text-sm font-bold text-white mt-0.5">Enclave Guard Active</h3>
             </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-slate-400/[0.12] bg-white/[0.035] p-3.5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Auto-approve</p>
-                <p className="mt-2 text-lg font-bold tracking-[-0.04em] text-white">≤ ₹2,000</p>
-                <p className="mt-1 text-[11px] text-teal-200">Policy protected</p>
-              </div>
-              <div className="rounded-xl border border-slate-400/[0.12] bg-white/[0.035] p-3.5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Daily ceiling</p>
-                <p className="mt-2 text-lg font-bold tracking-[-0.04em] text-white">₹25,000</p>
-                <p className="mt-1 text-[11px] text-blue-200">Enclave enforced</p>
-              </div>
-            </div>
-
-            <div className="mt-4 rounded-xl border border-blue-300/[0.14] bg-gradient-to-r from-blue-400/[0.11] to-cyan-300/[0.05] p-3.5">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-100">
-                <span className="status-dot-active" />
-                Buyer agent is standing by
-              </div>
-              <p className="mt-1.5 text-xs leading-5 text-slate-400">
-                Give it an intent and it will explain the quote, apply your rules, and create a verifiable payment.
-              </p>
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <LockKeyhole className="w-4 h-4" />
             </div>
           </div>
-        </aside>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-lg bg-[#080b11] border border-white/[0.05] space-y-1">
+              <div className="text-[10px] font-mono uppercase text-slate-500">Auto-Approve Bound</div>
+              <div className="text-lg font-bold text-white font-mono">≤ ₹2,000</div>
+              <div className="text-[10px] text-emerald-400 font-mono">Enclave Protected</div>
+            </div>
+            <div className="p-3.5 rounded-lg bg-[#080b11] border border-white/[0.05] space-y-1">
+              <div className="text-[10px] font-mono uppercase text-slate-500">Daily Spending Cap</div>
+              <div className="text-lg font-bold text-white font-mono">₹25,000</div>
+              <div className="text-[10px] text-[#38bdf8] font-mono">Cumulative Limit</div>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-[#080b11] border border-blue-500/20 text-xs text-slate-400 space-y-1">
+            <div className="text-white font-bold flex items-center space-x-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Razorpay Test Engine Active</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-400">
+              Orders created via `/v1/orders`, verified with HMAC-SHA256 signatures, and settled in real-time.
+            </p>
+          </div>
+        </div>
       </section>
 
+      {/* 4-Step Purchase Visualizer */}
       <section className="fintech-card overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-slate-400/[0.12] px-5 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-7">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 border-b border-white/[0.07] gap-3">
           <div>
-            <div className="eyebrow">A clear path from intent to payment</div>
-            <h2 className="mt-2 text-xl font-bold tracking-[-0.035em] text-white sm:text-2xl">One purchase. Four visible gates.</h2>
+            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#0c83ff]">Execution Pipeline</div>
+            <h2 className="text-base font-bold text-white mt-0.5">Four Visible Gates for Every Money Action</h2>
           </div>
+
           <button
             type="button"
             onClick={() => onNavigate('agent')}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-200 transition hover:text-white"
+            className="text-xs font-bold text-[#0c83ff] hover:text-[#38bdf8] flex items-center space-x-1"
           >
-            Explore the live agent <ChevronRight className="h-4 w-4" />
+            <span>Open Commerce Console</span>
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="grid grid-cols-2 gap-px bg-slate-400/[0.1] lg:grid-cols-1">
+        <div className="grid lg:grid-cols-[1fr_1.3fr]">
+          {/* Stepper Buttons */}
+          <div className="divide-y divide-white/[0.05] border-r border-white/[0.05] bg-[#080b11]">
             {flowSteps.map((step, index) => {
               const Icon = step.icon;
               const isActive = index === activeStep;
@@ -205,77 +212,79 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onRunLiveD
                   key={step.label}
                   type="button"
                   onClick={() => setActiveStep(index)}
-                  className={`group min-h-[8.1rem] p-4 text-left transition sm:p-5 ${
-                    isActive ? 'bg-blue-400/[0.11]' : 'bg-[#0a1829] hover:bg-white/[0.035]'
+                  className={`w-full p-4 text-left transition-all flex items-start space-x-3.5 ${
+                    isActive ? 'bg-[#0c83ff]/10 border-l-2 border-l-[#0c83ff]' : 'hover:bg-white/[0.02]'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className={`grid h-8 w-8 place-items-center rounded-lg border ${
-                      isActive ? 'border-blue-200/25 bg-blue-300/15 text-blue-100' : 'border-slate-400/[0.12] bg-white/[0.035] text-slate-400'
-                    }`}>
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <span className={`text-[10px] font-bold uppercase tracking-[0.13em] ${isActive ? 'text-blue-200' : 'text-slate-500'}`}>
-                      {step.label}
-                    </span>
+                  <div className={`p-2 rounded-lg mt-0.5 ${isActive ? 'bg-[#0c83ff]/20 text-[#38bdf8]' : 'bg-white/5 text-slate-500'}`}>
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <p className={`mt-3 text-sm font-semibold ${isActive ? 'text-white' : 'text-slate-300'}`}>{step.title}</p>
-                  <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-slate-500">{step.status}</p>
+                  <div className="flex-1 space-y-0.5">
+                    <div className="flex items-center justify-between">
+                      <span className={`text-xs font-bold ${isActive ? 'text-white' : 'text-slate-300'}`}>{step.title}</span>
+                      <span className="text-[10px] font-mono text-slate-500">{step.label}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 truncate max-w-[200px]">{step.status}</p>
+                  </div>
                 </button>
               );
             })}
           </div>
 
-          <div className="flex min-h-[22rem] flex-col justify-between p-6 sm:p-8">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-teal-200">
+          {/* Stepper Detail View */}
+          <div className="p-6 sm:p-8 flex flex-col justify-between space-y-6 bg-[#090d16]">
+            <div className="space-y-3">
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-400 font-mono">
                 <CheckCircle2 className="h-4 w-4" />
-                {activeFlow.status}
+                <span>{activeFlow.status}</span>
               </div>
-              <h3 className="mt-4 max-w-md text-2xl font-bold tracking-[-0.045em] text-white">{activeFlow.title}</h3>
-              <p className="mt-3 max-w-lg text-sm leading-6 text-slate-400">{activeFlow.detail}</p>
-              <div className="mt-6 rounded-xl border border-slate-400/[0.12] bg-slate-950/30 p-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-slate-500">Bounded transaction state</p>
-                <p className="mt-2 text-sm font-semibold text-slate-100">{activeFlow.value}</p>
+              <h3 className="text-xl font-bold text-white">{activeFlow.title}</h3>
+              <p className="text-xs text-slate-400 leading-relaxed max-w-lg">{activeFlow.detail}</p>
+              
+              <div className="mt-4 p-3.5 rounded-lg bg-[#080b11] border border-white/[0.06] space-y-1 font-mono">
+                <div className="text-[10px] uppercase text-slate-500">Output Payload Trace</div>
+                <div className="text-xs font-semibold text-slate-200">{activeFlow.value}</div>
               </div>
             </div>
 
-            <div className="mt-8 flex items-center justify-between border-t border-slate-400/[0.12] pt-4">
-              <p className="text-xs text-slate-500">Select a stage to inspect the flow.</p>
+            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Step {activeStep + 1} of 4</span>
               <button
                 type="button"
-                onClick={() => onRunLiveDemo('Buy running shoes under ₹2,000')}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-blue-200 transition hover:text-white"
+                onClick={() => onRunLiveDemo('Search Amazon for running shoes under ₹2,000')}
+                className="text-xs font-bold text-[#0c83ff] hover:text-[#38bdf8] flex items-center space-x-1.5"
               >
-                Try this flow <ArrowRight className="h-3.5 w-3.5" />
+                <span>Test this flow in console</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section>
-        <div className="max-w-xl">
-          <div className="eyebrow">Designed for trustworthy automation</div>
-          <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white">Everything an agent does remains legible to the person in charge.</h2>
+      {/* 4 Pillars Grid */}
+      <section className="space-y-4">
+        <div>
+          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">Core Architecture</div>
+          <h2 className="text-lg font-bold text-white mt-0.5">Built on Open Protocols & Controlled Execution</h2>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {principles.map((principle) => {
-            const Icon = principle.icon;
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {pillars.map((p) => {
+            const Icon = p.icon;
             return (
-              <article key={principle.title} className="fintech-card-interactive p-5">
-                <span className={`grid h-9 w-9 place-items-center rounded-xl border ${principle.tone}`}>
+              <div key={p.title} className="fintech-card p-5 space-y-2 bg-[#090d16]">
+                <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[#0c83ff]">
                   <Icon className="h-4 w-4" />
-                </span>
-                <h3 className="mt-4 text-sm font-semibold text-white">{principle.title}</h3>
-                <p className="mt-2 text-xs leading-5 text-slate-400">{principle.detail}</p>
-              </article>
+                </div>
+                <h3 className="text-xs font-bold text-white mt-3">{p.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{p.detail}</p>
+              </div>
             );
           })}
         </div>
       </section>
+
     </div>
   );
 };
