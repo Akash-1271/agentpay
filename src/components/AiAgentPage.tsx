@@ -1,26 +1,21 @@
 import React, { useState } from 'react';
 import {
-  Bot,
-  Send,
-  Sparkles,
-  ShieldCheck,
   CreditCard,
   CheckCircle2,
   AlertTriangle,
-  Layers,
   ChevronDown,
   ChevronUp,
-  QrCode,
   ArrowRight,
-  Sliders,
-  RotateCcw,
-  Tag,
-  Key,
+  ShoppingBag,
+  ShieldCheck,
+  Truck,
+  FileText,
+  Search,
+  Zap,
 } from 'lucide-react';
 import { AgentTransactionOutcome, AgentReasoningStep } from '../types';
 import { RazorpayCheckoutWidget } from './RazorpayCheckoutWidget';
 import { OrderFulfillmentModal } from './OrderFulfillmentModal';
-import { Truck, FileText } from 'lucide-react';
 
 interface AiAgentPageProps {
   onRunTransaction: (prompt: string, options?: any) => Promise<AgentTransactionOutcome>;
@@ -29,28 +24,28 @@ interface AiAgentPageProps {
   onOpenStepUpModal: () => void;
 }
 
-const PRESET_TASKS = [
+const PRESET_ORDERS = [
   {
-    label: 'Search Amazon for running shoes under ₹2,000',
-    desc: 'Nike Air Zoom Pegasus 40 Prime Express via Amazon India',
+    label: 'Nike Pegasus 40 Running Shoes (Auto-Approved)',
+    desc: 'Amazon Prime Express listing under ₹2,000 threshold',
     prompt: 'Search Amazon for running shoes under ₹2,000',
     type: 'AUTO_APPROVED',
   },
   {
-    label: 'Order Keychron Q1 Pro custom keyboard',
-    desc: 'High-value item triggering Step-Up Biometric Authorization',
+    label: 'Keychron Q1 Pro Mechanical Keyboard (Step-Up)',
+    desc: 'High-value order exceeding ₹2,000 limit (Requires Step-Up)',
     prompt: 'Order Keychron Q1 Pro custom mechanical keyboard',
     type: 'REQUIRES_STEP_UP',
   },
   {
-    label: 'Bundle Anker USB-C Hub with 100W Cable',
-    desc: 'Merchant Agent provides dynamic 25% bundle discount',
+    label: 'Anker USB-C Hub + Cable Bundle (Dynamic Yield)',
+    desc: 'Applies dynamic 25% multi-item bundle discount',
     prompt: 'Buy Anker 7-in-1 USB-C Hub and bundle with 100W braided cable',
     type: 'BUNDLE_UPSELL',
   },
   {
-    label: 'Simulate Amazon Out-of-Stock Fallback',
-    desc: 'Simulate stockout and test autonomous alternative routing',
+    label: 'Stockout Fallback Exception',
+    desc: 'Simulates zero inventory with autonomous alternative routing',
     prompt: 'Order Ultrahuman Ring AIR titanium smart tracker',
     type: 'OUT_OF_STOCK',
   },
@@ -73,7 +68,7 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
     onRunTransaction(prompt, { autoAcceptBundles: allowBundles });
   };
 
-  const handlePresetSelect = (p: typeof PRESET_TASKS[0]) => {
+  const handlePresetSelect = (p: typeof PRESET_ORDERS[0]) => {
     setPrompt(p.prompt);
     onRunTransaction(p.prompt, {
       autoAcceptBundles: allowBundles,
@@ -82,52 +77,48 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
   };
 
   return (
-    <div className="space-y-9 animate-in">
+    <div className="space-y-8 animate-in fade-in duration-200">
       
       {/* Header & Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="eyebrow">Autonomous buyer workspace</div>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl font-extrabold tracking-[-0.045em] text-white sm:text-4xl">AI buyer agent</h1>
-            <span className="inline-flex items-center gap-2 rounded-full border border-teal-200/15 bg-teal-300/[0.08] px-2.5 py-1 text-[11px] font-medium text-teal-100">
-              <span className="status-dot-active" />
-              <span>Online · UAP 1.0 / AP2</span>
+          <div className="flex items-center space-x-2.5">
+            <h1 className="text-2xl font-extrabold text-white">Commerce</h1>
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#0c83ff]/15 text-[#38bdf8] border border-[#0c83ff]/20 flex items-center space-x-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Gateway Active · UAP 1.0 / AP2</span>
             </span>
           </div>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
-            Delegate the intent. Keep the authority, constraints, and payment trail entirely visible.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Execute purchase orders with automated quote verification, enclave governance, and Razorpay settlement.
           </p>
         </div>
       </div>
 
-      {/* Main Execution Box */}
-      <section className="fintech-card p-5 space-y-6 sm:p-7">
+      {/* Main Order Runner Card */}
+      <section className="fintech-card p-6 space-y-6">
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-[0.13em] text-slate-400 mb-2">
-            What should your agent handle?
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 font-mono">
+            Purchase Order Execution
           </label>
           <form onSubmit={handleSubmit} className="flex gap-2">
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="e.g. Buy running shoes under ₹2,000"
-              className="premium-input flex-1 px-4 py-3 text-sm"
-            />
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+              <input
+                type="text"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="e.g. Search Amazon for running shoes under ₹2,000"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#090d16] border border-white/[0.08] rounded-lg text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-[#0c83ff]"
+              />
+            </div>
             <button
               type="submit"
               disabled={loading || !prompt.trim()}
-              className="premium-button px-5 py-3 text-xs font-bold disabled:opacity-50"
+              className="px-5 py-2.5 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-lg shadow-sm flex items-center space-x-2 transition-all disabled:opacity-50"
             >
-              {loading ? (
-                <span>Executing...</span>
-              ) : (
-                <>
-                  <span>Run Task</span>
-                  <Send className="w-3.5 h-3.5" />
-                </>
-              )}
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>{loading ? 'Executing Order...' : 'Execute Order'}</span>
             </button>
           </form>
 
@@ -137,158 +128,149 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
               id="bundlesCheck"
               checked={allowBundles}
               onChange={(e) => setAllowBundles(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-blue-400"
+              className="h-3.5 w-3.5 rounded border-slate-700 bg-[#090d16] accent-[#0c83ff]"
             />
             <label htmlFor="bundlesCheck" className="cursor-pointer select-none">
-              Allow dynamic bundle discount negotiation with Merchant Agent
+              Apply dynamic merchant bundle discounts when available
             </label>
           </div>
         </div>
 
-        {/* Task Presets */}
+        {/* Quick Order Presets */}
         <div>
-          <div className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.13em] text-slate-500">
-            Try a guided scenario
+          <div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+            Quick Orders
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {PRESET_TASKS.map((task, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {PRESET_ORDERS.map((p, idx) => (
               <button
                 key={idx}
                 type="button"
-                onClick={() => handlePresetSelect(task)}
-                className="flex min-h-[7.75rem] flex-col justify-between rounded-xl border border-slate-400/[0.1] bg-slate-950/25 p-3.5 text-left transition hover:-translate-y-0.5 hover:border-blue-200/25 hover:bg-blue-400/[0.06]"
+                onClick={() => handlePresetSelect(p)}
+                disabled={loading}
+                className="p-3 text-left rounded-lg bg-[#090d16] border border-white/[0.05] hover:border-white/[0.12] hover:bg-white/[0.02] transition-all group"
               >
-                <div>
-                  <div className="text-xs font-bold text-slate-200 line-clamp-1">{task.label}</div>
-                  <div className="mt-1 text-[11px] leading-5 text-slate-400 line-clamp-2">{task.desc}</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-200 group-hover:text-white">{p.label}</span>
+                  <ArrowRight className="w-3 h-3 text-slate-600 group-hover:text-slate-300 transition-colors" />
                 </div>
-                <div className="mt-2 flex items-center space-x-1 text-[10px] font-semibold text-blue-200">
-                  <span>Execute</span>
-                  <ArrowRight className="w-3 h-3" />
-                </div>
+                <p className="text-[11px] text-slate-400 mt-0.5">{p.desc}</p>
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Action Pipeline & Permissions Grid */}
+      {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Left Column: Action & Reasoning Pipeline (8 cols) */}
-        <section className="lg:col-span-8 fintech-card p-5 space-y-5 sm:p-7">
-          <div className="flex items-center justify-between border-b border-slate-400/[0.12] pb-4">
-            <div className="flex items-center space-x-2">
-              <Layers className="w-4 h-4 text-blue-200" />
-              <h3 className="text-sm font-bold text-white">Decision pipeline</h3>
+        {/* Left Column: Decision Ledger (8 cols) */}
+        <section className="lg:col-span-8 fintech-card p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.07]">
+            <div>
+              <h3 className="text-sm font-bold text-white">Decision Ledger</h3>
+              <p className="text-xs text-slate-400">Verifiable trace of catalog discovery, quote signing, and enclave checks</p>
             </div>
-            {lastOutcome && (
-              <span className="text-[11px] font-mono text-slate-400">
-                Tx: {lastOutcome.transactionId}
-              </span>
-            )}
+            <span className="text-xs font-mono text-slate-500">
+              {lastOutcome ? `${lastOutcome.reasoningTrail.length} steps recorded` : 'Idle'}
+            </span>
           </div>
 
-          {/* Reasoning Steps Stream */}
-          {lastOutcome ? (
+          {lastOutcome && lastOutcome.reasoningTrail.length > 0 ? (
             <div className="space-y-3">
-              {lastOutcome.reasoningTrail.map((step, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-xl border border-slate-400/[0.1] bg-slate-950/25 p-3.5 transition-all"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-3">
-                      <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-lg border border-slate-400/[0.1] bg-white/[0.04] font-mono text-[10px] text-slate-400">
-                        {step.step}
-                      </div>
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs font-bold text-slate-200">{step.agent}</span>
-                          <span className="text-[10px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.2 rounded">
-                            {step.action}
-                          </span>
-                          <span
-                            className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded uppercase ${
-                              step.status === 'SUCCESS'
-                                ? 'bg-emerald-500/15 text-emerald-400'
-                                : step.status === 'GATED'
-                                ? 'bg-amber-500/15 text-amber-400'
-                                : step.status === 'RECOVERED'
-                                ? 'bg-purple-500/15 text-purple-400'
-                                : 'bg-rose-500/15 text-rose-400'
-                            }`}
-                          >
-                            {step.status}
-                          </span>
+              {lastOutcome.reasoningTrail.map((step: AgentReasoningStep) => {
+                const isExpanded = expandedStep === step.step;
+
+                return (
+                  <div
+                    key={step.step}
+                    className="p-3.5 rounded-lg bg-[#090d16] border border-white/[0.04] space-y-2 text-xs transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start space-x-2.5">
+                        <span className="font-mono text-[11px] font-bold text-slate-500 mt-0.5">
+                          0{step.step}
+                        </span>
+                        <div className="space-y-0.5">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-bold text-white">{step.action}</span>
+                            <span className="font-mono text-[10px] text-slate-500 uppercase">{step.agent}</span>
+                          </div>
+                          <p className="text-slate-300 text-[11px] leading-relaxed">{step.detail}</p>
                         </div>
-                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                          {step.detail}
-                        </p>
+                      </div>
+
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        <span
+                          className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                            step.status === 'SUCCESS'
+                              ? 'bg-emerald-500/15 text-emerald-400'
+                              : step.status === 'GATED'
+                              ? 'bg-amber-500/15 text-amber-300'
+                              : 'bg-rose-500/15 text-rose-300'
+                          }`}
+                        >
+                          {step.status}
+                        </span>
+                        {step.payload && (
+                          <button
+                            onClick={() => setExpandedStep(isExpanded ? null : step.step)}
+                            className="p-1 rounded text-slate-500 hover:text-white"
+                          >
+                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                          </button>
+                        )}
                       </div>
                     </div>
 
-                    {step.payload && (
-                      <button
-                        onClick={() => setExpandedStep(expandedStep === idx ? null : idx)}
-                        className="text-slate-500 hover:text-slate-300 p-1"
-                      >
-                        {expandedStep === idx ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                      </button>
+                    {isExpanded && step.payload && (
+                      <div className="mt-2 p-2.5 rounded bg-black/60 border border-white/[0.05] overflow-x-auto text-[11px] font-mono text-slate-300">
+                        <pre>{JSON.stringify(step.payload, null, 2)}</pre>
+                      </div>
                     )}
                   </div>
-
-                  {expandedStep === idx && step.payload && (
-                    <div className="mt-3 p-2.5 rounded bg-black/60 border border-white/5 font-mono text-[10px] text-emerald-400 overflow-x-auto max-h-40">
-                      <pre>{JSON.stringify(step.payload, null, 2)}</pre>
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
-            <div className="py-12 text-center text-xs text-slate-500">
-              <Bot className="mx-auto mb-3 h-5 w-5 text-slate-600" />
-              Ready when you are. Start with an intent or one of the guided scenarios.
+            <div className="py-12 text-center text-xs text-slate-500 font-mono space-y-2">
+              <ShoppingBag className="w-8 h-8 text-slate-600 mx-auto opacity-50" />
+              <p>Ready to process orders. Execute a purchase query above to populate the ledger.</p>
             </div>
           )}
         </section>
 
-        {/* Right Column: Agent Permissions & Outcome Card (4 cols) */}
+        {/* Right Column: Execution Boundaries & Settlement Outcome (4 cols) */}
         <div className="lg:col-span-4 space-y-6">
           
-          {/* Agent Permissions Matrix */}
-          <section className="fintech-card p-5 space-y-3.5">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.13em] text-slate-400">
-              Financial permissions
+          {/* Execution Boundaries Matrix */}
+          <section className="fintech-card p-5 space-y-3">
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+              Execution Boundaries
             </h3>
 
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between rounded-lg border border-slate-400/[0.1] bg-slate-950/25 p-2.5">
-                <span className="text-slate-300">Product Discovery</span>
-                <span className="text-emerald-400 font-mono text-[11px]">✓ Authorized</span>
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#090d16] border border-white/[0.04]">
+                <span className="text-slate-300">Semantic Discovery</span>
+                <span className="text-emerald-400 font-mono text-[11px]">✓ Allowed</span>
               </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-400/[0.1] bg-slate-950/25 p-2.5">
-                <span className="text-slate-300">Price Negotiation</span>
-                <span className="text-emerald-400 font-mono text-[11px]">✓ Authorized</span>
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#090d16] border border-white/[0.04]">
+                <span className="text-slate-300">Dynamic Bundling</span>
+                <span className="text-emerald-400 font-mono text-[11px]">✓ Allowed</span>
               </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-400/[0.1] bg-slate-950/25 p-2.5">
-                <span className="text-slate-300">Dynamic Upselling</span>
-                <span className="text-emerald-400 font-mono text-[11px]">✓ Authorized</span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-400/[0.1] bg-slate-950/25 p-2.5">
-                <span className="text-slate-300">Payment Authorization</span>
-                <span className="text-amber-400 font-mono text-[11px]">Bounded (≤ ₹2,000)</span>
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#090d16] border border-white/[0.04]">
+                <span className="text-slate-300">Autonomous Settlement</span>
+                <span className="text-amber-400 font-mono text-[11px]">≤ ₹2,000 Bound</span>
               </div>
             </div>
           </section>
 
-          {/* Outcome & Step-Up Banner if Gated */}
+          {/* Settlement Outcome Card */}
           {lastOutcome && (
             <section className="fintech-card p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Result
+                <span className="text-[10px] font-bold text-slate-400 uppercase font-mono tracking-wider">
+                  Settlement Result
                 </span>
                 <span
                   className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
@@ -305,13 +287,13 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
 
               {lastOutcome.status === 'STEP_UP_REQUIRED' && (
                 <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs space-y-2">
-                  <div className="font-bold text-amber-300">Step-Up Authorization Required</div>
+                  <div className="font-bold text-amber-300">Step-Up Verification Required</div>
                   <p className="text-amber-200/80 text-[11px]">
-                    Transaction exceeds ₹2,000 threshold.
+                    Transaction exceeds single-order auto-threshold (₹2,000).
                   </p>
                   <button
                     onClick={onOpenStepUpModal}
-                    className="w-full rounded-lg bg-amber-300 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-amber-200"
+                    className="w-full py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded-lg text-xs transition-all"
                   >
                     Open Authorization Modal
                   </button>

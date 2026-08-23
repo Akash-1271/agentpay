@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, Home, Bot, ReceiptText, ShieldCheck, Package, History, AlertOctagon, Activity, ArrowRight, X } from 'lucide-react';
+import {
+  Search,
+  ShoppingBag,
+  Home,
+  CreditCard,
+  ShieldCheck,
+  Package,
+  History,
+  Layers,
+  Activity,
+  TrendingUp,
+  ArrowRight,
+  X,
+} from 'lucide-react';
 import { NavSection } from './Sidebar';
 
 interface CommandPaletteProps {
@@ -21,8 +34,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle
+        onClose();
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -35,14 +47,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   const actions = [
-    { label: 'Run Intent: "Buy running shoes under ₹2,000"', type: 'intent', icon: Sparkles, prompt: 'Buy running shoes under ₹2,000' },
-    { label: 'Run Intent: "Order Keychron Q1 Pro mechanical keyboard"', type: 'intent', icon: Sparkles, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
-    { label: 'Run 50-Batch Evaluation Benchmark', type: 'nav', icon: Activity, section: 'benchmark' },
-    { label: 'Go to Financial Policies & Enclave', type: 'nav', icon: ShieldCheck, section: 'policies' },
-    { label: 'Go to Transactions Ledger', type: 'nav', icon: ReceiptText, section: 'transactions' },
-    { label: 'Go to AI-Readable Catalog', type: 'nav', icon: Package, section: 'catalog' },
-    { label: 'Go to Cryptographic Audit Trail', type: 'nav', icon: History, section: 'audit' },
-    { label: 'Go to Failure Simulation Studio', type: 'nav', icon: AlertOctagon, section: 'failures' },
+    { label: 'Purchase: "Search Amazon for running shoes under ₹2,000"', type: 'intent', icon: ShoppingBag, prompt: 'Search Amazon for running shoes under ₹2,000' },
+    { label: 'Purchase: "Order Keychron Q1 Pro mechanical keyboard"', type: 'intent', icon: ShoppingBag, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
+    { label: 'Go to Overview', type: 'nav', icon: Home, section: 'overview' },
+    { label: 'Go to Commerce Console', type: 'nav', icon: ShoppingBag, section: 'agent' },
+    { label: 'Go to Merchant Yield Hub', type: 'nav', icon: TrendingUp, section: 'growth' },
+    { label: 'Go to Transactions Ledger', type: 'nav', icon: CreditCard, section: 'transactions' },
+    { label: 'Go to Policies & Enclave', type: 'nav', icon: ShieldCheck, section: 'policies' },
+    { label: 'Go to Product Catalog', type: 'nav', icon: Package, section: 'catalog' },
+    { label: 'Go to Audit Ledger', type: 'nav', icon: History, section: 'audit' },
+    { label: 'Go to Benchmark Suite', type: 'nav', icon: Activity, section: 'benchmark' },
+    { label: 'Go to Exception Studio', type: 'nav', icon: Layers, section: 'failures' },
   ];
 
   const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
@@ -69,8 +84,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command or shopping intent (e.g. 'Buy running shoes', 'Benchmark')..."
-            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
+            placeholder="Search commands, purchase orders, or navigation..."
+            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none font-sans"
           />
           <span className="text-[10px] font-mono text-slate-500 px-1.5 py-0.5 rounded bg-white/5 border border-white/5">
             ESC
@@ -80,8 +95,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         {/* Results List */}
         <div className="max-h-72 overflow-y-auto p-2 space-y-1 text-xs">
           {filtered.length === 0 ? (
-            <div className="py-6 text-center text-slate-500">
-              No matching commands. Press Enter to prompt agent directly.
+            <div className="py-6 text-center text-slate-500 font-mono text-xs">
+              No matching commands found.
             </div>
           ) : (
             filtered.map((item, idx) => {
@@ -104,7 +119,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         <div className="px-4 py-2 bg-[#090d16] border-t border-white/[0.05] text-[11px] font-mono text-slate-500 flex justify-between">
-          <span>AgentPay Command Palette</span>
+          <span>AgentPay Payments Console</span>
           <span>Navigation & Actions</span>
         </div>
 

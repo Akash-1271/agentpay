@@ -152,7 +152,7 @@ export const App: React.FC = () => {
               className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-xs text-slate-400 hover:text-slate-200 transition-all group"
             >
               <Search className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
-              <span>Search commands, prompts or views...</span>
+              <span>Search commands, orders, or navigation...</span>
               <kbd className="font-mono text-[10px] text-slate-500 bg-white/5 px-1.5 py-0.2 rounded ml-4 border border-white/5">
                 ⌘K
               </kbd>
