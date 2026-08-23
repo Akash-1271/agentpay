@@ -14,6 +14,7 @@ import { WireTraceModal } from './components/WireTraceModal';
 import { CommandPalette } from './components/CommandPalette';
 import { StepUpModal } from './components/StepUpModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
+import { RazorpayLogo } from './components/RazorpayLogo';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
 import { Menu, Zap, Search, Command } from 'lucide-react';
@@ -168,10 +169,7 @@ export const App: React.FC = () => {
               <span>Protocol Wire</span>
             </button>
 
-            <div className="flex items-center space-x-2 px-2.5 py-1 rounded-md bg-[#0d121f] border border-white/[0.07] text-[11px] font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="text-slate-300">Razorpay Test Mode Active</span>
-            </div>
+            <RazorpayLogo variant="badge" height={16} />
           </div>
         </header>
 

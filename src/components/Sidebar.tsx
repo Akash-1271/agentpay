@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { AP2DelegationMandate } from '../types';
 
+import { RazorpayLogo } from './RazorpayLogo';
+
 export type NavSection =
   | 'landing'
   | 'overview'
@@ -99,12 +101,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => selectSection('overview')}
             className="flex items-center gap-2.5 text-left group"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#0c83ff] flex items-center justify-center text-white shadow-sm font-bold">
-              <CreditCard className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-[#02042b] border border-[#0c83ff]/30 flex items-center justify-center p-1 shadow-sm">
+              <RazorpayLogo variant="icon" height={18} />
             </div>
             <div>
-              <span className="block text-sm font-bold tracking-tight text-white">AgentPay</span>
-              <span className="block text-[10px] text-slate-400">Safe Purchases</span>
+              <span className="block text-sm font-bold tracking-tight text-white flex items-center">
+                AgentPay
+              </span>
+              <span className="block text-[10px] font-mono text-[#38bdf8]">on Razorpay</span>
             </div>
           </button>
 
