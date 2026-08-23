@@ -8,21 +8,26 @@ import { PolicyEnginePage } from './components/PolicyEnginePage';
 import { CatalogPage } from './components/CatalogPage';
 import { AuditTrailPage } from './components/AuditTrailPage';
 import { FailureSimulationPage } from './components/FailureSimulationPage';
+import { BenchmarkRunner } from './components/BenchmarkRunner';
+import { WireTraceModal } from './components/WireTraceModal';
+import { CommandPalette } from './components/CommandPalette';
 import { StepUpModal } from './components/StepUpModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
-import { Menu, Zap } from 'lucide-react';
+import { Menu, Zap, Search, Command } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
   const [mandate, setMandate] = useState<AP2DelegationMandate | null>(null);
-  const [dailySpent, setDailySpent] = useState<number>(3200);
+  const [dailySpent, setDailySpent] = useState<number>(1250);
   const [auditLedger, setAuditLedger] = useState<AuditRecord[]>([]);
   const [lastOutcome, setLastOutcome] = useState<AgentTransactionOutcome | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isStepUpOpen, setIsStepUpOpen] = useState<boolean>(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState<boolean>(false);
+  const [isWireTraceOpen, setIsWireTraceOpen] = useState<boolean>(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -39,6 +44,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchEnclaveData();
+
+    // Global Cmd+K / Ctrl+K listener
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleRunTransaction = async (prompt: string, options: any = {}) => {
@@ -104,7 +119,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app-shell flex min-h-screen flex-col text-slate-100 selection:bg-blue-400 selection:text-slate-950">
+    <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col selection:bg-[#0c83ff] selection:text-white font-sans antialiased">
       
       {/* Sidebar Navigation */}
       <Sidebar
@@ -113,51 +128,67 @@ export const App: React.FC = () => {
         mandate={mandate}
         dailySpent={dailySpent}
         onOpenApiDocs={() => setIsApiDocsOpen(true)}
+        onOpenWireTrace={() => setIsWireTraceOpen(true)}
         isOpenMobile={isMobileNavOpen}
         onToggleMobile={() => setIsMobileNavOpen(!isMobileNavOpen)}
       />
 
       {/* Main Layout Area */}
-      <div className="flex min-w-0 flex-1 flex-col lg:pl-[17.25rem]">
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
         
-        {/* Mobile Header Bar */}
-        <div className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-400/[0.12] bg-[#081525]/90 px-4 backdrop-blur-xl lg:hidden">
-          <div className="flex items-center space-x-2.5">
-            <div className="grid h-8 w-8 place-items-center rounded-lg border border-blue-200/25 bg-gradient-to-br from-[#7ba0ff] to-[#3b6df4] text-xs font-bold text-white">
-              <Zap className="h-3.5 w-3.5 fill-current" />
-            </div>
-            <div>
-              <span className="block text-sm font-bold tracking-[-0.03em] text-white">AgentPay</span>
-              <span className="block text-[10px] font-medium text-slate-500">Autonomous commerce</span>
-            </div>
+        {/* Top App Header with Quick Search */}
+        <header className="h-14 px-4 sm:px-8 border-b border-white/[0.07] bg-[#090d16]/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setIsMobileNavOpen(true)}
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05]"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={() => setIsCommandPaletteOpen(true)}
+              className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-xs text-slate-400 hover:text-slate-200 transition-all group"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
+              <span>Search commands, prompts or views...</span>
+              <kbd className="font-mono text-[10px] text-slate-500 bg-white/5 px-1.5 py-0.2 rounded ml-4 border border-white/5">
+                ⌘K
+              </kbd>
+            </button>
           </div>
 
-          <button
-            type="button"
-            aria-label="Open navigation"
-            onClick={() => setIsMobileNavOpen(true)}
-            className="rounded-lg border border-slate-400/[0.12] bg-white/[0.04] p-2 text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
-          >
-            <Menu className="h-4 w-4" />
-          </button>
-        </div>
+          <div className="flex items-center space-x-3 text-xs">
+            <button
+              onClick={() => setIsWireTraceOpen(true)}
+              className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] text-slate-300 font-mono text-[11px] transition-all"
+            >
+              <Zap className="w-3 h-3 text-[#0c83ff]" />
+              <span>Protocol Wire</span>
+            </button>
+
+            <div className="flex items-center space-x-2 px-2.5 py-1 rounded-md bg-[#0d121f] border border-white/[0.07] text-[11px] font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="text-slate-300">Razorpay Test Mode Active</span>
+            </div>
+          </div>
+        </header>
 
         {/* Global Toast Alert if any */}
         {toastMessage && (
-          <div role="status" className="mx-4 mt-4 flex items-center justify-between rounded-xl border border-rose-300/20 bg-rose-400/[0.11] p-3 text-xs text-rose-100 shadow-lg shadow-rose-950/20 sm:mx-8 animate-in">
-            <span className="flex items-center gap-2"><span aria-hidden="true">⚠</span>{toastMessage}</span>
+          <div className="mx-4 sm:mx-8 mt-4 p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-200 text-xs font-mono flex items-center justify-between animate-in fade-in">
+            <span>⚠️ {toastMessage}</span>
             <button
-              type="button"
               onClick={() => setToastMessage(null)}
-              className="ml-4 text-xs font-semibold text-rose-200 transition hover:text-white"
+              className="text-rose-400 hover:text-white font-bold ml-4"
             >
               Dismiss
             </button>
           </div>
         )}
 
-        {/* Main Content View */}
-        <main className="mx-auto w-full max-w-[88rem] flex-1 px-4 py-7 sm:px-8 sm:py-10 lg:px-10">
+        {/* Main Content Router */}
+        <main className="flex-1 px-4 sm:px-8 lg:px-10 py-8 max-w-7xl w-full mx-auto">
           {currentSection === 'landing' && (
             <LandingPage
               onNavigate={setCurrentSection}
@@ -216,16 +247,20 @@ export const App: React.FC = () => {
               loading={loading}
             />
           )}
+
+          {currentSection === 'benchmark' && (
+            <BenchmarkRunner onRefreshEnclave={fetchEnclaveData} />
+          )}
         </main>
 
         {/* Footer */}
-        <footer className="flex flex-col items-center justify-between gap-2 border-t border-slate-400/[0.1] px-4 py-5 text-[11px] text-slate-500 sm:flex-row sm:px-8">
+        <footer className="border-t border-white/[0.05] py-4 px-4 sm:px-8 text-slate-500 text-xs font-mono flex flex-col sm:flex-row justify-between items-center gap-2">
           <span>AgentPay · Bounded payment infrastructure for agentic commerce</span>
-          <span className="font-mono text-slate-600">Razorpay AI Buildathon · 2026</span>
+          <span className="text-slate-400">Razorpay AI Buildathon · Track 01</span>
         </footer>
       </div>
 
-      {/* Modals */}
+      {/* Modals & Overlays */}
       {isStepUpOpen && lastOutcome && (
         <StepUpModal
           outcome={lastOutcome}
@@ -234,7 +269,24 @@ export const App: React.FC = () => {
         />
       )}
 
+      {isWireTraceOpen && (
+        <WireTraceModal
+          txId={lastOutcome?.transactionId || 'tx_pegasus_40_01'}
+          onClose={() => setIsWireTraceOpen(false)}
+        />
+      )}
+
       {isApiDocsOpen && <ApiDocsModal onClose={() => setIsApiDocsOpen(false)} />}
+
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigate={setCurrentSection}
+        onRunIntent={(p) => {
+          setCurrentSection('agent');
+          handleRunTransaction(p, { autoAcceptBundles: true });
+        }}
+      />
 
     </div>
   );
