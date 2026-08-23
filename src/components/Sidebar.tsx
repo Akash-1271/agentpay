@@ -72,6 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   mandate,
   dailySpent,
   onOpenApiDocs,
+  onOpenWireTrace,
   isOpenMobile,
   onToggleMobile,
 }) => {
