@@ -19,6 +19,9 @@ async function runTest(name: string, fn: () => Promise<void> | void) {
 async function runTestSuite() {
   console.log('\n🧪 Running AgentPay Track 01 Comprehensive Test Suite...\n');
 
+  // Reset Enclave Spend before testing
+  BoundedSpendingEnclave.resetSpend();
+
   // Test 1: Catalog search & schema
   await runTest('1. Canonical UAP Catalog Semantic Search', () => {
     const shoes = UAPCatalogEngine.queryCatalog({ query: 'shoe' });
@@ -36,7 +39,8 @@ async function runTestSuite() {
   // Test 3: Autonomous Transaction Execution
   await runTest('3. Autonomous Buyer Flow & Razorpay Order Creation', async () => {
     const outcome = await BuyerAgent.executeCommerceFlow({
-      userPrompt: 'Buy running shoes under ₹2,000',
+      userPrompt: 'Search Amazon for running shoes under ₹2,000',
+      autoAcceptBundles: true,
     });
     if (outcome.status !== 'COMPLETED') throw new Error(`Expected COMPLETED, got ${outcome.status}`);
     if (!outcome.razorpayOrder?.id) throw new Error('Missing Razorpay Order ID');
@@ -47,6 +51,7 @@ async function runTestSuite() {
   await runTest('4. Bounded Enclave Step-Up Gating (> ₹2,000)', async () => {
     const outcome = await BuyerAgent.executeCommerceFlow({
       userPrompt: 'Order Keychron Q1 Pro custom mechanical keyboard',
+      autoAcceptBundles: true,
     });
     if (outcome.status !== 'STEP_UP_REQUIRED') throw new Error(`Expected STEP_UP_REQUIRED, got ${outcome.status}`);
     if (!outcome.stepUpApprovalId) throw new Error('Missing Step-Up Approval ID');
