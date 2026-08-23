@@ -79,4 +79,26 @@ export const api = {
     }
     return res.json();
   },
+
+  async runBenchmarkSuite(batchSize: number = 50) {
+    const res = await fetch(`${API_BASE}/benchmark/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ batchSize }),
+    });
+    if (!res.ok) throw new Error('Benchmark suite execution failed');
+    return res.json();
+  },
+
+  async getProtocolWireTrace(txId: string) {
+    const res = await fetch(`${API_BASE}/protocol/wire-trace/${txId}`);
+    if (!res.ok) throw new Error('Failed to fetch protocol wire trace');
+    return res.json();
+  },
+
+  async resetSpend() {
+    const res = await fetch(`${API_BASE}/enclave/reset-spend`, { method: 'POST' });
+    if (!res.ok) throw new Error('Failed to reset spend');
+    return res.json();
+  },
 };

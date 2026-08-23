@@ -24,7 +24,8 @@ export type NavSection =
   | 'policies'
   | 'catalog'
   | 'audit'
-  | 'failures';
+  | 'failures'
+  | 'benchmark';
 
 interface SidebarProps {
   currentSection: NavSection;
@@ -32,6 +33,7 @@ interface SidebarProps {
   mandate: AP2DelegationMandate | null;
   dailySpent: number;
   onOpenApiDocs: () => void;
+  onOpenWireTrace: () => void;
   isOpenMobile: boolean;
   onToggleMobile: () => void;
 }
@@ -46,19 +48,20 @@ const navigationGroups: Array<{ label: string; items: NavigationItem[] }> = [
   {
     label: 'Workspace',
     items: [
-      { id: 'landing', label: 'Home', icon: Sparkles },
-      { id: 'overview', label: 'Command center', icon: Home },
-      { id: 'agent', label: 'AI agent', icon: Bot },
+      { id: 'landing', label: 'Explore & Flow', icon: Sparkles },
+      { id: 'overview', label: 'Overview', icon: Home },
+      { id: 'agent', label: 'AI Agent', icon: Bot },
+      { id: 'benchmark', label: 'Evaluation Suite', icon: Zap },
     ],
   },
   {
     label: 'Control center',
     items: [
       { id: 'transactions', label: 'Transactions', icon: ReceiptText },
-      { id: 'policies', label: 'Policy guardrails', icon: ShieldCheck },
-      { id: 'catalog', label: 'Product catalog', icon: Package },
-      { id: 'audit', label: 'Audit trail', icon: History },
-      { id: 'failures', label: 'Recovery studio', icon: AlertOctagon },
+      { id: 'policies', label: 'Financial Policies', icon: ShieldCheck },
+      { id: 'catalog', label: 'Catalog', icon: Package },
+      { id: 'audit', label: 'Audit Trail', icon: History },
+      { id: 'failures', label: 'Failure Studio', icon: AlertOctagon },
     ],
   },
 ];
@@ -184,8 +187,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             type="button"
+            onClick={onOpenWireTrace}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.045] hover:text-slate-100"
+          >
+            <Zap className="h-4 w-4 text-[#0c83ff]" />
+            <span className="flex-1">Wire Packet Trace</span>
+            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-slate-400">RFC</span>
+          </button>
+
+          <button
+            type="button"
             onClick={onOpenApiDocs}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.045] hover:text-slate-100"
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.045] hover:text-slate-100"
           >
             <FileCode className="h-4 w-4 text-slate-500" />
             <span className="flex-1">Protocol docs</span>

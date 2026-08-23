@@ -8,6 +8,8 @@ import { MerchantAgent } from './agents/merchantAgent.js';
 import { BuyerAgent } from './agents/buyerAgent.js';
 import { RazorpayEngine } from './razorpay/client.js';
 import { WebhookManager } from './razorpay/webhooks.js';
+import { BenchmarkEngine } from './protocols/benchmark.js';
+import { ProtocolWireEngine } from './protocols/protocolWire.js';
 
 const app = express();
 
@@ -201,8 +203,22 @@ app.post('/api/razorpay/webhook', (req: Request, res: Response) => {
 });
 
 // ----------------------------------------------------
-// START SERVER
+// BENCHMARK EVALUATION & PROTOCOL WIRE TRACE
 // ----------------------------------------------------
+app.post('/api/benchmark/run', async (req: Request, res: Response) => {
+  try {
+    const { batchSize } = req.body;
+    const results = await BenchmarkEngine.runEvaluationSuite(batchSize ? parseInt(batchSize, 10) : 50);
+    res.json(results);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/protocol/wire-trace/:txId', (req: Request, res: Response) => {
+  const trace = ProtocolWireEngine.generateWireTrace(req.params.txId);
+  res.json(trace);
+});
 app.listen(CONFIG.PORT, () => {
   console.log(`🚀 AgentPay Gateway & Enclave listening on port ${CONFIG.PORT}`);
   console.log(`📡 Protocols: Universal Agent Protocol (UAP 1.0) & AP2 (Autonomous Payment Protocol)`);
