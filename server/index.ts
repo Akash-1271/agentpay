@@ -10,6 +10,8 @@ import { RazorpayEngine } from './razorpay/client.js';
 import { WebhookManager } from './razorpay/webhooks.js';
 import { BenchmarkEngine } from './protocols/benchmark.js';
 import { ProtocolWireEngine } from './protocols/protocolWire.js';
+import { AmazonMerchantAdapter } from './merchants/amazonAdapter.js';
+import { FulfillmentEngine } from './merchants/fulfillmentEngine.js';
 
 const app = express();
 
@@ -215,10 +217,26 @@ app.post('/api/benchmark/run', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/protocol/wire-trace/:txId', (req: Request, res: Response) => {
-  const trace = ProtocolWireEngine.generateWireTrace(req.params.txId);
-  res.json(trace);
+// ----------------------------------------------------
+// AMAZON & MULTI-MERCHANT FULFILLMENT
+// ----------------------------------------------------
+app.get('/api/merchants/amazon/search', (req: Request, res: Response) => {
+  const query = (req.query.q as string) || '';
+  const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
+  const items = AmazonMerchantAdapter.searchAmazon(query, maxPrice);
+  res.json({ count: items.length, source: 'Amazon India Storefront API', items });
 });
+
+app.get('/api/merchants/orders', (req: Request, res: Response) => {
+  res.json({ orders: FulfillmentEngine.getAllOrders() });
+});
+
+app.get('/api/merchants/orders/:id', (req: Request, res: Response) => {
+  const order = FulfillmentEngine.getOrder(req.params.id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+  res.json({ order });
+});
+
 app.listen(CONFIG.PORT, () => {
   console.log(`🚀 AgentPay Gateway & Enclave listening on port ${CONFIG.PORT}`);
   console.log(`📡 Protocols: Universal Agent Protocol (UAP 1.0) & AP2 (Autonomous Payment Protocol)`);

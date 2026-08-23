@@ -5,10 +5,12 @@ import { BoundedSpendingEnclave, PolicyValidationResult } from '../protocols/gua
 import { RazorpayEngine, RazorpayOrderResponse } from '../razorpay/client.js';
 import { WebhookManager } from '../razorpay/webhooks.js';
 import { AP2SignedQuote } from '../protocols/ap2.js';
+import { AmazonMerchantAdapter } from '../merchants/amazonAdapter.js';
+import { FulfillmentEngine, FulfillmentOrder } from '../merchants/fulfillmentEngine.js';
 
 export interface AgentReasoningStep {
   step: number;
-  agent: 'BuyerAgent' | 'MerchantAgent' | 'SpendingEnclave' | 'RazorpayGateway';
+  agent: 'BuyerAgent' | 'MerchantAgent' | 'SpendingEnclave' | 'RazorpayGateway' | 'AmazonFulfillment';
   action: string;
   detail: string;
   status: 'SUCCESS' | 'WARNING' | 'GATED' | 'FAILED' | 'RECOVERED';
@@ -29,6 +31,7 @@ export interface AgentTransactionOutcome {
   upsellOffers?: DynamicBundleOffer[];
   stepUpApprovalId?: string;
   alternativeProduct?: ProductItem;
+  fulfillment?: FulfillmentOrder;
   receipt?: {
     receiptId: string;
     totalPaid: number;
@@ -350,6 +353,33 @@ export class BuyerAgent {
       }
     });
 
+    // 5. Dispatch Merchant Fulfillment & Courier AWB
+    const fulfillment = FulfillmentEngine.createOrder({
+      razorpayOrderId: razorpayOrder.id,
+      razorpayPaymentId: simulatedWebhook.payload.payment?.entity.id,
+      merchantId: params.quote.merchantId,
+      merchantName: params.selectedProduct.merchantName,
+      productName: params.selectedProduct.name,
+      amount: params.quote.netAmount,
+      asinOrSku: params.selectedProduct.id,
+    });
+
+    params.reasoningTrail.push({
+      step: params.reasoningTrail.length + 1,
+      agent: 'AmazonFulfillment',
+      action: 'DISPATCH_MERCHANT_FULFILLMENT',
+      detail: `Fulfillment Order ${fulfillment.orderId} created with ${fulfillment.courierPartner}. Tracking AWB: ${fulfillment.trackingNumber}. Estimated: ${fulfillment.estimatedDelivery}.`,
+      status: 'SUCCESS',
+      timestamp: timestamp(),
+      payload: {
+        orderId: fulfillment.orderId,
+        trackingNumber: fulfillment.trackingNumber,
+        courier: fulfillment.courierPartner,
+        taxInvoiceId: fulfillment.taxInvoiceId,
+        cryptoSeal: fulfillment.cryptoSealHash
+      }
+    });
+
     const receipt = {
       receiptId: `rcpt_${crypto.randomBytes(6).toString('hex')}`,
       totalPaid: params.quote.netAmount,
@@ -369,6 +399,7 @@ export class BuyerAgent {
       razorpayOrder,
       upiQr,
       upsellOffers: params.upsellOffers,
+      fulfillment,
       receipt
     };
   }

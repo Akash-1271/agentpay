@@ -18,6 +18,9 @@ import {
   Key,
 } from 'lucide-react';
 import { AgentTransactionOutcome, AgentReasoningStep } from '../types';
+import { RazorpayCheckoutWidget } from './RazorpayCheckoutWidget';
+import { OrderFulfillmentModal } from './OrderFulfillmentModal';
+import { Truck, FileText } from 'lucide-react';
 
 interface AiAgentPageProps {
   onRunTransaction: (prompt: string, options?: any) => Promise<AgentTransactionOutcome>;
@@ -28,9 +31,9 @@ interface AiAgentPageProps {
 
 const PRESET_TASKS = [
   {
-    label: 'Buy running shoes under ₹2,000',
-    desc: 'Nike Air Zoom Pegasus within ₹2,000 auto-approval limit',
-    prompt: 'Buy running shoes under ₹2,000',
+    label: 'Search Amazon for running shoes under ₹2,000',
+    desc: 'Nike Air Zoom Pegasus 40 Prime Express via Amazon India',
+    prompt: 'Search Amazon for running shoes under ₹2,000',
     type: 'AUTO_APPROVED',
   },
   {
@@ -46,8 +49,8 @@ const PRESET_TASKS = [
     type: 'BUNDLE_UPSELL',
   },
   {
-    label: 'Handle Ultrahuman Ring Stockout',
-    desc: 'Simulate out-of-stock item and test autonomous recovery',
+    label: 'Simulate Amazon Out-of-Stock Fallback',
+    desc: 'Simulate stockout and test autonomous alternative routing',
     prompt: 'Order Ultrahuman Ring AIR titanium smart tracker',
     type: 'OUT_OF_STOCK',
   },
@@ -59,9 +62,10 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
   loading,
   onOpenStepUpModal,
 }) => {
-  const [prompt, setPrompt] = useState('Buy running shoes under ₹2,000');
+  const [prompt, setPrompt] = useState('Search Amazon for running shoes under ₹2,000');
   const [allowBundles, setAllowBundles] = useState(true);
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
+  const [isFulfillmentOpen, setIsFulfillmentOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -336,12 +340,30 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
                   )}
                 </div>
               )}
+
+              {lastOutcome.status === 'COMPLETED' && (
+                <div className="space-y-3">
+                  <button
+                    onClick={() => setIsFulfillmentOpen(true)}
+                    className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-bold rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all"
+                  >
+                    <Truck className="w-3.5 h-3.5" />
+                    <span>Track Merchant Order & Courier</span>
+                  </button>
+
+                  <RazorpayCheckoutWidget outcome={lastOutcome} />
+                </div>
+              )}
             </section>
           )}
 
         </div>
 
       </div>
+
+      {isFulfillmentOpen && lastOutcome && (
+        <OrderFulfillmentModal outcome={lastOutcome} onClose={() => setIsFulfillmentOpen(false)} />
+      )}
 
     </div>
   );
