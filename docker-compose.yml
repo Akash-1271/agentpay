@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  agentpay-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - RAZORPAY_KEY_ID=rzp_test_AgentPayLiveDemo2026
+      - RAZORPAY_KEY_SECRET=AgentPaySecretSalt2026Razorpay
+      - ENCLAVE_SECRET_SALT=AgentPay_Guard_Enclave_Salt_99182
+      - WEBHOOK_SECRET=AgentPayWebhookSecret2026
+    restart: unless-stopped
+
+  agentpay-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - agentpay-backend
+    restart: unless-stopped

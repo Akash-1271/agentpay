@@ -11,6 +11,7 @@ import {
   ReceiptText,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
   X,
   Zap,
 } from 'lucide-react';
@@ -20,6 +21,7 @@ export type NavSection =
   | 'landing'
   | 'overview'
   | 'agent'
+  | 'growth'
   | 'transactions'
   | 'policies'
   | 'catalog'
@@ -51,6 +53,7 @@ const navigationGroups: Array<{ label: string; items: NavigationItem[] }> = [
       { id: 'landing', label: 'Explore & Flow', icon: Sparkles },
       { id: 'overview', label: 'Overview', icon: Home },
       { id: 'agent', label: 'AI Agent', icon: Bot },
+      { id: 'growth', label: 'Revenue Growth', icon: TrendingUp },
       { id: 'benchmark', label: 'Evaluation Suite', icon: Zap },
     ],
   },
