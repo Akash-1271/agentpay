@@ -8,6 +8,7 @@ import {
   Package,
   Layers,
   ArrowRight,
+  Star,
 } from 'lucide-react';
 import { NavSection } from './Sidebar';
 
@@ -45,6 +46,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const actions = [
     { label: 'Buy: "Search Amazon for running shoes under ₹2,000"', type: 'intent', icon: ShoppingBag, prompt: 'Search Amazon for running shoes under ₹2,000' },
     { label: 'Buy: "Order Keychron Q1 Pro mechanical keyboard"', type: 'intent', icon: ShoppingBag, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
+    { label: 'Go to Amazon Advisor & Review Insights', type: 'nav', icon: Star, section: 'amazon' },
     { label: 'Go to Overview', type: 'nav', icon: Home, section: 'overview' },
     { label: 'Go to Buy Page', type: 'nav', icon: ShoppingBag, section: 'agent' },
     { label: 'Go to Purchase History', type: 'nav', icon: History, section: 'transactions' },

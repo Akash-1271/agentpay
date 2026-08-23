@@ -152,4 +152,14 @@ export const api = {
     if (!res.ok) throw new Error('Failed to execute A2A payment');
     return res.json();
   },
+
+  async analyzeAmazonReviews(query: string, maxBudget?: number) {
+    const res = await fetch(`${API_BASE}/amazon/analyze-reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, maxBudget }),
+    });
+    if (!res.ok) throw new Error('Failed to analyze Amazon reviews');
+    return res.json();
+  },
 };

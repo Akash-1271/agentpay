@@ -230,6 +230,16 @@ app.get('/api/merchants/amazon/search', (req: Request, res: Response) => {
   res.json({ count: items.length, source: 'Amazon India Storefront API', items });
 });
 
+app.post('/api/amazon/analyze-reviews', (req: Request, res: Response) => {
+  try {
+    const { query, maxBudget } = req.body;
+    const report = AmazonMerchantAdapter.analyzeAndCompare(query || 'running shoes', maxBudget);
+    res.json(report);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/merchants/orders', (req: Request, res: Response) => {
   res.json({ orders: FulfillmentEngine.getAllOrders() });
 });

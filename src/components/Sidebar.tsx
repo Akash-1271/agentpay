@@ -12,6 +12,7 @@ import {
   TrendingUp,
   X,
   Zap,
+  Star,
 } from 'lucide-react';
 import { AP2DelegationMandate } from '../types';
 
@@ -21,6 +22,7 @@ export type NavSection =
   | 'landing'
   | 'overview'
   | 'agent'
+  | 'amazon'
   | 'transactions'
   | 'policies'
   | 'catalog'
@@ -49,6 +51,7 @@ interface NavigationItem {
 const mainNavItems: NavigationItem[] = [
   { id: 'overview', label: 'Overview', icon: Home },
   { id: 'agent', label: 'Buy', icon: ShoppingBag },
+  { id: 'amazon', label: 'Amazon Advisor', icon: Star },
   { id: 'transactions', label: 'History', icon: History },
   { id: 'policies', label: 'Limits', icon: ShieldCheck },
   { id: 'catalog', label: 'Catalog', icon: Package },
