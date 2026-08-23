@@ -1,8 +1,6 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
-  Activity,
-  ArrowUpRight,
   CreditCard,
   FileCode,
   History,
@@ -21,10 +19,10 @@ export type NavSection =
   | 'landing'
   | 'overview'
   | 'agent'
-  | 'growth'
   | 'transactions'
   | 'policies'
   | 'catalog'
+  | 'growth'
   | 'audit'
   | 'failures'
   | 'benchmark';
@@ -46,26 +44,18 @@ interface NavigationItem {
   icon: LucideIcon;
 }
 
-const navigationGroups: Array<{ label: string; items: NavigationItem[] }> = [
-  {
-    label: 'Platform',
-    items: [
-      { id: 'overview', label: 'Overview', icon: Home },
-      { id: 'agent', label: 'Commerce', icon: ShoppingBag },
-      { id: 'growth', label: 'Merchant Yield', icon: TrendingUp },
-      { id: 'transactions', label: 'Transactions', icon: CreditCard },
-    ],
-  },
-  {
-    label: 'Governance & Infrastructure',
-    items: [
-      { id: 'policies', label: 'Policies', icon: ShieldCheck },
-      { id: 'catalog', label: 'Catalog', icon: Package },
-      { id: 'audit', label: 'Audit Ledger', icon: History },
-      { id: 'benchmark', label: 'Benchmark', icon: Activity },
-      { id: 'failures', label: 'Exception Studio', icon: Layers },
-    ],
-  },
+const mainNavItems: NavigationItem[] = [
+  { id: 'overview', label: 'Overview', icon: Home },
+  { id: 'agent', label: 'Buy', icon: ShoppingBag },
+  { id: 'transactions', label: 'History', icon: History },
+  { id: 'policies', label: 'Limits', icon: ShieldCheck },
+  { id: 'catalog', label: 'Catalog', icon: Package },
+];
+
+const advancedNavItems: NavigationItem[] = [
+  { id: 'growth', label: 'Merchant Yield', icon: TrendingUp },
+  { id: 'benchmark', label: 'Benchmark', icon: Zap },
+  { id: 'failures', label: 'Test Exceptions', icon: Layers },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -98,23 +88,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/[0.07] bg-[#090d16] transition-transform duration-200 ease-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-white/[0.07] bg-[#090d16] transition-transform duration-200 ease-out lg:translate-x-0 ${
           isOpenMobile ? 'translate-x-0 shadow-2xl shadow-black/80' : '-translate-x-full'
         }`}
       >
-        {/* Console Header */}
+        {/* Brand Header */}
         <div className="flex h-16 items-center justify-between border-b border-white/[0.07] px-5">
           <button
             type="button"
             onClick={() => selectSection('overview')}
-            className="flex items-center gap-3 text-left group"
+            className="flex items-center gap-2.5 text-left group"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#0c83ff] flex items-center justify-center text-white shadow-sm font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-[#0c83ff] flex items-center justify-center text-white shadow-sm font-bold">
               <CreditCard className="w-4 h-4" />
             </div>
             <div>
               <span className="block text-sm font-bold tracking-tight text-white">AgentPay</span>
-              <span className="block text-[10px] font-mono text-slate-500 uppercase tracking-wider">Payments Console</span>
+              <span className="block text-[10px] text-slate-400">Safe Purchases</span>
             </div>
           </button>
 
@@ -128,46 +118,65 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Navigation */}
+        {/* Primary Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6" aria-label="Primary navigation">
-          {navigationGroups.map((group) => (
-            <div key={group.label} className="space-y-1">
-              <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                {group.label}
-              </p>
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentSection === item.id;
+          <div className="space-y-1">
+            {mainNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentSection === item.id;
 
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => selectSection(item.id)}
-                    className={`group flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold transition-all ${
-                      isActive
-                        ? 'bg-[#0c83ff]/10 text-white border border-[#0c83ff]/30 shadow-sm'
-                        : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 border border-transparent'
-                    }`}
-                  >
-                    <Icon className={`h-4 w-4 ${isActive ? 'text-[#0c83ff]' : 'text-slate-500 group-hover:text-slate-300'}`} />
-                    <span className="flex-1">{item.label}</span>
-                    {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#0c83ff]" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => selectSection(item.id)}
+                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs font-semibold transition-all ${
+                    isActive
+                      ? 'bg-[#0c83ff] text-white shadow-sm font-bold'
+                      : 'text-slate-400 hover:bg-white/[0.04] hover:text-white'
+                  }`}
+                >
+                  <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`} />
+                  <span className="flex-1">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Advanced Section (Subtle) */}
+          <div className="pt-4 border-t border-white/[0.06] space-y-1">
+            <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              Advanced
+            </p>
+            {advancedNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentSection === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => selectSection(item.id)}
+                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs transition-all ${
+                    isActive
+                      ? 'bg-white/[0.08] text-white font-bold'
+                      : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+                  }`}
+                >
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#0c83ff]' : 'text-slate-500 group-hover:text-slate-400'}`} />
+                  <span className="flex-1">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </nav>
 
-        {/* Footer Info: Spend Today & Protocol Wire */}
-        <div className="border-t border-white/[0.07] p-3.5 space-y-3 bg-[#080b11]/50">
-          <div className="rounded-lg border border-white/[0.06] bg-[#090d16] p-3 space-y-2">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-slate-400 font-medium">Spend today</span>
-              <span className="font-mono text-white font-bold">₹{dailySpent.toLocaleString()}</span>
+        {/* Footer: Simple Spending Bar */}
+        <div className="border-t border-white/[0.07] p-4 space-y-3 bg-[#080b11]/60">
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-400">Spent today</span>
+              <span className="text-white font-bold font-mono">₹{dailySpent.toLocaleString()}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
               <div
@@ -177,35 +186,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 style={{ width: `${spendPercent}%` }}
               />
             </div>
-            <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
-              <span>Policy Cap</span>
-              <span>₹{dailyCeiling.toLocaleString()}</span>
+            <div className="text-[11px] text-slate-500 flex justify-between">
+              <span>Limit: ₹{dailyCeiling.toLocaleString()}</span>
+              <span>{spendPercent}% used</span>
             </div>
           </div>
 
-          <div className="space-y-1">
+          <div className="pt-2 border-t border-white/[0.05] flex items-center justify-between text-[11px] text-slate-500">
             <button
-              type="button"
               onClick={onOpenWireTrace}
-              className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs font-mono text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 transition-colors"
+              className="hover:text-slate-300 transition-colors"
             >
-              <div className="flex items-center space-x-2">
-                <Zap className="h-3.5 w-3.5 text-[#0c83ff]" />
-                <span>Protocol Wire Trace</span>
-              </div>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-white/5 text-slate-500">RFC</span>
+              Wire trace
             </button>
-
             <button
-              type="button"
               onClick={onOpenApiDocs}
-              className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 transition-colors"
+              className="hover:text-slate-300 transition-colors flex items-center space-x-1"
             >
-              <div className="flex items-center space-x-2">
-                <FileCode className="h-3.5 w-3.5 text-slate-500" />
-                <span>API Reference</span>
-              </div>
-              <ArrowUpRight className="h-3.5 w-3.5 text-slate-600" />
+              <span>API docs</span>
             </button>
           </div>
         </div>

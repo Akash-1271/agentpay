@@ -3,15 +3,11 @@ import {
   Search,
   ShoppingBag,
   Home,
-  CreditCard,
+  History,
   ShieldCheck,
   Package,
-  History,
   Layers,
-  Activity,
-  TrendingUp,
   ArrowRight,
-  X,
 } from 'lucide-react';
 import { NavSection } from './Sidebar';
 
@@ -47,17 +43,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   const actions = [
-    { label: 'Purchase: "Search Amazon for running shoes under ₹2,000"', type: 'intent', icon: ShoppingBag, prompt: 'Search Amazon for running shoes under ₹2,000' },
-    { label: 'Purchase: "Order Keychron Q1 Pro mechanical keyboard"', type: 'intent', icon: ShoppingBag, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
+    { label: 'Buy: "Search Amazon for running shoes under ₹2,000"', type: 'intent', icon: ShoppingBag, prompt: 'Search Amazon for running shoes under ₹2,000' },
+    { label: 'Buy: "Order Keychron Q1 Pro mechanical keyboard"', type: 'intent', icon: ShoppingBag, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
     { label: 'Go to Overview', type: 'nav', icon: Home, section: 'overview' },
-    { label: 'Go to Commerce Console', type: 'nav', icon: ShoppingBag, section: 'agent' },
-    { label: 'Go to Merchant Yield Hub', type: 'nav', icon: TrendingUp, section: 'growth' },
-    { label: 'Go to Transactions Ledger', type: 'nav', icon: CreditCard, section: 'transactions' },
-    { label: 'Go to Policies & Enclave', type: 'nav', icon: ShieldCheck, section: 'policies' },
-    { label: 'Go to Product Catalog', type: 'nav', icon: Package, section: 'catalog' },
-    { label: 'Go to Audit Ledger', type: 'nav', icon: History, section: 'audit' },
-    { label: 'Go to Benchmark Suite', type: 'nav', icon: Activity, section: 'benchmark' },
-    { label: 'Go to Exception Studio', type: 'nav', icon: Layers, section: 'failures' },
+    { label: 'Go to Buy Page', type: 'nav', icon: ShoppingBag, section: 'agent' },
+    { label: 'Go to Purchase History', type: 'nav', icon: History, section: 'transactions' },
+    { label: 'Go to Spending Limits', type: 'nav', icon: ShieldCheck, section: 'policies' },
+    { label: 'Go to Catalog', type: 'nav', icon: Package, section: 'catalog' },
+    { label: 'Go to Advanced Tools', type: 'nav', icon: Layers, section: 'benchmark' },
   ];
 
   const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
@@ -77,15 +70,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       <div className="relative w-full max-w-xl bg-[#0d121f] border border-white/[0.12] rounded-xl shadow-2xl overflow-hidden">
         
         {/* Search Input */}
-        <div className="flex items-center px-4 py-3 border-b border-white/[0.08]">
+        <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08]">
           <Search className="w-4 h-4 text-slate-400 mr-3" />
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search commands, purchase orders, or navigation..."
-            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none font-sans"
+            placeholder="Search purchases, limits, or navigation..."
+            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
           />
           <span className="text-[10px] font-mono text-slate-500 px-1.5 py-0.5 rounded bg-white/5 border border-white/5">
             ESC
@@ -95,8 +88,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         {/* Results List */}
         <div className="max-h-72 overflow-y-auto p-2 space-y-1 text-xs">
           {filtered.length === 0 ? (
-            <div className="py-6 text-center text-slate-500 font-mono text-xs">
-              No matching commands found.
+            <div className="py-6 text-center text-slate-500 text-xs">
+              No matching options found.
             </div>
           ) : (
             filtered.map((item, idx) => {
@@ -109,7 +102,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 >
                   <div className="flex items-center space-x-2.5">
                     <Icon className="w-4 h-4 text-[#0c83ff]" />
-                    <span>{item.label}</span>
+                    <span className="text-xs font-medium">{item.label}</span>
                   </div>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 transition-colors" />
                 </button>
@@ -118,9 +111,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           )}
         </div>
 
-        <div className="px-4 py-2 bg-[#090d16] border-t border-white/[0.05] text-[11px] font-mono text-slate-500 flex justify-between">
-          <span>AgentPay Payments Console</span>
-          <span>Navigation & Actions</span>
+        <div className="px-4 py-2 bg-[#090d16] border-t border-white/[0.05] text-[11px] text-slate-500 flex justify-between">
+          <span>AgentPay</span>
+          <span>Quick actions & navigation</span>
         </div>
 
       </div>
