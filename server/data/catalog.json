@@ -215,7 +215,7 @@
     "description": "Responsive everyday workhorse running shoes with React foam technology and dual Zoom Air units for road running and training.",
     "price": 1899,
     "currency": "INR",
-    "stock": 15,
+    "stock": 4,
     "rating": 4.9,
     "merchantId": "merch_nike_india",
     "merchantName": "Nike India",
@@ -299,6 +299,26 @@
       "plate": "Full-Length Carbon Fiber Flyplate",
       "foam": "Ultra-light ZoomX",
       "shippingEta": "Express Air Delivery"
+    },
+    "bundleDeals": []
+  },
+  {
+    "id": "prod_test_01",
+    "name": "Test Unit Product",
+    "category": "Electronics",
+    "description": "",
+    "price": 1499,
+    "currency": "INR",
+    "stock": 10,
+    "rating": 4.8,
+    "merchantId": "merch_test",
+    "merchantName": "Test Merchant",
+    "tags": [
+      "electronics",
+      "test unit product"
+    ],
+    "specifications": {
+      "source": "CSV Importer"
     },
     "bundleDeals": []
   }

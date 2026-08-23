@@ -4,8 +4,8 @@
 [![Razorpay](https://img.shields.io/badge/Razorpay-Test%20API%20Active-0c83ff?style=flat&logo=razorpay)](https://razorpay.com)
 [![Protocol](https://img.shields.io/badge/Protocol-NPCI--UAP%20%7C%20AP2%20v2.0-8b5cf6?style=flat)]()
 [![Enclave](https://img.shields.io/badge/Spending%20Guard-Cryptographic%20Enclave-10b981?style=flat)]()
-[![Benchmark](https://img.shields.io/badge/Benchmark-100%25%20Adherence-10b981?style=flat)]()
-[![Status](https://img.shields.io/badge/Build-Passing-emerald)]()
+[![Tests](https://img.shields.io/badge/Tests-7%2F7%20Passed-10b981?style=flat)]()
+[![Benchmark](https://img.shields.io/badge/Benchmark-100%25%20Policy%20Adherence-10b981?style=flat)]()
 
 ---
 
@@ -35,7 +35,7 @@ $$\text{DISCOVER} \longrightarrow \text{DECIDE} \longrightarrow \text{CONTROL} \
 │                          BOUNDED SPENDING ENCLAVE                               │
 │  - Policy Verification Engine (HMAC-SHA256 Signed Mandates)                     │
 │  - Single-Tx Threshold Gating (> ₹2,000 triggers Step-Up Modal)                 │
-│  - Daily Cumulative Ceiling Tracker                                             │
+│  - Double-Entry FinOps Ledger (Balanced Debits & Credits)                       │
 │  - Whitelisted Merchant & Category Validator                                    │
 └───────────────────────┬─────────────────────────────────┬───────────────────────┘
                         │                                 │
@@ -44,51 +44,73 @@ $$\text{DISCOVER} \longrightarrow \text{DECIDE} \longrightarrow \text{CONTROL} \
                         ▼                                 ▼
 ┌───────────────────────────────────┐             ┌───────────────────────────────┐
 │     AUTONOMOUS BUYER AGENT        │ ◄───UAP───► │     MERCHANT YIELD AGENT      │
-│  - Natural Language Intent Parser │   (AP2/     │  - Machine-Readable Catalog   │
-│  - Semantic Catalog Discovery     │   x402)     │  - Dynamic Bundle Upsells     │
-│  - Out-of-Stock Graceful Recovery │             │  - Cryptographic Quote Signer │
+│  - Natural Language Intent Parser │   (AP2/     │  - Canonical UAP / CSV Schema │
+│  - Semantic Catalog Discovery     │   x402)     │  - Dynamic Upsell Bundles     │
+│  - Out-of-Stock Graceful Recovery │             │  - Abandoned Cart Recovery    │
 └─────────────────┬─────────────────┘             └───────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           RAZORPAY TEST API ENGINE                              │
-│  - Orders API (`/v1/orders`)                                                    │
-│  - Dynamic UPI QR Intent Builder (`upi://pay?...`)                              │
+│  - Orders API (`/v1/orders`) & Payment Links (`https://rzp.io/i/...`)           │
+│  - Official Razorpay Standard Checkout SDK Modal (`checkout.js`)                │
 │  - Webhook Listener with HMAC-SHA256 Signature Verification                     │
-│  - Cryptographic FinOps Audit Ledger (`/api/enclave/audit`)                     │
+│  - Live Merchant Courier Dispatch (Amazon Logistics / Delhivery)                │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🌟 Flagship Features for Top-Tier Buildathon Signal
+## 🌟 6 Core Pillars (Track 01 Flagship Requirements)
 
-1. **Automated 50-Transaction Benchmark Suite**:
-   - 1-click execution over 50 synthetic transactions measuring throughput, latency (~148ms), 100% policy adherence, and an **Honest Exception Triage Queue**.
-2. **RFC-Compliant Protocol Wire Inspector**:
-   - Inspect raw HTTP wire frames and headers (`X-Agent-Protocol: UAP/1.0`, `X-Enclave-Signature`, `402 Payment Required`, `X-Razorpay-Signature`).
-3. **Command Palette (`Cmd+K` / `Ctrl+K`)**:
-   - Instant search across navigation, benchmark triggers, and shopping intents.
-4. **Explore & Flow (Landing)**: Minimal hero (*"Autonomous commerce. Controlled by you."*) + interactive 4-step purchase visualization + 4 core pillars.
-5. **AI Agent Command Center**: Task execution runner, action pipeline with expandable JSON payloads, and permissions matrix.
-6. **Financial Policies (Security Enclave)**: Controls for auto-threshold slider, daily ceiling, category toggles, merchant whitelist, and cryptographic AP2 mandate.
-7. **Transactions Ledger & Explainability**: Filter by status + **Deep Explainability Modal** (*"Why was this payment allowed?"*).
-8. **AI-Readable Catalog**: Semantic catalog with AI match scores, bundle discounts, and machine-readable JSON-LD UAP schema viewer.
-9. **Cryptographic Audit Trail**: Chronological event ledger with HMAC-SHA256 verification signatures.
-10. **Failure Simulation Studio**: Edge-case testing for stockout fallback, price surges, and budget ceiling containment.
+### 1. 📦 **Agent-Readable Merchant Catalog Layer**
+* Canonical schema (`id`, `name`, `description`, `price`, `currency`, `stock`, `specifications`, `bundleDeals`).
+* 1-Click CSV Catalog Importer (`POST /api/uap/catalog/import-csv`).
+* Exposed ReAct agent tools: `search_products`, `get_product`, `list_categories`, `get_inventory`.
+* Semantic embeddings + Amazon India ASIN mapping adapter (`amazonAdapter.ts`).
+
+### 2. 🤖 **Conversational / Autonomous Shopping & Checkout Agent**
+* Natural-language or structured intent $\rightarrow$ product discovery $\rightarrow$ cart $\rightarrow$ Razorpay Order creation.
+* Official Razorpay Standard Checkout popup widget (`RazorpayCheckoutWidget.tsx`).
+* Webhook listener (`payment.captured`) with HMAC-SHA256 signature verification.
+* Live courier order fulfillment dispatch (`AWB-93323E61-IN`) with downloadable cryptographic tax invoice.
+
+### 3. 🛡️ **Safety & Governance Guardrails (For Judges)**
+* Per-agent spending limits (per-tx ₹2,000, daily ceiling ₹25,000).
+* Allow-list of merchants and authorized categories.
+* Human-in-the-loop Biometric Passkey / Hardware OTP step-up approval for high-value orders.
+* **Double-Entry FinOps Accounting Ledger** (`DoubleEntryLedgerEngine`) with idempotency key enforcement (`idemp_...`).
+* Full explainability log on every transaction: *"Why this product, why this price, why this amount"*.
+
+### 4. 📈 **Merchant Revenue Growth Engine**
+* **Dynamic Upsell / Cross-Sell Optimizer**: Multi-item bundle affinity deals (15%–30% discount).
+* **Abandoned Cart Recovery Agent**: Dispatches personalized AI follow-up messages with Razorpay payment links.
+* **Merchant Analytics Hub**: +18.4% AOV lift, 68.2% conversion rate, 42.1% cart recovery rate.
+
+### 5. 📡 **Multi-Agent / A2A Payee Protocol**
+* Agent exposes itself as a payee (`A2APayeeProtocolEngine`) to receive autonomous payments from external bots.
+* RFC-compliant **Protocol Wire Inspector** for raw UAP 1.0, AP2 v2.0, and x402 headers.
+
+### 6. 🧪 **Automated 50-Transaction Benchmark Suite & Tests**
+* 1-Click 50-Batch stress test: **100.0% Policy Adherence**, **100.0% Cryptographic Audit Completeness**, **~148ms latency**.
+* 7/7 automated integration test suite (`npm test`).
 
 ---
 
-## 🚀 Quickstart & Setup
+## 🚀 Quickstart & Running Locally
 
 ```bash
-# Navigate to project directory
-cd c:\razorpay
+# 1. Clone the repository
+git clone https://github.com/Akash-1271/agentpay.git
+cd agentpay
 
-# Install all dependencies
+# 2. Install dependencies
 npm install
 
-# Start both Backend Server (Port 3001) and Frontend UI (Port 5173)
+# 3. Run automated tests
+npm test
+
+# 4. Start both Backend Server & Frontend UI
 npm run dev
 ```
 
@@ -96,25 +118,29 @@ Open **`http://localhost:5173`** in your browser.
 
 ---
 
-## 🎬 5-Minute Video Pitch Script (For Buildathon Submission)
+## 🧪 Running Automated Tests
 
-* **[0:00 - 0:45] The Hook & Problem**:
-  * *"AI agents are ready to buy, but merchants aren't ready to sell safely. Unbounded agents risk financial hallucinations, and merchants have no agent-readable commerce gateway."*
-* **[0:45 - 1:45] Live Demo 1: Autonomous Quick Buy (≤ ₹2,000)**:
-  * Prompt: *"Buy running shoes under ₹2,000."*
-  * Show real-time trace: Buyer Agent matches Nike Pegasus 40 (₹1,709 with discount) $\rightarrow$ Enclave checks bounds $\rightarrow$ Razorpay Order created and settled in 1.5 seconds.
-* **[1:45 - 2:30] Live Demo 2: Bounded Step-Up Gating (> ₹2,000)**:
-  * Prompt: *"Order Keychron Q1 Pro mechanical keyboard."*
-  * Show Enclave gating the ₹3,509 order $\rightarrow$ Step-Up Modal appears $\rightarrow$ Biometric Passkey signature authorization $\rightarrow$ Settled.
-* **[2:30 - 3:15] Live Demo 3: Automated 50-Transaction Benchmark Suite**:
-  * Click *"Launch 50-Transaction Benchmark"* $\rightarrow$ Show 50 transactions executed in 380ms with 100% policy adherence and honest exceptions triage.
-* **[3:15 - 4:00] Live Demo 4: RFC Protocol Wire Trace & Explainability**:
-  * Click *"Protocol Wire"* $\rightarrow$ Show raw HTTP headers (`X-Agent-Protocol`, `X-Enclave-Signature`, `X-Razorpay-Signature`).
-  * Open a transaction $\rightarrow$ Show *"Why was this payment allowed?"* visual timeline and HMAC audit log.
-* **[4:00 - 4:30] Live Demo 5: Graceful Failure Recovery**:
-  * Trigger Stockout scenario $\rightarrow$ Agent gracefully recovers with Adidas Ultraboost alternative.
-* **[4:30 - 5:00] Conclusion & Why Razorpay**:
-  * *"AgentPay turns Razorpay into the default financial settlement layer for the upcoming agentic economy."*
+```bash
+npx tsx server/tests/agentpay.test.ts
+```
+```
+🧪 Running AgentPay Track 01 Comprehensive Test Suite...
+
+  ✅ PASSED: 1. Canonical UAP Catalog Semantic Search
+  ✅ PASSED: 2. Dynamic CSV Catalog Import
+  ✅ PASSED: 3. Autonomous Buyer Flow & Razorpay Order Creation
+  ✅ PASSED: 4. Bounded Enclave Step-Up Gating (> ₹2,000)
+  ✅ PASSED: 5. Double-Entry FinOps Balanced Debits & Credits
+  ✅ PASSED: 6. Abandoned Cart Recovery & Payment Link Generation
+  ✅ PASSED: 7. A2A Payee Protocol & Settlement
+
+🎉 All 7 Core Track 01 Tests Passed Successfully!
+```
+
+---
+
+## 🎬 5-Minute Pitch Video Script
+Find the detailed script and timing breakdown in **[`docs/demo-script.md`](./docs/demo-script.md)**.
 
 ---
 

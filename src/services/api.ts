@@ -101,4 +101,55 @@ export const api = {
     if (!res.ok) throw new Error('Failed to reset spend');
     return res.json();
   },
+
+  async getGrowthMetrics() {
+    const res = await fetch(`${API_BASE}/growth/metrics`);
+    if (!res.ok) throw new Error('Failed to fetch growth metrics');
+    return res.json();
+  },
+
+  async getAbandonedCarts() {
+    const res = await fetch(`${API_BASE}/growth/abandoned-carts`);
+    if (!res.ok) throw new Error('Failed to fetch abandoned carts');
+    return res.json();
+  },
+
+  async recoverCart(cartId: string) {
+    const res = await fetch(`${API_BASE}/growth/recover-cart`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cartId }),
+    });
+    if (!res.ok) throw new Error('Failed to recover cart');
+    return res.json();
+  },
+
+  async getFinOpsLedger() {
+    const res = await fetch(`${API_BASE}/finops/ledger`);
+    if (!res.ok) throw new Error('Failed to fetch FinOps ledger');
+    return res.json();
+  },
+
+  async importCatalogCsv(csvText: string) {
+    const res = await fetch(`${API_BASE}/uap/catalog/import-csv`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ csvText }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to import CSV');
+    }
+    return res.json();
+  },
+
+  async sendA2APayment(payerAgentId: string, serviceRequested: string, amount: number) {
+    const res = await fetch(`${API_BASE}/a2a/request-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payerAgentId, serviceRequested, amount }),
+    });
+    if (!res.ok) throw new Error('Failed to execute A2A payment');
+    return res.json();
+  },
 };

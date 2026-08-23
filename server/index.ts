@@ -12,6 +12,9 @@ import { BenchmarkEngine } from './protocols/benchmark.js';
 import { ProtocolWireEngine } from './protocols/protocolWire.js';
 import { AmazonMerchantAdapter } from './merchants/amazonAdapter.js';
 import { FulfillmentEngine } from './merchants/fulfillmentEngine.js';
+import { RevenueGrowthEngine } from './agents/growthEngine.js';
+import { DoubleEntryLedgerEngine } from './protocols/doubleEntryLedger.js';
+import { A2APayeeProtocolEngine } from './protocols/payeeAgent.js';
 
 const app = express();
 
@@ -231,10 +234,80 @@ app.get('/api/merchants/orders', (req: Request, res: Response) => {
   res.json({ orders: FulfillmentEngine.getAllOrders() });
 });
 
-app.get('/api/merchants/orders/:id', (req: Request, res: Response) => {
-  const order = FulfillmentEngine.getOrder(req.params.id);
-  if (!order) return res.status(404).json({ error: 'Order not found' });
-  res.json({ order });
+// ----------------------------------------------------
+// CSV CATALOG IMPORT
+// ----------------------------------------------------
+app.post('/api/uap/catalog/import-csv', (req: Request, res: Response) => {
+  try {
+    const { csvText } = req.body;
+    if (!csvText) return res.status(400).json({ error: 'csvText is required' });
+    const result = UAPCatalogEngine.importFromCsv(csvText);
+    res.json({ message: 'Catalog CSV imported successfully', ...result });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// ----------------------------------------------------
+// REVENUE GROWTH & ABANDONED CART RECOVERY
+// ----------------------------------------------------
+app.get('/api/growth/metrics', (req: Request, res: Response) => {
+  res.json(RevenueGrowthEngine.getGrowthMetrics());
+});
+
+app.get('/api/growth/abandoned-carts', (req: Request, res: Response) => {
+  res.json({ carts: RevenueGrowthEngine.getAbandonedCarts() });
+});
+
+app.post('/api/growth/recover-cart', (req: Request, res: Response) => {
+  try {
+    const { cartId } = req.body;
+    const cart = RevenueGrowthEngine.triggerCartRecovery(cartId);
+    res.json({ message: 'Abandoned cart recovered successfully', cart });
+  } catch (err: any) {
+    res.status(404).json({ error: err.message });
+  }
+});
+
+// ----------------------------------------------------
+// DOUBLE-ENTRY FINOPS LEDGER
+// ----------------------------------------------------
+app.get('/api/finops/ledger', (req: Request, res: Response) => {
+  res.json({
+    count: DoubleEntryLedgerEngine.getJournal().length,
+    journal: DoubleEntryLedgerEngine.getJournal(),
+    balances: DoubleEntryLedgerEngine.getBalances(),
+  });
+});
+
+app.get('/api/finops/balances', (req: Request, res: Response) => {
+  res.json({ balances: DoubleEntryLedgerEngine.getBalances() });
+});
+
+// ----------------------------------------------------
+// MULTI-AGENT / A2A PAYEE PROTOCOL
+// ----------------------------------------------------
+app.post('/api/a2a/request-payment', async (req: Request, res: Response) => {
+  try {
+    const { payerAgentId, serviceRequested, amount, currency, voucherToken } = req.body;
+    if (!payerAgentId || !serviceRequested || !amount) {
+      return res.status(400).json({ error: 'payerAgentId, serviceRequested, and amount are required' });
+    }
+    const a2aReq = await A2APayeeProtocolEngine.receivePaymentRequest({
+      payerAgentId,
+      serviceRequested,
+      amount: parseFloat(amount),
+      currency,
+      voucherToken,
+    });
+    res.json({ message: 'A2A Payment request received and settled via Razorpay test mode', request: a2aReq });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/a2a/requests', (req: Request, res: Response) => {
+  res.json({ requests: A2APayeeProtocolEngine.getA2ARequests() });
 });
 
 app.listen(CONFIG.PORT, () => {

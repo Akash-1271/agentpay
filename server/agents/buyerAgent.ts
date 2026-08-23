@@ -7,6 +7,7 @@ import { WebhookManager } from '../razorpay/webhooks.js';
 import { AP2SignedQuote } from '../protocols/ap2.js';
 import { AmazonMerchantAdapter } from '../merchants/amazonAdapter.js';
 import { FulfillmentEngine, FulfillmentOrder } from '../merchants/fulfillmentEngine.js';
+import { DoubleEntryLedgerEngine } from '../protocols/doubleEntryLedger.js';
 
 export interface AgentReasoningStep {
   step: number;
@@ -335,9 +336,16 @@ export class BuyerAgent {
     // 3. Simulate Gateway Webhook & Settlement
     const simulatedWebhook = WebhookManager.emitSimulatedWebhookEvent('payment.captured', razorpayOrder.id, params.quote.netAmount);
 
-    // 4. Decrement Stock & Commit Spend in Enclave
+    // 4. Decrement Stock & Commit Spend in Enclave & Record Double-Entry Journal
     UAPCatalogEngine.updateStock(params.selectedProduct.id, -1);
     BoundedSpendingEnclave.commitSpend(params.quote.netAmount);
+    DoubleEntryLedgerEngine.recordTransaction({
+      transactionId: params.transactionId,
+      razorpayOrderId: razorpayOrder.id,
+      amount: params.quote.netAmount,
+      currency: params.quote.currency,
+      description: `Settlement for ${params.selectedProduct.name} via Razorpay Order ${razorpayOrder.id}`,
+    });
 
     params.reasoningTrail.push({
       step: params.reasoningTrail.length + 1,

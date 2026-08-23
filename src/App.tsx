@@ -9,6 +9,7 @@ import { CatalogPage } from './components/CatalogPage';
 import { AuditTrailPage } from './components/AuditTrailPage';
 import { FailureSimulationPage } from './components/FailureSimulationPage';
 import { BenchmarkRunner } from './components/BenchmarkRunner';
+import { RevenueGrowthPage } from './components/RevenueGrowthPage';
 import { WireTraceModal } from './components/WireTraceModal';
 import { CommandPalette } from './components/CommandPalette';
 import { StepUpModal } from './components/StepUpModal';
@@ -247,6 +248,8 @@ export const App: React.FC = () => {
               loading={loading}
             />
           )}
+
+          {currentSection === 'growth' && <RevenueGrowthPage />}
 
           {currentSection === 'benchmark' && (
             <BenchmarkRunner onRefreshEnclave={fetchEnclaveData} />
