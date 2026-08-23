@@ -1,0 +1,305 @@
+[
+  {
+    "id": "prod_kb_01",
+    "name": "Keychron Q1 Pro Wireless Custom Mechanical Keyboard",
+    "category": "Electronics & Peripherals",
+    "description": "75% QMK/VIA custom wireless mechanical keyboard with Gateron Jupiter Brown switches, CNC aluminum body, and hot-swappable PCB.",
+    "price": 3899,
+    "currency": "INR",
+    "stock": 11,
+    "rating": 4.9,
+    "merchantId": "merch_apex_gear",
+    "merchantName": "Apex Gear India",
+    "tags": [
+      "keyboard",
+      "mechanical",
+      "wireless",
+      "brown switch",
+      "gadgets",
+      "office"
+    ],
+    "specifications": {
+      "switches": "Gateron Brown (Tactile)",
+      "connectivity": "Bluetooth 5.1 & Type-C Wired",
+      "layout": "75% ANSI",
+      "shippingEta": "1 Day (Bangalore Priority Express)"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_wrist_01",
+        "addonName": "Walnut Hardwood Ergonomic Wrist Rest",
+        "addonPrice": 499,
+        "bundleDiscountPct": 15
+      },
+      {
+        "addonId": "prod_cable_01",
+        "addonName": "Custom Aviator Coiled Type-C Cable",
+        "addonPrice": 399,
+        "bundleDiscountPct": 20
+      }
+    ]
+  },
+  {
+    "id": "prod_audio_02",
+    "name": "Sony WH-1000XM5 Noise-Canceling Wireless Headphones",
+    "category": "Audio",
+    "description": "Industry-leading active noise cancellation with 2 processors, 8 microphones, 30-hour battery life, and crystal-clear hands-free calling.",
+    "price": 24990,
+    "currency": "INR",
+    "stock": 8,
+    "rating": 4.8,
+    "merchantId": "merch_apex_gear",
+    "merchantName": "Apex Gear India",
+    "tags": [
+      "audio",
+      "headphones",
+      "anc",
+      "wireless",
+      "sony",
+      "music"
+    ],
+    "specifications": {
+      "battery": "30 Hours ANC On",
+      "drivers": "30mm Carbon Fiber",
+      "codecs": "LDAC, AAC, SBC",
+      "shippingEta": "Same-day Dispatch"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_case_01",
+        "addonName": "Hard Shell Travel Case + Airplane Adapter",
+        "addonPrice": 999,
+        "bundleDiscountPct": 25
+      },
+      {
+        "addonId": "prod_care_01",
+        "addonName": "Razorpay 2-Year Complete Damage Protection",
+        "addonPrice": 1499,
+        "bundleDiscountPct": 30
+      }
+    ]
+  },
+  {
+    "id": "prod_mouse_03",
+    "name": "Logitech MX Master 3S Performance Wireless Mouse",
+    "category": "Electronics & Peripherals",
+    "description": "Ergonomic quiet click mouse with 8K DPI any-surface tracking and MagSpeed electromagnetic scrolling.",
+    "price": 1899,
+    "currency": "INR",
+    "stock": 23,
+    "rating": 4.9,
+    "merchantId": "merch_apex_gear",
+    "merchantName": "Apex Gear India",
+    "tags": [
+      "mouse",
+      "ergonomic",
+      "bluetooth",
+      "logitech",
+      "office"
+    ],
+    "specifications": {
+      "sensor": "8000 DPI Darkfield",
+      "clicks": "Quiet Clicks (90% noise reduction)",
+      "battery": "70 days on full charge",
+      "shippingEta": "1 Day Delivery"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_pad_01",
+        "addonName": "Microfiber Desk Mat (900x400mm)",
+        "addonPrice": 299,
+        "bundleDiscountPct": 15
+      }
+    ]
+  },
+  {
+    "id": "prod_saas_04",
+    "name": "NebulaGPU 1000 H100 Cloud Compute Hours Pack",
+    "category": "Cloud & AI Infrastructure",
+    "description": "On-demand high-throughput Nvidia H100 SXM5 GPU cluster instance credits with 3.2Tbps InfiniBand networking for LLM training and inference.",
+    "price": 12500,
+    "currency": "INR",
+    "stock": 999,
+    "rating": 5,
+    "merchantId": "merch_nebulacloud",
+    "merchantName": "Nebula Cloud Computing",
+    "tags": [
+      "gpu",
+      "cloud",
+      "compute",
+      "h100",
+      "ai",
+      "inference",
+      "saas"
+    ],
+    "specifications": {
+      "accelerator": "NVIDIA H100 80GB HBM3",
+      "interconnect": "Quantum-2 3200 Gb/s",
+      "instantProvisioning": "True",
+      "sla": "99.99% Uptime"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_vectordb_01",
+        "addonName": "Dedicated Milvus Vector DB (10M Embeddings)",
+        "addonPrice": 2500,
+        "bundleDiscountPct": 40
+      }
+    ]
+  },
+  {
+    "id": "prod_gadget_05",
+    "name": "Ultrahuman Ring AIR Smart Sleep & Metabolism Tracker",
+    "category": "Wearables & Health",
+    "description": "Ultra-lightweight titanium smart ring measuring sleep staging, circadian rhythm, temperature fluctuations, and heart rate variability.",
+    "price": 18499,
+    "currency": "INR",
+    "stock": 0,
+    "rating": 4.7,
+    "merchantId": "merch_biowear",
+    "merchantName": "BioWear India",
+    "tags": [
+      "smart ring",
+      "health",
+      "tracker",
+      "wearable",
+      "sleep",
+      "fitness"
+    ],
+    "specifications": {
+      "material": "Fighter jet grade Titanium with Tungsten Carbide",
+      "weight": "2.4 grams",
+      "waterResistance": "100 meters (10 ATM)",
+      "shippingEta": "Currently Backordered"
+    },
+    "bundleDeals": []
+  },
+  {
+    "id": "prod_hub_06",
+    "name": "Anker 7-in-1 USB-C PowerExpand Hub 4K HDMI & 100W PD",
+    "category": "Electronics & Peripherals",
+    "description": "USB-C multiport adapter with 4K@60Hz HDMI output, 100W Power Delivery, SD/microSD card reader, and dual USB 3.0 ports.",
+    "price": 1499,
+    "currency": "INR",
+    "stock": 42,
+    "rating": 4.7,
+    "merchantId": "merch_apex_gear",
+    "merchantName": "Apex Gear India",
+    "tags": [
+      "usb-c",
+      "hub",
+      "adapter",
+      "anker",
+      "hdmi",
+      "power delivery"
+    ],
+    "specifications": {
+      "powerDelivery": "100W Pass-through",
+      "videoOutput": "4K @ 60Hz HDMI",
+      "ports": "7 Ports",
+      "shippingEta": "1 Day Express"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_cable_02",
+        "addonName": "Braided 100W USB-C to USB-C E-Marker Cable (2m)",
+        "addonPrice": 349,
+        "bundleDiscountPct": 25
+      }
+    ]
+  },
+  {
+    "id": "prod_shoe_07",
+    "name": "Nike Air Zoom Pegasus 40 Running Shoes",
+    "category": "Athletics & Apparel",
+    "description": "Responsive everyday workhorse running shoes with React foam technology and dual Zoom Air units for road running and training.",
+    "price": 1899,
+    "currency": "INR",
+    "stock": 17,
+    "rating": 4.9,
+    "merchantId": "merch_nike_india",
+    "merchantName": "Nike India",
+    "tags": [
+      "shoes",
+      "running",
+      "nike",
+      "sneakers",
+      "pegasus",
+      "athletics",
+      "footwear"
+    ],
+    "specifications": {
+      "cushioning": "Nike React Foam + Dual Zoom Air",
+      "surface": "Road & Track",
+      "weight": "285g",
+      "shippingEta": "1 Day (Priority Express)"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_socks_01",
+        "addonName": "Nike Dri-FIT Anti-Blister Running Socks (3-Pack)",
+        "addonPrice": 299,
+        "bundleDiscountPct": 20
+      }
+    ]
+  },
+  {
+    "id": "prod_shoe_08",
+    "name": "Adidas Ultraboost Light Running Shoes",
+    "category": "Athletics & Apparel",
+    "description": "Lightweight high-energy-return running shoes with Light BOOST midsole and Continental Rubber outsole grip.",
+    "price": 1799,
+    "currency": "INR",
+    "stock": 14,
+    "rating": 4.8,
+    "merchantId": "merch_adidas_store",
+    "merchantName": "Adidas Store",
+    "tags": [
+      "shoes",
+      "running",
+      "adidas",
+      "ultraboost",
+      "sneakers",
+      "athletics"
+    ],
+    "specifications": {
+      "midsole": "Light BOOST Compound",
+      "outsole": "Continental Natural Rubber",
+      "shippingEta": "Same-day Dispatch"
+    },
+    "bundleDeals": [
+      {
+        "addonId": "prod_bottle_01",
+        "addonName": "Stainless Steel Hydration Flask (750ml)",
+        "addonPrice": 349,
+        "bundleDiscountPct": 25
+      }
+    ]
+  },
+  {
+    "id": "prod_shoe_09",
+    "name": "Nike Alphafly 3 Premium Marathon Race Shoes",
+    "category": "Athletics & Apparel",
+    "description": "World-record breaking marathon shoe with full-length carbon fiber Flyplate, ZoomX foam, and dual Zoom Air pods.",
+    "price": 2499,
+    "currency": "INR",
+    "stock": 6,
+    "rating": 5,
+    "merchantId": "merch_nike_india",
+    "merchantName": "Nike India",
+    "tags": [
+      "shoes",
+      "running",
+      "marathon",
+      "nike",
+      "alphafly",
+      "carbon plate"
+    ],
+    "specifications": {
+      "plate": "Full-Length Carbon Fiber Flyplate",
+      "foam": "Ultra-light ZoomX",
+      "shippingEta": "Express Air Delivery"
+    },
+    "bundleDeals": []
+  }
+]
