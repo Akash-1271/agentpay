@@ -139,10 +139,5 @@ npx tsx server/tests/agentpay.test.ts
 
 ---
 
-## 🎬 5-Minute Pitch Video Script
-Find the detailed script and timing breakdown in **[`docs/demo-script.md`](./docs/demo-script.md)**.
-
----
-
 ## 📜 License
-MIT License · Built with ❤️ for the Razorpay AI Buildathon 2026.
+MIT License ·
