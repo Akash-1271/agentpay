@@ -1,5 +1,5 @@
 # ⚡ AgentPay — Autonomous Agentic Commerce Protocol & Bounded Payment Gateway
-> Built for the **Razorpay AI Buildathon 2026** · **Track 01: AI Growth & Agentic Commerce**
+**Track 01: AI Growth & Agentic Commerce**
 
 [![Razorpay](https://img.shields.io/badge/Razorpay-Test%20API%20Active-0c83ff?style=flat&logo=razorpay)](https://razorpay.com)
 [![Protocol](https://img.shields.io/badge/Protocol-NPCI--UAP%20%7C%20AP2%20v2.0-8b5cf6?style=flat)]()
