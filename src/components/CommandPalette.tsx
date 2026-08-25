@@ -46,13 +46,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const actions = [
     { label: 'Buy: "Search Amazon for running shoes under ₹2,000"', type: 'intent', icon: ShoppingBag, prompt: 'Search Amazon for running shoes under ₹2,000' },
     { label: 'Buy: "Order Keychron Q1 Pro custom mechanical keyboard"', type: 'intent', icon: ShoppingBag, prompt: 'Order Keychron Q1 Pro custom mechanical keyboard' },
-    { label: 'Amazon Advisor & Reviews', type: 'nav', icon: Star, section: 'amazon' },
+    { label: 'Buy: "Order Anker 735 GaN Fast Charger 65W"', type: 'intent', icon: ShoppingBag, prompt: 'Order Anker 735 GaN Fast Charger 65W' },
+    { label: 'Amazon.in & Flipkart.com Review Advisor', type: 'nav', icon: Star, section: 'amazon' },
     { label: 'Executive Dashboard Overview', type: 'nav', icon: Home, section: 'overview' },
-    { label: 'Purchase & Order Console', type: 'nav', icon: ShoppingBag, section: 'agent' },
-    { label: 'Audit History & Ledger', type: 'nav', icon: History, section: 'transactions' },
-    { label: 'Spending Limits & Enclave', type: 'nav', icon: ShieldCheck, section: 'policies' },
-    { label: 'Merchant Catalog & Lookbook', type: 'nav', icon: Package, section: 'catalog' },
-    { label: 'Evaluation Benchmark Suite', type: 'nav', icon: Layers, section: 'benchmark' },
+    { label: 'Purchase & Order Console (Autonomous ReAct Agent)', type: 'nav', icon: ShoppingBag, section: 'agent' },
+    { label: 'Audit History & Double-Entry Ledger', type: 'nav', icon: History, section: 'transactions' },
+    { label: 'Spending Limits & Bounded Enclave', type: 'nav', icon: ShieldCheck, section: 'policies' },
+    { label: 'Merchant Catalog & Lookbook (UAP)', type: 'nav', icon: Package, section: 'catalog' },
+    { label: 'Merchant Revenue & Abandoned Cart Recovery', type: 'nav', icon: Layers, section: 'growth' },
+    { label: 'Failure Simulation & Edge Cases (3 Modes)', type: 'nav', icon: ShieldCheck, section: 'failures' },
+    { label: 'Evaluation Stress Benchmark Suite (50-Tx)', type: 'nav', icon: Layers, section: 'benchmark' },
   ];
 
   const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));

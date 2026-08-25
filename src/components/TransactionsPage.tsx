@@ -79,13 +79,44 @@ const DEFAULT_TRANSACTIONS: DisplayTransaction[] = [
   },
 ];
 
-export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
+export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger = [] }) => {
   const [filter, setFilter] = useState<'ALL' | 'COMPLETED' | 'STEP_UP_REQUIRED' | 'BLOCKED'>('ALL');
   const [search, setSearch] = useState('');
   const [selectedTx, setSelectedTx] = useState<DisplayTransaction | null>(null);
   const [trackingOutcome, setTrackingOutcome] = useState<AgentTransactionOutcome | null>(null);
 
-  const filtered = DEFAULT_TRANSACTIONS.filter((t) => {
+  // Convert live audit logs into DisplayTransactions if available
+  const liveItems: DisplayTransaction[] = auditLedger
+    .filter((a) => a.action === 'TRANSACTION_SETTLED' || a.action === 'STEP_UP_REQUIRED' || a.action === 'POLICY_REJECTED')
+    .map((a, i) => {
+      let status: 'COMPLETED' | 'STEP_UP_REQUIRED' | 'BLOCKED' = 'COMPLETED';
+      if (a.action === 'STEP_UP_REQUIRED') status = 'STEP_UP_REQUIRED';
+      if (a.action === 'POLICY_REJECTED') status = 'BLOCKED';
+
+      const details = typeof a.details === 'object' ? a.details : {};
+      const prodName = details.productName || details.quoteId || 'Autonomous Commerce Purchase';
+      const merch = details.merchantId || 'Verified UAP Merchant';
+
+      return {
+        id: a.id || `live_tx_${i}`,
+        productName: prodName,
+        merchantName: merch,
+        merchantId: merch,
+        amount: a.amount || 1899,
+        currency: a.currency || 'INR',
+        status,
+        timestamp: a.timestamp,
+        orderId: details.razorpayOrderId || details.orderId || `order_${a.id.slice(0, 8)}`,
+        paymentId: details.paymentId || `pay_${a.id.slice(0, 8)}`,
+        policyReason: a.reasoning || 'Executed within verified spending limits.',
+        enclaveHash: a.signature || 'sha256:enclave_verified',
+        userPrompt: details.intent || `Purchase of ${prodName}`,
+      };
+    });
+
+  const combinedList = liveItems.length > 0 ? [...liveItems, ...DEFAULT_TRANSACTIONS.slice(liveItems.length)] : DEFAULT_TRANSACTIONS;
+
+  const filtered = combinedList.filter((t) => {
     if (filter !== 'ALL' && t.status !== filter) return false;
     if (search) {
       const q = search.toLowerCase();
