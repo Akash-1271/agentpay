@@ -62,6 +62,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
         requiresStepUpAbove: maxAutoTx,
         maxPerTransaction: maxAutoTx,
         dailyCeiling,
+        whitelistedMerchants: merchants,
       });
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
