@@ -115,7 +115,7 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
               +{metrics.aovLiftPct}%
             </div>
             <div className="text-[11px] text-[#6C6863] font-sans">
-              ₹169,075 vs ₹142,800 baseline
+              ₹{metrics.growthGmv?.toLocaleString() || '14,100'} vs ₹{metrics.baselineGmv?.toLocaleString() || '12,000'} baseline
             </div>
           </div>
 

@@ -157,7 +157,7 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
             </p>
 
             <div className="p-3 bg-[#FAF8F5] border border-[#1A1A1A]/10 text-[11px] font-mono space-y-1 text-[#1A1A1A]">
-              <div className="text-[#6C6863]">Daily Ceiling: ₹15,000</div>
+              <div className="text-[#6C6863]">Daily Ceiling: ₹25,000</div>
               <div className="text-rose-800 font-bold">Attempted: ₹99,999 (Blocked ✗)</div>
             </div>
           </div>

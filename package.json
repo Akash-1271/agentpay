@@ -12,7 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/better-sqlite3": "^9.6.0",
     "better-sqlite3": "^13.0.3",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -26,6 +25,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.4",
