@@ -303,6 +303,43 @@
     "bundleDeals": []
   },
   {
+    "id": "prod_kb_02",
+    "name": "Royal Kludge RK84 Wireless Mechanical Keyboard",
+    "category": "Electronics & Peripherals",
+    "description": "75% triple mode wireless mechanical keyboard with 3750mAh battery, hot-swappable switches, and dual USB pass-through ports.",
+    "price": 3499,
+    "currency": "INR",
+    "stock": 16,
+    "rating": 4.7,
+    "merchantId": "merch_test",
+    "merchantName": "Flipkart RetailNet",
+    "tags": ["keyboard", "mechanical", "wireless", "royal kludge", "gadgets", "office", "coding"],
+    "specifications": {
+      "switches": "RK Hot-Swap Tactile",
+      "battery": "3750mAh",
+      "connectivity": "Bluetooth 5.0 / 2.4Ghz / USB-C"
+    },
+    "bundleDeals": []
+  },
+  {
+    "id": "prod_charg_01",
+    "name": "Anker 735 GaNPrime 65W 3-Port Fast Wall Charger",
+    "category": "Electronics & Peripherals",
+    "description": "Ultra-compact 65W GaN fast charger with PowerIQ 4.0 and ActiveShield 2.0 temperature monitoring for laptops and phones.",
+    "price": 2899,
+    "currency": "INR",
+    "stock": 14,
+    "rating": 4.8,
+    "merchantId": "merch_amazon",
+    "merchantName": "Amazon India (Anker Direct)",
+    "tags": ["charger", "gan", "anker", "fast charging", "usb-c", "65w"],
+    "specifications": {
+      "power": "65W GaNPrime",
+      "ports": "2x USB-C + 1x USB-A"
+    },
+    "bundleDeals": []
+  },
+  {
     "id": "prod_test_01",
     "name": "Test Unit Product",
     "category": "Electronics",
