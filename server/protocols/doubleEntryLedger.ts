@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import { AgentPayDatabase, JournalEntryRecord, JournalLineRecord } from '../db/database.js';
+import { CONFIG } from '../config.js';
 
 export interface JournalLine {
   account: 'PRINCIPAL_SPENDABLE_WALLET' | 'MERCHANT_SETTLEMENT_ACCOUNT' | 'RAZORPAY_ESCROW_CLEARING';
@@ -20,13 +22,7 @@ export interface DoubleEntryTransaction {
 }
 
 export class DoubleEntryLedgerEngine {
-  private static journal: DoubleEntryTransaction[] = [];
   private static idempotencyRegistry: Map<string, { outcome: any; hash: string }> = new Map();
-  private static balances: Record<string, number> = {
-    'PRINCIPAL_SPENDABLE_WALLET': 50000, // Initial user budget
-    'MERCHANT_SETTLEMENT_ACCOUNT': 0,
-    'RAZORPAY_ESCROW_CLEARING': 0,
-  };
 
   public static checkIdempotency(key: string, payload: any): { isDuplicate: boolean; cachedOutcome?: any } {
     if (!key) return { isDuplicate: false };
@@ -51,61 +47,96 @@ export class DoubleEntryLedgerEngine {
     transactionId: string;
     razorpayOrderId: string;
     amount: number;
-    currency: string;
+    currency?: string;
     description: string;
     idempotencyKey?: string;
   }): DoubleEntryTransaction {
-    const id = `jrn_${crypto.randomBytes(6).toString('hex')}`;
-    const timestamp = new Date().toISOString();
     const idempKey = params.idempotencyKey || `idemp_${params.transactionId}`;
-
-    const lines: JournalLine[] = [
-      {
-        account: 'PRINCIPAL_SPENDABLE_WALLET',
-        type: 'DEBIT',
-        amount: params.amount,
-        currency: params.currency,
-      },
-      {
-        account: 'MERCHANT_SETTLEMENT_ACCOUNT',
-        type: 'CREDIT',
-        amount: params.amount,
-        currency: params.currency,
-      },
-    ];
-
-    // Update balances
-    this.balances['PRINCIPAL_SPENDABLE_WALLET'] -= params.amount;
-    this.balances['MERCHANT_SETTLEMENT_ACCOUNT'] += params.amount;
-
-    const totalDebits = lines.filter(l => l.type === 'DEBIT').reduce((acc, l) => acc + l.amount, 0);
-    const totalCredits = lines.filter(l => l.type === 'CREDIT').reduce((acc, l) => acc + l.amount, 0);
-    const balanced = totalDebits === totalCredits;
-
-    const signaturePayload = `${id}:${params.transactionId}:${params.amount}:${timestamp}`;
-    const hmacSignature = crypto.createHmac('sha256', 'SECRET_DOUBLE_ENTRY_SALT').update(signaturePayload).digest('hex');
-
-    const entry: DoubleEntryTransaction = {
-      id,
+    const record = AgentPayDatabase.recordDoubleEntryTransaction({
       transactionId: params.transactionId,
       razorpayOrderId: params.razorpayOrderId,
-      timestamp,
       description: params.description,
       idempotencyKey: idempKey,
-      lines,
-      balanced,
-      hmacSignature,
-    };
+      amount: params.amount,
+      currency: params.currency || 'INR'
+    });
 
-    this.journal.unshift(entry);
-    return entry;
+    const lines: JournalLine[] = (record.lines || []).map((l: JournalLineRecord) => ({
+      account: l.account_id as JournalLine['account'],
+      type: l.type as JournalLine['type'],
+      amount: l.amount,
+      currency: l.currency
+    }));
+
+    return {
+      id: record.id,
+      transactionId: record.transaction_id,
+      razorpayOrderId: record.razorpay_order_id,
+      timestamp: record.created_at,
+      description: record.description,
+      idempotencyKey: record.idempotency_key,
+      lines,
+      balanced: record.balanced === 1,
+      hmacSignature: record.hmac_signature
+    };
   }
 
   public static getJournal(): DoubleEntryTransaction[] {
-    return this.journal;
+    const entries = AgentPayDatabase.getJournalEntries(100);
+    return entries.map(e => ({
+      id: e.id,
+      transactionId: e.transaction_id,
+      razorpayOrderId: e.razorpay_order_id,
+      timestamp: e.created_at,
+      description: e.description,
+      idempotencyKey: e.idempotency_key,
+      lines: (e.lines || []).map((l: JournalLineRecord) => ({
+        account: l.account_id as JournalLine['account'],
+        type: l.type as JournalLine['type'],
+        amount: l.amount,
+        currency: l.currency
+      })),
+      balanced: e.balanced === 1,
+      hmacSignature: e.hmac_signature
+    }));
   }
 
   public static getBalances(): Record<string, number> {
-    return { ...this.balances };
+    return AgentPayDatabase.getBalances();
+  }
+
+  public static verifyLedgerIntegrity(): {
+    totalEntries: number;
+    totalDebits: number;
+    totalCredits: number;
+    isBalanced: boolean;
+    validSignaturesCount: number;
+  } {
+    const journal = this.getJournal();
+    let totalDebits = 0;
+    let totalCredits = 0;
+    let validSignatures = 0;
+
+    for (const entry of journal) {
+      for (const line of entry.lines) {
+        if (line.type === 'DEBIT') totalDebits += line.amount;
+        if (line.type === 'CREDIT') totalCredits += line.amount;
+      }
+
+      // Verify HMAC Signature
+      const sigPayload = `${entry.id}:${entry.transactionId}:${entry.lines.find(l => l.type === 'DEBIT')?.amount || 0}:${entry.timestamp}`;
+      const expected = crypto.createHmac('sha256', CONFIG.ENCLAVE_SECRET_SALT).update(sigPayload).digest('hex');
+      if (expected === entry.hmacSignature) {
+        validSignatures++;
+      }
+    }
+
+    return {
+      totalEntries: journal.length,
+      totalDebits: Math.round(totalDebits * 100) / 100,
+      totalCredits: Math.round(totalCredits * 100) / 100,
+      isBalanced: Math.round(totalDebits * 100) === Math.round(totalCredits * 100),
+      validSignaturesCount: validSignatures
+    };
   }
 }

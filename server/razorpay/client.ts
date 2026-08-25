@@ -57,7 +57,7 @@ export class RazorpayEngine {
     const currency = params.currency || 'INR';
     const client = this.getClient();
 
-    // If live/valid Razorpay credentials exist, attempt real API call, with instant elegant fallback
+    // If live/valid Razorpay credentials exist (not default demo string), attempt real API call
     if (client && !CONFIG.RAZORPAY_KEY_ID.includes('LiveDemo')) {
       try {
         const order = await client.orders.create({
@@ -68,7 +68,7 @@ export class RazorpayEngine {
         });
         return order as unknown as RazorpayOrderResponse;
       } catch (err) {
-        console.warn('Razorpay API live call encountered error, using high-fidelity test mode:', err);
+        console.warn('Razorpay API call failed, falling back to RFC test mock:', err);
       }
     }
 
@@ -98,12 +98,42 @@ export class RazorpayEngine {
     customerName?: string;
     customerEmail?: string;
   }): Promise<RazorpayPaymentLinkResponse> {
+    const amountInPaise = Math.round(params.amountInRupees * 100);
+    const client = this.getClient();
+
+    if (client && !CONFIG.RAZORPAY_KEY_ID.includes('LiveDemo')) {
+      try {
+        const plink = await (client as any).paymentLink.create({
+          amount: amountInPaise,
+          currency: 'INR',
+          description: params.description,
+          customer: {
+            name: params.customerName || 'AI Principal Consumer',
+            email: params.customerEmail || 'shopper@razorpay-ai.build',
+            contact: '+919876543210'
+          },
+          notify: { sms: true, email: true }
+        });
+        return {
+          id: plink.id,
+          short_url: plink.short_url,
+          status: plink.status,
+          amount: plink.amount,
+          currency: plink.currency,
+          description: plink.description,
+          customer: plink.customer
+        };
+      } catch (err) {
+        console.warn('Razorpay Payment Link API call failed, falling back to RFC test mock:', err);
+      }
+    }
+
     const plinkId = `plink_${crypto.randomBytes(7).toString('hex')}`;
     return {
       id: plinkId,
       short_url: `https://rzp.io/i/agentpay_${plinkId.slice(-6)}`,
       status: 'active',
-      amount: Math.round(params.amountInRupees * 100),
+      amount: amountInPaise,
       currency: 'INR',
       description: params.description,
       customer: {

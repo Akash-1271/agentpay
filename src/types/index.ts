@@ -104,10 +104,31 @@ export interface AgentTransactionOutcome {
   alternativeProduct?: ProductItem;
   receipt?: {
     receiptId: string;
+    paymentId?: string;
     totalPaid: number;
     currency: string;
     paidAt: string;
     auditEnclaveHash: string;
+  };
+  fulfillment?: {
+    orderId: string;
+    razorpayOrderId: string;
+    razorpayPaymentId?: string;
+    merchantName: string;
+    merchantId?: string;
+    customerName: string;
+    deliveryAddress: string;
+    courierPartner: string;
+    trackingNumber: string;
+    estimatedDelivery: string;
+    items: Array<{
+      name: string;
+      quantity: number;
+      price: number;
+      asinOrSku?: string;
+    }>;
+    totalAmount: number;
+    taxInvoiceId?: string;
   };
 }
 

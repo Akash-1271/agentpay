@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { UAPCatalogEngine, ProductItem } from '../protocols/uap.js';
-import { MerchantAgent, DynamicBundleOffer } from './merchantAgent.js';
+import { MerchantAgent, DynamicBundleOffer, AP2QuoteResult } from './merchantAgent.js';
 import { BoundedSpendingEnclave, PolicyValidationResult } from '../protocols/guardEnclave.js';
 import { RazorpayEngine, RazorpayOrderResponse } from '../razorpay/client.js';
 import { WebhookManager } from '../razorpay/webhooks.js';
@@ -8,10 +8,12 @@ import { AP2SignedQuote } from '../protocols/ap2.js';
 import { AmazonMerchantAdapter } from '../merchants/amazonAdapter.js';
 import { FulfillmentEngine, FulfillmentOrder } from '../merchants/fulfillmentEngine.js';
 import { DoubleEntryLedgerEngine } from '../protocols/doubleEntryLedger.js';
+import { AgentToolExecutor } from './tools.js';
+import { AgentPayDatabase } from '../db/database.js';
 
 export interface AgentReasoningStep {
   step: number;
-  agent: 'BuyerAgent' | 'MerchantAgent' | 'SpendingEnclave' | 'RazorpayGateway' | 'AmazonFulfillment';
+  agent: 'BuyerAgent' | 'MerchantAgent' | 'SpendingEnclave' | 'RazorpayGateway' | 'AmazonFulfillment' | 'FinOpsLedger';
   action: string;
   detail: string;
   status: 'SUCCESS' | 'WARNING' | 'GATED' | 'FAILED' | 'RECOVERED';
@@ -57,16 +59,18 @@ export class BuyerAgent {
     const timestamp = () => new Date().toISOString();
 
     // ----------------------------------------------------
-    // STEP 1: Parse Natural Language Intent
+    // STEP 1: Parse Natural Language Intent (ReAct Step 1)
     // ----------------------------------------------------
+    const parsedIntent = this.extractIntentFromPrompt(params.userPrompt);
+
     reasoningTrail.push({
       step: 1,
       agent: 'BuyerAgent',
       action: 'PARSE_INTENT',
-      detail: `Deconstructing user natural language intent: "${params.userPrompt}"`,
+      detail: `Deconstructing user natural language intent: "${params.userPrompt}". Target: ${parsedIntent.keyword || 'General'}, Max Budget: ${parsedIntent.maxBudget ? '₹' + parsedIntent.maxBudget : 'Unbounded'}.`,
       status: 'SUCCESS',
       timestamp: timestamp(),
-      payload: { rawPrompt: params.userPrompt }
+      payload: { rawPrompt: params.userPrompt, parsed: parsedIntent }
     });
 
     BoundedSpendingEnclave.recordAudit({
@@ -74,40 +78,31 @@ export class BuyerAgent {
       principalUser: 'user_akash_ai_shopper',
       action: 'CATALOG_DISCOVERY',
       currency: 'INR',
-      details: { prompt: params.userPrompt },
+      details: { prompt: params.userPrompt, parsed: parsedIntent },
       reasoning: `Buyer Agent parsed shopping intent from prompt: '${params.userPrompt}'.`
     });
 
     // ----------------------------------------------------
-    // STEP 2: Query Semantic Catalog via UAP Protocol
+    // STEP 2: Query Canonical Catalog via Tool (ReAct Step 2)
     // ----------------------------------------------------
-    let queryKeyword = '';
-    const lowerPrompt = params.userPrompt.toLowerCase();
+    const searchRes = await AgentToolExecutor.executeTool('search_products', {
+      query: parsedIntent.keyword,
+      category: params.overrideCategory || parsedIntent.category,
+      maxPrice: parsedIntent.maxBudget
+    });
 
-    if (lowerPrompt.includes('shoe') || lowerPrompt.includes('running') || lowerPrompt.includes('nike') || lowerPrompt.includes('adidas') || lowerPrompt.includes('sneaker')) {
-      queryKeyword = 'shoe';
-    } else if (lowerPrompt.includes('keyboard') || lowerPrompt.includes('keychron')) {
-      queryKeyword = 'keyboard';
-    } else if (lowerPrompt.includes('headphone') || lowerPrompt.includes('sony') || lowerPrompt.includes('audio')) {
-      queryKeyword = 'headphones';
-    } else if (lowerPrompt.includes('mouse') || lowerPrompt.includes('logitech') || lowerPrompt.includes('mx master')) {
-      queryKeyword = 'mouse';
-    } else if (lowerPrompt.includes('gpu') || lowerPrompt.includes('compute') || lowerPrompt.includes('h100') || lowerPrompt.includes('cloud')) {
-      queryKeyword = 'gpu';
-    } else if (lowerPrompt.includes('ring') || lowerPrompt.includes('ultrahuman') || lowerPrompt.includes('sleep')) {
-      queryKeyword = 'ring';
-    } else if (lowerPrompt.includes('hub') || lowerPrompt.includes('usb-c') || lowerPrompt.includes('adapter') || lowerPrompt.includes('anker')) {
-      queryKeyword = 'hub';
+    let matches: ProductItem[] = searchRes.products || [];
+    if (matches.length === 0) {
+      matches = UAPCatalogEngine.queryCatalog({});
     }
 
-    const matches = UAPCatalogEngine.queryCatalog({ query: queryKeyword });
-    let selectedProduct = matches[0] || UAPCatalogEngine.queryCatalog({})[0];
+    let selectedProduct: ProductItem = matches[0];
 
     reasoningTrail.push({
       step: 2,
       agent: 'BuyerAgent',
       action: 'QUERY_UAP_CATALOG',
-      detail: `Queried UAP Catalog standard. Located candidate: "${selectedProduct.name}" (₹${selectedProduct.price}) with ${selectedProduct.stock} units in stock.`,
+      detail: `Discovered candidate product: "${selectedProduct.name}" (₹${selectedProduct.price}) from merchant '${selectedProduct.merchantName}'. Available stock: ${selectedProduct.stock} units.`,
       status: 'SUCCESS',
       timestamp: timestamp(),
       payload: {
@@ -118,22 +113,39 @@ export class BuyerAgent {
     });
 
     // ----------------------------------------------------
-    // STEP 3: Handle Out of Stock Scenario / Simulated Stockout
+    // STEP 3: Check Stock & Graceful Failure Recovery (ReAct Step 3)
     // ----------------------------------------------------
+    let wasStockoutRecovered = false;
+    let alternativeProduct: ProductItem | undefined;
+
     if (selectedProduct.stock <= 0 || params.simulatedFailureMode === 'OUT_OF_STOCK') {
       reasoningTrail.push({
         step: 3,
         agent: 'MerchantAgent',
         action: 'STOCK_CHECK_FAILED',
-        detail: `Item "${selectedProduct.name}" has 0 stock remaining. Triggering Graceful Recovery Fallback.`,
+        detail: `Item "${selectedProduct.name}" has 0 stock remaining. Initiating Autonomous Alternative Recovery.`,
         status: 'WARNING',
         timestamp: timestamp(),
-        payload: { outOfStockItem: selectedProduct.id }
+        payload: { outOfStockItem: selectedProduct.id, stock: 0 }
       });
 
-      // Graceful Autonomous Recovery: Search for in-stock alternative in related or popular category
-      const fallbackList = UAPCatalogEngine.queryCatalog({ inStockOnly: true });
-      const alternative = fallbackList.find((p) => p.id !== selectedProduct.id) || fallbackList[0];
+      // Gracefully search for in-stock alternative in same or related category
+      const fallbackItems = UAPCatalogEngine.queryCatalog({
+        category: selectedProduct.category,
+        inStockOnly: true
+      });
+
+      const alternative = fallbackItems.find(p => p.id !== selectedProduct.id) || UAPCatalogEngine.queryCatalog({ inStockOnly: true })[0];
+
+      if (!alternative) {
+        return {
+          transactionId,
+          intent: params.userPrompt,
+          status: 'FAILED_OUT_OF_STOCK',
+          reasoningTrail,
+          selectedProduct
+        };
+      }
 
       reasoningTrail.push({
         step: 4,
@@ -142,88 +154,103 @@ export class BuyerAgent {
         detail: `Gracefully rerouted to verified in-stock equivalent: "${alternative.name}" (₹${alternative.price}). Initiating quote negotiation.`,
         status: 'RECOVERED',
         timestamp: timestamp(),
-        payload: { substitutedProduct: alternative.id }
+        payload: { outOfStockItem: selectedProduct.id, substitutedProduct: alternative.id }
       });
 
+      alternativeProduct = alternative;
       selectedProduct = alternative;
+      wasStockoutRecovered = true;
     }
 
     // ----------------------------------------------------
-    // STEP 4: Negotiate with Merchant Agent (AP2 Quote & Upsells)
+    // STEP 4: Request Signed AP2 Quote with Dynamic Bundles (ReAct Step 4)
     // ----------------------------------------------------
-    const bundlesToAccept: string[] = params.forceBundleIds || [];
-    if (params.autoAcceptBundles && selectedProduct.bundleDeals && selectedProduct.bundleDeals.length > 0) {
-      bundlesToAccept.push(selectedProduct.bundleDeals[0].addonId);
-    }
-
-    const merchantResponse = MerchantAgent.evaluateAndGenerateQuote({
+    const quoteResult: AP2QuoteResult = await AgentToolExecutor.executeTool('request_signed_quote', {
       productId: selectedProduct.id,
       quantity: 1,
-      acceptBundles: bundlesToAccept,
-      customDiscountCoupon: 'AGENTIC10'
+      acceptBundles: params.autoAcceptBundles,
+      forceBundleIds: params.forceBundleIds
     });
 
-    if (!merchantResponse.quote) {
+    if (!quoteResult.quote) {
+      reasoningTrail.push({
+        step: 5,
+        agent: 'MerchantAgent',
+        action: 'QUOTE_REJECTED',
+        detail: `Merchant failed to issue signed quote: ${quoteResult.error || 'Unknown merchant error'}`,
+        status: 'FAILED',
+        timestamp: timestamp()
+      });
+
       return {
         transactionId,
         intent: params.userPrompt,
-        status: 'FAILED_OUT_OF_STOCK',
+        status: 'REJECTED_POLICY',
         reasoningTrail,
-        selectedProduct,
-        quote: null
+        selectedProduct
       };
     }
 
-    const quote = merchantResponse.quote;
+    let quote = quoteResult.quote;
+
+    // Simulate price surge if requested
+    if (params.simulatedFailureMode === 'PRICE_SURGE') {
+      quote = {
+        ...quote,
+        grossAmount: 3899,
+        netAmount: 3899,
+      };
+    }
+
+    // Simulate budget breach if requested
+    if (params.simulatedFailureMode === 'BUDGET_BREACH') {
+      quote = {
+        ...quote,
+        grossAmount: 99999,
+        netAmount: 99999,
+      };
+    }
 
     reasoningTrail.push({
       step: 5,
       agent: 'MerchantAgent',
-      action: 'ISSUE_SIGNED_AP2_QUOTE',
-      detail: `Merchant Agent generated signed AP2 quote (Quote ID: ${quote.quoteId}). Gross: ₹${quote.grossAmount}, Bundle/Coupon Discount: ₹${quote.discountAmount}, Net Payable: ₹${quote.netAmount}.`,
+      action: 'GENERATE_SIGNED_QUOTE',
+      detail: `Issued AP2 signed quote #${quote.quoteId.slice(0, 10)}. Gross: ₹${quote.grossAmount}, Discount: ₹${quote.discountAmount}, Net: ₹${quote.netAmount}. HMAC: ${quote.merchantSignature.slice(0, 12)}...`,
       status: 'SUCCESS',
       timestamp: timestamp(),
       payload: {
         quoteId: quote.quoteId,
-        netAmount: quote.netAmount,
-        discountAmount: quote.discountAmount,
-        merchantSignature: quote.merchantSignature.slice(0, 16) + '...'
+        gross: quote.grossAmount,
+        discount: quote.discountAmount,
+        net: quote.netAmount,
+        expiresAt: quote.expiresAt
       }
     });
 
     // ----------------------------------------------------
-    // STEP 5: Policy Evaluation in Bounded Spending Enclave
+    // STEP 5: Server-side Non-Bypassable Policy Enclave (ReAct Step 5)
     // ----------------------------------------------------
-    // If testing budget breach simulation, artificially elevate amount
-    if (params.simulatedFailureMode === 'BUDGET_BREACH') {
-      quote.netAmount = 99999;
-    }
-
-    const policyCheck = BoundedSpendingEnclave.evaluateQuote(
+    const category = params.overrideCategory || selectedProduct.category;
+    const policyResult: PolicyValidationResult = await AgentToolExecutor.executeTool('evaluate_enclave_policy', {
       quote,
-      params.overrideCategory || selectedProduct.category
-    );
-
-    reasoningTrail.push({
-      step: 6,
-      agent: 'SpendingEnclave',
-      action: 'EVALUATE_BOUNDED_POLICY',
-      detail: `Enclave evaluated transaction rules. Policy code: ${policyCheck.policyCode}. (${policyCheck.reason})`,
-      status: policyCheck.allowed ? (policyCheck.requiresStepUp ? 'GATED' : 'SUCCESS') : 'FAILED',
-      timestamp: timestamp(),
-      payload: policyCheck
+      category
     });
 
-    // If strictly disallowed (e.g. Daily ceiling breached, untrusted merchant)
-    if (!policyCheck.allowed) {
-      BoundedSpendingEnclave.recordAudit({
-        agentId: this.AGENT_ID,
-        principalUser: 'user_akash_ai_shopper',
-        action: 'EXECUTION_REJECTED',
-        amount: quote.netAmount,
-        currency: quote.currency,
-        details: { quoteId: quote.quoteId, policyCode: policyCheck.policyCode, reason: policyCheck.reason },
-        reasoning: `Transaction halted by Bounded Spending Enclave: ${policyCheck.reason}`
+    // Handle Policy Block (Ceiling Exceeded or Whitelist Rejection)
+    if (!policyResult.allowed) {
+      reasoningTrail.push({
+        step: 6,
+        agent: 'SpendingEnclave',
+        action: 'POLICY_REJECTION',
+        detail: `Enclave halted transaction: ${policyResult.reason} (Policy Code: ${policyResult.policyCode}).`,
+        status: 'FAILED',
+        timestamp: timestamp(),
+        payload: {
+          policyCode: policyResult.policyCode,
+          enclaveHash: policyResult.enclaveHash,
+          currentDailySpend: policyResult.currentDailySpend,
+          dailyCeiling: policyResult.dailyCeiling
+        }
       });
 
       return {
@@ -233,41 +260,34 @@ export class BuyerAgent {
         reasoningTrail,
         selectedProduct,
         quote,
-        policyResult: policyCheck,
-        upsellOffers: merchantResponse.upsellSuggestions
+        policyResult
       };
     }
 
-    // ----------------------------------------------------
-    // STEP 6: Gated Step-Up Approval Required (> Threshold)
-    // ----------------------------------------------------
-    if (policyCheck.requiresStepUp) {
-      const approvalId = `appr_${crypto.randomBytes(6).toString('hex')}`;
+    // Handle Step-Up Gating (> ₹2,000 threshold)
+    if (policyResult.requiresStepUp) {
+      const approvalId = `stepup_${crypto.randomBytes(6).toString('hex')}`;
       BoundedSpendingEnclave.registerPendingApproval(approvalId, quote, {
         transactionId,
         selectedProduct,
         reasoningTrail,
-        upsellOffers: merchantResponse.upsellSuggestions
-      });
-
-      BoundedSpendingEnclave.recordAudit({
-        agentId: this.AGENT_ID,
-        principalUser: 'user_akash_ai_shopper',
-        action: 'STEP_UP_REQUESTED',
-        amount: quote.netAmount,
-        currency: quote.currency,
-        details: { approvalId, quoteId: quote.quoteId, threshold: BoundedSpendingEnclave.getMandate().requiresStepUpAbove },
-        reasoning: `Transaction of ₹${quote.netAmount} exceeds auto-threshold. Human Step-Up signature requested.`
+        upsellOffers: quoteResult.upsellSuggestions
       });
 
       reasoningTrail.push({
-        step: 7,
+        step: 6,
         agent: 'SpendingEnclave',
-        action: 'STEP_UP_DISPATCH',
-        detail: `Amount ₹${quote.netAmount} exceeds single-transaction autonomous delegation threshold (₹${BoundedSpendingEnclave.getMandate().requiresStepUpAbove}). Dispatched Step-Up Approval Modal to Principal User.`,
+        action: 'STEP_UP_GATED',
+        detail: `Amount (₹${quote.netAmount}) exceeds single-tx auto-approval ceiling of ₹2,000. Dispatched biometric step-up authorization challenge.`,
         status: 'GATED',
         timestamp: timestamp(),
-        payload: { approvalId }
+        payload: {
+          approvalId,
+          amount: quote.netAmount,
+          threshold: 2000,
+          policyCode: policyResult.policyCode,
+          enclaveHash: policyResult.enclaveHash
+        }
       });
 
       return {
@@ -277,23 +297,35 @@ export class BuyerAgent {
         reasoningTrail,
         selectedProduct,
         quote,
-        policyResult: policyCheck,
+        policyResult,
         stepUpApprovalId: approvalId,
-        upsellOffers: merchantResponse.upsellSuggestions
+        upsellOffers: quoteResult.upsellSuggestions
       };
     }
 
     // ----------------------------------------------------
-    // STEP 7: Autonomous Execution via Razorpay Test API
+    // STEP 6: Policy Auto-Approved -> Execute Settlement (ReAct Step 6)
     // ----------------------------------------------------
+    reasoningTrail.push({
+      step: 6,
+      agent: 'SpendingEnclave',
+      action: 'POLICY_APPROVED',
+      detail: `Enclave auto-approved transaction within safe limits (₹${quote.netAmount} <= ₹2,000). Enclave attestation hash: ${policyResult.enclaveHash.slice(0, 12)}...`,
+      status: 'SUCCESS',
+      timestamp: timestamp(),
+      payload: { enclaveHash: policyResult.enclaveHash, policyCode: policyResult.policyCode }
+    });
+
     return await this.finalizeTransactionWithRazorpay({
       transactionId,
       intent: params.userPrompt,
       selectedProduct,
       quote,
-      policyResult: policyCheck,
+      policyResult,
       reasoningTrail,
-      upsellOffers: merchantResponse.upsellSuggestions
+      upsellOffers: quoteResult.upsellSuggestions,
+      wasStockoutRecovered,
+      alternativeProduct
     });
   }
 
@@ -304,102 +336,134 @@ export class BuyerAgent {
     quote: AP2SignedQuote;
     policyResult: PolicyValidationResult;
     reasoningTrail: AgentReasoningStep[];
-    upsellOffers: DynamicBundleOffer[];
+    upsellOffers?: DynamicBundleOffer[];
+    wasStockoutRecovered?: boolean;
+    alternativeProduct?: ProductItem;
   }): Promise<AgentTransactionOutcome> {
     const timestamp = () => new Date().toISOString();
 
     // 1. Create Razorpay Order
-    const razorpayOrder = await RazorpayEngine.createOrder({
+    const receiptRef = `rcpt_${params.transactionId}`;
+    const razorpayOrder: RazorpayOrderResponse = await AgentToolExecutor.executeTool('create_razorpay_order', {
       amountInRupees: params.quote.netAmount,
-      receipt: `rcpt_${params.transactionId}`,
+      receipt: receiptRef,
       notes: {
-        buyerAgent: this.AGENT_ID,
-        merchantId: params.quote.merchantId,
+        transactionId: params.transactionId,
         quoteId: params.quote.quoteId,
-        enclaveHash: params.policyResult.enclaveHash
+        productId: params.selectedProduct.id,
+        merchantId: params.quote.merchantId
       }
     });
 
     params.reasoningTrail.push({
-      step: params.reasoningTrail.length + 1,
+      step: 7,
       agent: 'RazorpayGateway',
       action: 'CREATE_RAZORPAY_ORDER',
-      detail: `Created Razorpay Order ${razorpayOrder.id} for ₹${params.quote.netAmount}. Status: ${razorpayOrder.status}.`,
+      detail: `Created Razorpay test order ${razorpayOrder.id} for ₹${params.quote.netAmount} (Status: ${razorpayOrder.status}).`,
       status: 'SUCCESS',
       timestamp: timestamp(),
-      payload: razorpayOrder
+      payload: {
+        orderId: razorpayOrder.id,
+        amountPaise: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        receipt: razorpayOrder.receipt
+      }
     });
 
     // 2. Generate UPI QR Intent
     const upiQr = RazorpayEngine.generateUpiQrIntent(razorpayOrder.id, params.quote.netAmount);
 
-    // 3. Simulate Gateway Webhook & Settlement
-    const simulatedWebhook = WebhookManager.emitSimulatedWebhookEvent('payment.captured', razorpayOrder.id, params.quote.netAmount);
-
-    // 4. Decrement Stock & Commit Spend in Enclave & Record Double-Entry Journal
-    UAPCatalogEngine.updateStock(params.selectedProduct.id, -1);
-    BoundedSpendingEnclave.commitSpend(params.quote.netAmount);
-    DoubleEntryLedgerEngine.recordTransaction({
+    // 3. Post Double-Entry FinOps Accounting Journal
+    const ledgerEntry = await AgentToolExecutor.executeTool('record_finops_ledger', {
       transactionId: params.transactionId,
       razorpayOrderId: razorpayOrder.id,
       amount: params.quote.netAmount,
-      currency: params.quote.currency,
-      description: `Settlement for ${params.selectedProduct.name} via Razorpay Order ${razorpayOrder.id}`,
+      description: `Autonomous agent purchase of ${params.selectedProduct.name} via AP2 quote ${params.quote.quoteId}`,
+      idempotencyKey: `idemp_${params.transactionId}`
     });
 
     params.reasoningTrail.push({
-      step: params.reasoningTrail.length + 1,
-      agent: 'RazorpayGateway',
-      action: 'CAPTURE_WEBHOOK_SETTLEMENT',
-      detail: `Razorpay webhook verified (HMAC SHA-256). Payment captured: ${simulatedWebhook.payload.payment?.entity.id}. Enclave state settled.`,
+      step: 8,
+      agent: 'FinOpsLedger',
+      action: 'POST_DOUBLE_ENTRY_JOURNAL',
+      detail: `Posted balanced double-entry journal entry #${ledgerEntry.id}. Debited Principal Wallet: ₹${params.quote.netAmount}, Credited Merchant Settlement: ₹${params.quote.netAmount}. HMAC: ${ledgerEntry.hmacSignature.slice(0, 12)}...`,
       status: 'SUCCESS',
       timestamp: timestamp(),
       payload: {
-        paymentId: simulatedWebhook.payload.payment?.entity.id,
-        orderId: razorpayOrder.id,
-        status: 'CAPTURED'
+        journalId: ledgerEntry.id,
+        balanced: ledgerEntry.balanced,
+        hmacSignature: ledgerEntry.hmacSignature,
+        lines: ledgerEntry.lines
       }
     });
 
-    // 5. Dispatch Merchant Fulfillment & Courier AWB
+    // 4. Fulfillment & Courier Logistics
     const fulfillment = FulfillmentEngine.createOrder({
       razorpayOrderId: razorpayOrder.id,
-      razorpayPaymentId: simulatedWebhook.payload.payment?.entity.id,
-      merchantId: params.quote.merchantId,
-      merchantName: params.selectedProduct.merchantName,
-      productName: params.selectedProduct.name,
-      amount: params.quote.netAmount,
-      asinOrSku: params.selectedProduct.id,
+      item: params.selectedProduct,
+      amountPaid: params.quote.netAmount,
+      customerName: 'Akash Sharma',
+      shippingAddress: '42 UB City Luxury Boulevard, Bangalore 560001'
     });
 
     params.reasoningTrail.push({
-      step: params.reasoningTrail.length + 1,
+      step: 9,
       agent: 'AmazonFulfillment',
-      action: 'DISPATCH_MERCHANT_FULFILLMENT',
-      detail: `Fulfillment Order ${fulfillment.orderId} created with ${fulfillment.courierPartner}. Tracking AWB: ${fulfillment.trackingNumber}. Estimated: ${fulfillment.estimatedDelivery}.`,
+      action: 'DISPATCH_LOGISTICS',
+      detail: `Logistics order dispatched via ${fulfillment.courierPartner}. Tracking AWB: ${fulfillment.trackingNumber}. Estimated Delivery: ${fulfillment.estimatedDelivery}.`,
       status: 'SUCCESS',
       timestamp: timestamp(),
       payload: {
-        orderId: fulfillment.orderId,
-        trackingNumber: fulfillment.trackingNumber,
         courier: fulfillment.courierPartner,
-        taxInvoiceId: fulfillment.taxInvoiceId,
-        cryptoSeal: fulfillment.cryptoSealHash
+        awb: fulfillment.trackingNumber,
+        eta: fulfillment.estimatedDelivery
       }
     });
 
-    const receipt = {
-      receiptId: `rcpt_${crypto.randomBytes(6).toString('hex')}`,
-      totalPaid: params.quote.netAmount,
+    // 5. Decrement Inventory & Record Order in DB
+    UAPCatalogEngine.decrementInventory(params.selectedProduct.id, 1);
+
+    AgentPayDatabase.insertOrder({
+      id: `ord_${crypto.randomBytes(6).toString('hex')}`,
+      razorpayOrderId: razorpayOrder.id,
+      razorpayPaymentId: `pay_${crypto.randomBytes(6).toString('hex')}`,
+      productId: params.selectedProduct.id,
+      productName: params.selectedProduct.name,
+      merchantId: params.quote.merchantId,
+      merchantName: params.selectedProduct.merchantName,
+      amount: params.quote.netAmount,
+      currency: 'INR',
+      status: 'CAPTURED',
+      idempotencyKey: `idemp_${params.transactionId}`,
+      reasoningTrailJson: JSON.stringify(params.reasoningTrail),
+      courierPartner: fulfillment.courierPartner,
+      trackingAwb: fulfillment.trackingNumber,
+      estimatedDelivery: fulfillment.estimatedDelivery,
+      taxInvoiceId: `INV-${Date.now().toString().slice(-6)}`
+    });
+
+    // 6. Record Audit Log for successful payment capture
+    BoundedSpendingEnclave.recordAudit({
+      agentId: this.AGENT_ID,
+      principalUser: 'user_akash_ai_shopper',
+      action: 'PAYMENT_CAPTURED',
+      amount: params.quote.netAmount,
       currency: params.quote.currency,
-      paidAt: timestamp(),
-      auditEnclaveHash: params.policyResult.enclaveHash
-    };
+      details: {
+        transactionId: params.transactionId,
+        razorpayOrderId: razorpayOrder.id,
+        quoteId: params.quote.quoteId,
+        productId: params.selectedProduct.id,
+        enclaveHash: params.policyResult.enclaveHash,
+        trackingNumber: fulfillment.trackingNumber
+      },
+      reasoning: `Payment captured and settled for ₹${params.quote.netAmount} with verified double-entry accounting.`
+    });
 
     return {
       transactionId: params.transactionId,
       intent: params.intent,
-      status: 'COMPLETED',
+      status: params.wasStockoutRecovered ? 'FAILED_RECOVERED' : 'COMPLETED',
       reasoningTrail: params.reasoningTrail,
       selectedProduct: params.selectedProduct,
       quote: params.quote,
@@ -407,8 +471,59 @@ export class BuyerAgent {
       razorpayOrder,
       upiQr,
       upsellOffers: params.upsellOffers,
+      alternativeProduct: params.alternativeProduct,
       fulfillment,
-      receipt
+      receipt: {
+        receiptId: receiptRef,
+        totalPaid: params.quote.netAmount,
+        currency: params.quote.currency,
+        paidAt: timestamp(),
+        auditEnclaveHash: params.policyResult.enclaveHash
+      }
     };
+  }
+
+  private static extractIntentFromPrompt(prompt: string): {
+    keyword: string;
+    category?: string;
+    maxBudget?: number;
+  } {
+    const lower = prompt.toLowerCase();
+    let keyword = '';
+    let category: string | undefined;
+    let maxBudget: number | undefined;
+
+    // Extract price constraint (e.g. "under 2000", "under ₹2,000", "below 1500", "max 3000")
+    const priceMatch = lower.match(/(?:under|below|max|budget|within)\s*(?:₹|rs\.?|inr)?\s*([0-9,]+)/i);
+    if (priceMatch && priceMatch[1]) {
+      maxBudget = parseFloat(priceMatch[1].replace(/,/g, ''));
+    }
+
+    if (lower.includes('shoe') || lower.includes('running') || lower.includes('nike') || lower.includes('adidas') || lower.includes('sneaker') || lower.includes('puma') || lower.includes('asics')) {
+      keyword = 'shoe';
+      category = 'Athletics & Apparel';
+    } else if (lower.includes('keyboard') || lower.includes('keychron') || lower.includes('mechanical')) {
+      keyword = 'keyboard';
+      category = 'Electronics & Peripherals';
+    } else if (lower.includes('headphone') || lower.includes('sony') || lower.includes('audio') || lower.includes('earphone')) {
+      keyword = 'headphones';
+      category = 'Audio';
+    } else if (lower.includes('mouse') || lower.includes('logitech') || lower.includes('mx master')) {
+      keyword = 'mouse';
+      category = 'Electronics & Peripherals';
+    } else if (lower.includes('gpu') || lower.includes('compute') || lower.includes('h100') || lower.includes('cloud') || lower.includes('nebula')) {
+      keyword = 'gpu';
+      category = 'Cloud & AI Infrastructure';
+    } else if (lower.includes('ring') || lower.includes('ultrahuman') || lower.includes('sleep') || lower.includes('tracker')) {
+      keyword = 'ring';
+      category = 'Wearables & Health';
+    } else if (lower.includes('hub') || lower.includes('usb-c') || lower.includes('adapter') || lower.includes('anker')) {
+      keyword = 'hub';
+      category = 'Electronics & Peripherals';
+    } else if (lower.includes('rogue') || lower.includes('untrusted')) {
+      keyword = 'untrusted';
+    }
+
+    return { keyword, category, maxBudget };
   }
 }

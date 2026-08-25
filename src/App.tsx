@@ -20,9 +20,10 @@ import { DemoTourModal } from './components/DemoTourModal';
 import { playPaymentSuccessChime } from './utils/soundEffects';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
-import { Menu, Zap, Search, Command, Play } from 'lucide-react';
+import { Menu, Zap, Search, Play } from 'lucide-react';
 
 export const App: React.FC = () => {
+
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
   const [mandate, setMandate] = useState<AP2DelegationMandate | null>(null);
   const [dailySpent, setDailySpent] = useState<number>(1250);
@@ -130,8 +131,17 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col selection:bg-[#0c83ff] selection:text-white font-sans antialiased">
+    <div className="min-h-screen bg-[#F9F8F6] text-[#1A1A1A] flex flex-col selection:bg-[#D4AF37] selection:text-[#FFFFFF] font-body antialiased relative">
       
+      {/* Luxury Editorial Background Accents: Paper Grain Noise Overlay & 4-Line Architectural Grid */}
+      <div className="paper-noise-overlay" aria-hidden="true" />
+      <div className="architectural-gridlines" aria-hidden="true">
+        <div className="grid-line" />
+        <div className="grid-line" />
+        <div className="grid-line" />
+        <div className="grid-line" />
+      </div>
+
       {/* Sidebar Navigation */}
       <Sidebar
         currentSection={currentSection}
@@ -145,25 +155,26 @@ export const App: React.FC = () => {
       />
 
       {/* Main Layout Area */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 relative z-10">
         
-        {/* Top App Header with Quick Search */}
-        <header className="h-14 px-4 sm:px-8 border-b border-white/[0.07] bg-[#090d16]/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+        {/* Top App Header with Editorial Architectural Line */}
+        <header className="h-16 px-4 sm:px-8 border-b border-[#1A1A1A]/12 bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsMobileNavOpen(true)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05]"
+              className="lg:hidden p-2 text-[#1A1A1A] hover:bg-[#EBE5DE] transition-colors"
+              aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5" />
             </button>
 
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-xs text-slate-400 hover:text-slate-200 transition-all group"
+              className="hidden sm:flex items-center space-x-2.5 px-4 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] text-xs text-[#6C6863] hover:text-[#1A1A1A] transition-all group shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
             >
-              <Search className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
-              <span>Search commands, orders, or navigation...</span>
-              <kbd className="font-mono text-[10px] text-slate-500 bg-white/5 px-1.5 py-0.2 rounded ml-4 border border-white/5">
+              <Search className="w-3.5 h-3.5 text-[#D4AF37] group-hover:scale-110 transition-transform" />
+              <span className="font-serif italic tracking-wide text-xs">Search commands, orders, or policies...</span>
+              <kbd className="font-mono text-[10px] text-[#1A1A1A] bg-[#EBE5DE] px-1.5 py-0.5 ml-4 border border-[#1A1A1A]/15">
                 ⌘K
               </kbd>
             </button>
@@ -172,31 +183,33 @@ export const App: React.FC = () => {
           <div className="flex items-center space-x-3 text-xs">
             <button
               onClick={() => setIsDemoTourOpen(true)}
-              className="px-3 py-1 rounded-md bg-[#0c83ff] hover:bg-[#0270e0] text-white font-bold text-xs flex items-center space-x-1.5 shadow-sm transition-all animate-pulse"
+              className="luxury-btn-secondary px-4 py-2 text-xs"
             >
-              <Play className="w-3 h-3 fill-current" />
-              <span>2-Min Demo Tour</span>
+              <Play className="w-3 h-3 fill-current text-[#D4AF37]" />
+              <span>Editorial Tour</span>
             </button>
 
             <button
               onClick={() => setIsWireTraceOpen(true)}
-              className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] text-slate-300 font-mono text-[11px] transition-all"
+              className="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] text-[#1A1A1A] font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
             >
-              <Zap className="w-3 h-3 text-[#0c83ff]" />
-              <span>Protocol Wire</span>
+              <Zap className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span className="tracking-wider uppercase">Protocol Wire</span>
             </button>
 
-            <RazorpayLogo variant="badge" height={16} />
+            <div className="pl-1">
+              <RazorpayLogo variant="badge" height={18} />
+            </div>
           </div>
         </header>
 
-        {/* Global Toast Alert if any */}
+        {/* Global Toast Alert */}
         {toastMessage && (
-          <div className="mx-4 sm:mx-8 mt-4 p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-200 text-xs font-mono flex items-center justify-between animate-in fade-in">
+          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-600 border border-rose-200 bg-[#FFFFFF] text-rose-900 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
             <span>⚠️ {toastMessage}</span>
             <button
               onClick={() => setToastMessage(null)}
-              className="text-rose-400 hover:text-white font-bold ml-4"
+              className="text-rose-700 hover:text-rose-950 font-bold ml-4 uppercase tracking-widest text-[10px]"
             >
               Dismiss
             </button>
@@ -204,7 +217,7 @@ export const App: React.FC = () => {
         )}
 
         {/* Main Content Router */}
-        <main className="flex-1 px-4 sm:px-8 lg:px-10 py-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 px-4 sm:px-8 lg:px-12 py-10 max-w-7xl w-full mx-auto">
           {currentSection === 'landing' && (
             <LandingPage
               onNavigate={setCurrentSection}
@@ -280,10 +293,14 @@ export const App: React.FC = () => {
           )}
         </main>
 
-        {/* Footer */}
-        <footer className="border-t border-white/[0.05] py-4 px-4 sm:px-8 text-slate-500 text-xs font-mono flex flex-col sm:flex-row justify-between items-center gap-2">
-          <span>AgentPay · Bounded payment infrastructure for agentic commerce</span>
-          <span className="text-slate-400">Razorpay AI Buildathon · Track 01</span>
+        {/* Editorial Architectural Footer */}
+        <footer className="border-t border-[#1A1A1A]/12 py-6 px-4 sm:px-8 text-[#6C6863] text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#F9F8F6]/90 backdrop-blur-md">
+          <span className="tracking-[0.25em] uppercase font-serif text-[11px] text-[#1A1A1A] font-semibold">
+            AgentPay · Autonomous Commerce Protocol
+          </span>
+          <span className="text-[#6C6863] tracking-[0.2em] uppercase text-[10px]">
+            Editorial Vol. 01 · Razorpay AI Architecture
+          </span>
         </footer>
       </div>
 

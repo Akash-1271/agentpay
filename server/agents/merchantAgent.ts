@@ -12,20 +12,23 @@ export interface DynamicBundleOffer {
   upsellPitch: string;
 }
 
+export interface AP2QuoteResult {
+  quote: AP2SignedQuote | null;
+  upsellSuggestions: DynamicBundleOffer[];
+  status: 'QUOTE_ISSUED' | 'OUT_OF_STOCK' | 'PRODUCT_NOT_FOUND';
+  error?: string;
+}
+
 export class MerchantAgent {
   public static readonly AGENT_ID = 'agent_merchant_yield_maximizer';
 
   public static evaluateAndGenerateQuote(params: {
     productId: string;
     quantity?: number;
-    acceptBundles?: string[];
+    acceptBundles?: boolean | string[];
+    forceBundleIds?: string[];
     customDiscountCoupon?: string;
-  }): {
-    quote: AP2SignedQuote | null;
-    upsellSuggestions: DynamicBundleOffer[];
-    status: 'QUOTE_ISSUED' | 'OUT_OF_STOCK' | 'PRODUCT_NOT_FOUND';
-    error?: string;
-  } {
+  }): AP2QuoteResult {
     const product = UAPCatalogEngine.getProductById(params.productId);
     const qty = params.quantity || 1;
 
@@ -83,24 +86,35 @@ export class MerchantAgent {
     let grossAmount = product.price * qty;
     let discountAmount = 0;
 
-    // Apply bundle addons if accepted
-    if (params.acceptBundles && params.acceptBundles.length > 0) {
-      params.acceptBundles.forEach((addonId) => {
-        const deal = upsellSuggestions.find((d) => d.addonId === addonId);
-        if (deal) {
-          const discountForThis = deal.originalPrice - deal.discountedPrice;
-          items.push({
-            productId: deal.addonId,
-            name: deal.addonName,
-            quantity: 1,
-            unitPrice: deal.originalPrice,
-            appliedDiscount: discountForThis,
-          });
-          grossAmount += deal.originalPrice;
-          discountAmount += discountForThis;
-        }
-      });
+    // Determine which bundles to apply
+    let acceptedBundleIds: string[] = [];
+    if (Array.isArray(params.acceptBundles)) {
+      acceptedBundleIds = params.acceptBundles;
+    } else if (params.acceptBundles === true) {
+      // Auto-accept the highest discount bundle deal
+      acceptedBundleIds = upsellSuggestions.map(u => u.addonId).slice(0, 1);
     }
+
+    if (params.forceBundleIds && params.forceBundleIds.length > 0) {
+      acceptedBundleIds = Array.from(new Set([...acceptedBundleIds, ...params.forceBundleIds]));
+    }
+
+    // Apply bundle addons if accepted
+    acceptedBundleIds.forEach((addonId) => {
+      const deal = upsellSuggestions.find((d) => d.addonId === addonId);
+      if (deal) {
+        const discountForThis = deal.originalPrice - deal.discountedPrice;
+        items.push({
+          productId: deal.addonId,
+          name: deal.addonName,
+          quantity: 1,
+          unitPrice: deal.originalPrice,
+          appliedDiscount: discountForThis,
+        });
+        grossAmount += deal.originalPrice;
+        discountAmount += discountForThis;
+      }
+    });
 
     // Optional AI coupon
     if (params.customDiscountCoupon === 'AGENTIC10') {

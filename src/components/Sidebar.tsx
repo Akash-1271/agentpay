@@ -1,22 +1,19 @@
 import React from 'react';
-import type { LucideIcon } from 'lucide-react';
 import {
-  CreditCard,
-  FileCode,
-  History,
   Home,
-  Layers,
-  Package,
-  ShieldCheck,
   ShoppingBag,
+  History,
+  ShieldCheck,
+  Package,
+  Layers,
   TrendingUp,
   X,
   Zap,
   Star,
+  type LucideIcon,
 } from 'lucide-react';
-import { AP2DelegationMandate } from '../types';
-
 import { RazorpayLogo } from './RazorpayLogo';
+import { AP2DelegationMandate } from '../types';
 
 export type NavSection =
   | 'landing'
@@ -45,22 +42,23 @@ interface SidebarProps {
 interface NavigationItem {
   id: NavSection;
   label: string;
+  numeral: string;
   icon: LucideIcon;
 }
 
 const mainNavItems: NavigationItem[] = [
-  { id: 'overview', label: 'Overview', icon: Home },
-  { id: 'agent', label: 'Buy', icon: ShoppingBag },
-  { id: 'amazon', label: 'Amazon Advisor', icon: Star },
-  { id: 'transactions', label: 'History', icon: History },
-  { id: 'policies', label: 'Limits', icon: ShieldCheck },
-  { id: 'catalog', label: 'Catalog', icon: Package },
+  { id: 'overview', label: 'Overview', numeral: 'I', icon: Home },
+  { id: 'agent', label: 'Purchase & Order', numeral: 'II', icon: ShoppingBag },
+  { id: 'amazon', label: 'Advisor & Reviews', numeral: 'III', icon: Star },
+  { id: 'transactions', label: 'History & Ledger', numeral: 'IV', icon: History },
+  { id: 'policies', label: 'Spending Limits', numeral: 'V', icon: ShieldCheck },
+  { id: 'catalog', label: 'Merchant Catalog', numeral: 'VI', icon: Package },
 ];
 
 const advancedNavItems: NavigationItem[] = [
-  { id: 'growth', label: 'Merchant Yield', icon: TrendingUp },
-  { id: 'benchmark', label: 'Benchmark', icon: Zap },
-  { id: 'failures', label: 'Test Exceptions', icon: Layers },
+  { id: 'growth', label: 'Merchant Yield', numeral: 'VII', icon: TrendingUp },
+  { id: 'benchmark', label: 'Stress Benchmark', numeral: 'VIII', icon: Zap },
+  { id: 'failures', label: 'Test Exceptions', numeral: 'IX', icon: Layers },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -88,30 +86,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
           type="button"
           aria-label="Close navigation"
           onClick={onToggleMobile}
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-[#1A1A1A]/60 backdrop-blur-sm lg:hidden"
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-white/[0.07] bg-[#090d16] transition-transform duration-200 ease-out lg:translate-x-0 ${
-          isOpenMobile ? 'translate-x-0 shadow-2xl shadow-black/80' : '-translate-x-full'
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[#1A1A1A]/12 bg-[#F9F8F6] transition-transform duration-500 cubic-bezier(0.25, 0.46, 0.45, 0.94) lg:translate-x-0 ${
+          isOpenMobile ? 'translate-x-0 shadow-[0_12px_40px_rgba(0,0,0,0.25)]' : '-translate-x-full'
         }`}
       >
-        {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between border-b border-white/[0.07] px-5">
+        {/* Editorial Brand Header */}
+        <div className="flex h-20 items-center justify-between border-b border-[#1A1A1A]/12 px-6 bg-[#F9F8F6]">
           <button
             type="button"
             onClick={() => selectSection('overview')}
-            className="flex items-center gap-2.5 text-left group"
+            className="flex items-center gap-3 text-left group"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#02042b] border border-[#0c83ff]/30 flex items-center justify-center p-1 shadow-sm">
-              <RazorpayLogo variant="icon" height={18} />
+            <div className="w-8 h-8 shrink-0 flex items-center justify-center border border-[#1A1A1A]/20 bg-[#FFFFFF] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+              <RazorpayLogo variant="icon" height={16} />
             </div>
             <div>
-              <span className="block text-sm font-bold tracking-tight text-white flex items-center">
-                AgentPay
+              <span className="block font-serif text-base font-bold tracking-[0.15em] text-[#1A1A1A] uppercase">
+                <span className="italic text-[#D4AF37] font-normal">Agent</span>Pay
               </span>
-              <span className="block text-[10px] font-mono text-[#38bdf8]">on Razorpay</span>
+              <span className="block text-[8px] font-sans tracking-[0.25em] text-[#6C6863] uppercase">
+                Autonomous Commerce
+              </span>
             </div>
           </button>
 
@@ -119,15 +119,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             aria-label="Close navigation"
             onClick={onToggleMobile}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/[0.05] hover:text-white lg:hidden"
+            className="p-1.5 text-[#1A1A1A] hover:bg-[#EBE5DE] lg:hidden shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Primary Navigation */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6" aria-label="Primary navigation">
+        <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6" aria-label="Primary navigation">
           <div className="space-y-1">
+            <p className="px-3 pb-2 text-[9px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.25em] flex items-center gap-2">
+              <span className="w-3 h-px bg-[#D4AF37]" />
+              <span>Core Protocol</span>
+            </p>
             {mainNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentSection === item.id;
@@ -137,23 +141,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => selectSection(item.id)}
-                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs font-semibold transition-all ${
+                  className={`group flex w-full items-center justify-between px-3.5 py-2.5 text-left text-xs font-sans uppercase tracking-[0.18em] transition-all duration-500 ${
                     isActive
-                      ? 'bg-[#0c83ff] text-white shadow-sm font-bold'
-                      : 'text-slate-400 hover:bg-white/[0.04] hover:text-white'
+                      ? 'bg-[#1A1A1A] text-[#FFFFFF] font-medium border-l-2 border-l-[#D4AF37] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                      : 'text-[#6C6863] hover:text-[#1A1A1A] hover:bg-[#EBE5DE]/60 border-l-2 border-l-transparent'
                   }`}
                 >
-                  <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`} />
-                  <span className="flex-1">{item.label}</span>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors duration-500 ${isActive ? 'text-[#D4AF37]' : 'text-[#6C6863] group-hover:text-[#1A1A1A]'}`} />
+                    <span className="truncate text-xs">{item.label}</span>
+                  </div>
+                  <span className={`font-serif text-[10px] shrink-0 ml-1.5 ${isActive ? 'text-[#D4AF37]' : 'text-[#6C6863]/60'}`}>
+                    {item.numeral}
+                  </span>
                 </button>
               );
             })}
           </div>
 
-          {/* Advanced Section (Subtle) */}
-          <div className="pt-4 border-t border-white/[0.06] space-y-1">
-            <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              Advanced
+          {/* Architecture Navigation */}
+          <div className="pt-4 border-t border-[#1A1A1A]/10 space-y-1">
+            <p className="px-3 pb-2 text-[9px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.25em] flex items-center gap-2">
+              <span className="w-3 h-px bg-[#D4AF37]" />
+              <span>Architecture</span>
             </p>
             {advancedNavItems.map((item) => {
               const Icon = item.icon;
@@ -164,53 +174,59 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => selectSection(item.id)}
-                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs transition-all ${
+                  className={`group flex w-full items-center justify-between px-3.5 py-2 text-left text-xs font-sans uppercase tracking-[0.18em] transition-all duration-500 ${
                     isActive
-                      ? 'bg-white/[0.08] text-white font-bold'
-                      : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+                      ? 'bg-[#1A1A1A] text-[#FFFFFF] font-medium border-l-2 border-l-[#D4AF37] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                      : 'text-[#6C6863] hover:text-[#1A1A1A] hover:bg-[#EBE5DE]/60 border-l-2 border-l-transparent'
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#0c83ff]' : 'text-slate-500 group-hover:text-slate-400'}`} />
-                  <span className="flex-1">{item.label}</span>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors duration-500 ${isActive ? 'text-[#D4AF37]' : 'text-[#6C6863] group-hover:text-[#1A1A1A]'}`} />
+                    <span className="truncate text-xs">{item.label}</span>
+                  </div>
+                  <span className={`font-serif text-[10px] shrink-0 ml-1.5 ${isActive ? 'text-[#D4AF37]' : 'text-[#6C6863]/60'}`}>
+                    {item.numeral}
+                  </span>
                 </button>
               );
             })}
           </div>
         </nav>
 
-        {/* Footer: Simple Spending Bar */}
-        <div className="border-t border-white/[0.07] p-4 space-y-3 bg-[#080b11]/60">
+        {/* Footer: Editorial Spending Meter */}
+        <div className="border-t border-[#1A1A1A]/12 p-4 space-y-3 bg-[#FAF8F5]">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Spent today</span>
-              <span className="text-white font-bold font-mono">₹{dailySpent.toLocaleString()}</span>
+              <span className="font-sans text-[10px] text-[#6C6863] uppercase tracking-[0.2em] font-semibold">Spent Today</span>
+              <span className="text-[#1A1A1A] font-semibold font-mono text-xs">₹{dailySpent.toLocaleString()}</span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
+            <div className="h-1 bg-[#EBE5DE] p-0 overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${
-                  spendPercent > 85 ? 'bg-rose-500' : spendPercent > 60 ? 'bg-amber-400' : 'bg-[#0c83ff]'
+                className={`h-full transition-all duration-700 ${
+                  spendPercent > 85 ? 'bg-rose-600' : spendPercent > 60 ? 'bg-amber-500' : 'bg-[#1A1A1A]'
                 }`}
                 style={{ width: `${spendPercent}%` }}
               />
             </div>
-            <div className="text-[11px] text-slate-500 flex justify-between">
+            <div className="text-[9px] font-mono text-[#6C6863] flex justify-between tracking-wider">
               <span>Limit: ₹{dailyCeiling.toLocaleString()}</span>
-              <span>{spendPercent}% used</span>
+              <span>{spendPercent}% USED</span>
             </div>
           </div>
 
-          <div className="pt-2 border-t border-white/[0.05] flex items-center justify-between text-[11px] text-slate-500">
+          <div className="pt-2.5 border-t border-[#1A1A1A]/10 flex items-center justify-between text-[10px] font-sans uppercase tracking-[0.2em] text-[#6C6863]">
             <button
               onClick={onOpenWireTrace}
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-[#1A1A1A] hover:underline transition-colors"
             >
-              Wire trace
+              Wire Trace
             </button>
+            <span className="text-[#D4AF37]">·</span>
             <button
               onClick={onOpenApiDocs}
-              className="hover:text-slate-300 transition-colors flex items-center space-x-1"
+              className="hover:text-[#1A1A1A] hover:underline transition-colors"
             >
-              <span>API docs</span>
+              API Docs
             </button>
           </div>
         </div>
