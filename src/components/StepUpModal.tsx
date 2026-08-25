@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import {
   ShieldAlert,
-  CheckCircle2,
-  Lock,
   ArrowRight,
   X,
-  KeyRound,
   Fingerprint,
+  KeyRound,
 } from 'lucide-react';
 import { AgentTransactionOutcome } from '../types';
 
@@ -37,101 +35,106 @@ export const StepUpModal: React.FC<StepUpModalProps> = ({ outcome, onApprove, on
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="relative w-full max-w-md bg-[#0d121f] border border-amber-500/30 rounded-xl shadow-2xl p-6 space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
+      <div className="relative w-full max-w-md bg-[#FFFFFF] border-2 border-[#1A1A1A] p-7 space-y-6 shadow-[0_16px_48px_rgba(0,0,0,0.25)]">
         
+        {/* Top Gold Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#D4AF37]" />
+
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.05]"
+          className="absolute top-4 right-4 text-[#6C6863] hover:text-[#1A1A1A] p-1 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Header Badge */}
+        {/* Header */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+          <div className="w-10 h-10 border border-amber-600/30 bg-amber-50 flex items-center justify-center text-amber-800 shrink-0">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-base font-bold text-white">Step-Up Gating</h3>
-              <span className="px-1.5 py-0.2 text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 rounded">
-                &gt; ₹2,000 Threshold
+              <h3 className="font-serif text-lg font-bold text-[#1A1A1A]">
+                Step-Up Authorization Gating
+              </h3>
+              <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-600/30">
+                &gt; ₹2,000 LIMIT
               </span>
             </div>
-            <p className="text-xs text-slate-400">
-              Autonomous threshold exceeded. Human signature required.
+            <p className="text-xs text-[#6C6863] font-sans mt-0.5">
+              Autonomous threshold exceeded. Cryptographic authorization required.
             </p>
           </div>
         </div>
 
         {/* Reason Alert */}
-        <div className="p-3 rounded-lg bg-[#090d16] border border-amber-500/20 text-xs text-amber-200/90 font-mono leading-relaxed">
-          ⚠️ {policyResult?.reason || 'Transaction exceeds autonomous limit.'}
+        <div className="p-3 border border-[#1A1A1A]/10 bg-[#FAF8F5] text-xs text-[#1A1A1A] font-mono leading-relaxed">
+          ◆ {policyResult?.reason || 'Transaction exceeds autonomous limit.'}
         </div>
 
         {/* Transaction Summary Card */}
-        <div className="p-3.5 rounded-lg bg-[#090d16] border border-white/[0.04] space-y-2 text-xs">
-          <div className="flex justify-between items-center pb-2 border-b border-white/[0.04]">
-            <span className="text-slate-400">Product</span>
-            <span className="font-semibold text-white truncate max-w-[200px]">{selectedProduct?.name}</span>
+        <div className="p-4 border border-[#1A1A1A]/10 bg-[#FAF8F5] space-y-2 text-xs font-sans">
+          <div className="flex justify-between items-center pb-2 border-b border-[#1A1A1A]/10">
+            <span className="text-[#6C6863]">Product</span>
+            <span className="font-serif font-bold text-[#1A1A1A] truncate max-w-[200px]">{selectedProduct?.name}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">Merchant</span>
-            <span className="text-slate-200 font-mono text-[11px]">{quote.merchantId}</span>
+            <span className="text-[#6C6863]">Merchant</span>
+            <span className="text-[#1A1A1A] font-mono text-[11px] font-semibold">{quote.merchantId}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">Items / Addons</span>
-            <span className="text-slate-200">{quote.items.length} item(s)</span>
+            <span className="text-[#6C6863]">Items</span>
+            <span className="text-[#1A1A1A]">{quote.items?.length || 1} item(s)</span>
           </div>
           {quote.discountAmount > 0 && (
-            <div className="flex justify-between items-center text-emerald-400">
+            <div className="flex justify-between items-center text-emerald-800">
               <span>Agent Bundle Savings</span>
-              <span className="font-mono">-₹{quote.discountAmount.toLocaleString()}</span>
+              <span className="font-mono font-bold">-₹{quote.discountAmount.toLocaleString()}</span>
             </div>
           )}
-          <div className="flex justify-between items-center pt-2 border-t border-white/[0.07] font-bold">
-            <span className="text-white">Net Amount</span>
-            <span className="text-[#38bdf8] font-mono text-sm">₹{quote.netAmount.toLocaleString()}</span>
+          <div className="flex justify-between items-center pt-2.5 border-t border-[#1A1A1A]/12">
+            <span className="font-sans font-bold text-[#1A1A1A] uppercase tracking-[0.15em] text-[11px]">Net Amount</span>
+            <span className="font-serif text-2xl font-bold text-[#1A1A1A]">₹{quote.netAmount.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Authentication Method Selector */}
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => setAuthMethod('passkey')}
-            className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-lg border text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center space-x-2 py-3 px-3 border text-xs font-sans font-bold tracking-[0.15em] uppercase transition-all ${
               authMethod === 'passkey'
-                ? 'bg-[#0c83ff]/15 border-[#0c83ff] text-[#38bdf8]'
-                : 'bg-[#090d16] border-white/[0.04] text-slate-400 hover:text-slate-200'
+                ? 'bg-[#1A1A1A] text-[#F9F8F6] border-[#1A1A1A]'
+                : 'border-[#1A1A1A]/20 text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
-            <Fingerprint className="w-3.5 h-3.5" />
-            <span>Biometric Passkey</span>
+            <Fingerprint className="w-4 h-4 text-[#D4AF37]" />
+            <span>Passkey</span>
           </button>
 
           <button
             type="button"
             onClick={() => setAuthMethod('otp')}
-            className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-lg border text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center space-x-2 py-3 px-3 border text-xs font-sans font-bold tracking-[0.15em] uppercase transition-all ${
               authMethod === 'otp'
-                ? 'bg-[#0c83ff]/15 border-[#0c83ff] text-[#38bdf8]'
-                : 'bg-[#090d16] border-white/[0.04] text-slate-400 hover:text-slate-200'
+                ? 'bg-[#1A1A1A] text-[#F9F8F6] border-[#1A1A1A]'
+                : 'border-[#1A1A1A]/20 text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
-            <KeyRound className="w-3.5 h-3.5" />
-            <span>Hardware OTP</span>
+            <KeyRound className="w-4 h-4 text-[#D4AF37]" />
+            <span>SMS OTP</span>
           </button>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-2.5 pt-1">
+        <div className="flex space-x-3 pt-2">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2 px-3 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-xs font-medium text-slate-300 transition-all"
+            className="luxury-btn-secondary flex-1 h-11 text-xs"
           >
             Reject
           </button>
@@ -140,7 +143,7 @@ export const StepUpModal: React.FC<StepUpModalProps> = ({ outcome, onApprove, on
             type="button"
             onClick={handleConfirm}
             disabled={approving}
-            className="flex-[2] py-2 px-3 rounded-lg bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold shadow-sm flex items-center justify-center space-x-1.5 transition-all disabled:opacity-50"
+            className="luxury-btn-primary flex-[2] h-11 text-xs flex items-center justify-center space-x-1.5"
           >
             {approving ? (
               <span>Authorizing...</span>

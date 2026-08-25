@@ -49,28 +49,31 @@ export const AuditTrailPage: React.FC = () => {
     switch (action) {
       case 'PAYMENT_CAPTURED':
       case 'STEP_UP_APPROVED':
-        return 'bg-emerald-500/15 text-emerald-400';
+        return 'border border-emerald-600/30 text-emerald-800 bg-emerald-50';
       case 'STEP_UP_REQUESTED':
-        return 'bg-amber-500/15 text-amber-400';
+        return 'border border-amber-600/30 text-amber-800 bg-amber-50';
       case 'EXECUTION_REJECTED':
       case 'FAILURE_HANDLED':
-        return 'bg-rose-500/15 text-rose-400';
+        return 'border border-rose-600/30 text-rose-800 bg-rose-50';
       case 'RAZORPAY_ORDER_CREATED':
       case 'QUOTE_NEGOTIATION':
-        return 'bg-blue-500/15 text-[#38bdf8]';
+        return 'border border-[#1A1A1A]/30 text-[#1A1A1A] bg-[#FAF8F5]';
       default:
-        return 'bg-white/5 text-slate-300';
+        return 'border border-[#1A1A1A]/15 text-[#6C6863] bg-[#FAF8F5]';
     }
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-10 animate-in max-w-5xl">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">Cryptographic Audit Trail</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <div className="luxury-eyebrow mb-2">Immutable Proofs</div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+            Cryptographic Audit Ledger
+          </h1>
+          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
             Chronological, tamper-evident audit ledger of every prompt, policy evaluation, and Razorpay payment.
           </p>
         </div>
@@ -78,7 +81,7 @@ export const AuditTrailPage: React.FC = () => {
         <button
           onClick={fetchAudit}
           disabled={loading}
-          className="px-3.5 py-2 bg-[#0d121f] hover:bg-[#121828] border border-white/[0.08] text-xs font-semibold text-slate-300 rounded-lg flex items-center space-x-2 transition-all self-start sm:self-auto"
+          className="luxury-btn-secondary text-xs h-11 px-5 flex items-center space-x-2 self-start sm:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Ledger</span>
@@ -86,22 +89,22 @@ export const AuditTrailPage: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="relative">
-        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+      <div className="luxury-input-wrapper max-w-md">
+        <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Filter by action, actor, reasoning, or HMAC hash..."
-          className="w-full pl-10 pr-4 py-2.5 bg-[#0d121f] border border-white/[0.07] rounded-lg text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#0c83ff]"
+          className="luxury-input text-xs sm:text-sm"
         />
       </div>
 
-      {/* Audit Table */}
-      <div className="fintech-card overflow-hidden">
+      {/* Audit Table Container */}
+      <div className="luxury-card p-0 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#090d16] border-b border-white/[0.07] text-slate-400 font-mono">
+            <thead className="bg-[#FAF8F5] border-b border-[#1A1A1A]/12 text-[#1A1A1A] font-sans uppercase tracking-[0.15em] text-[10px]">
               <tr>
                 <th className="py-3 px-4">Timestamp</th>
                 <th className="py-3 px-4">Action</th>
@@ -111,10 +114,10 @@ export const AuditTrailPage: React.FC = () => {
                 <th className="py-3 px-4 text-right">HMAC Signature</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04] text-slate-300">
+            <tbody className="divide-y divide-[#1A1A1A]/10 text-[#1A1A1A]">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-500">
+                  <td colSpan={6} className="py-8 text-center text-[#6C6863] font-sans">
                     No records found matching your query.
                   </td>
                 </tr>
@@ -125,42 +128,42 @@ export const AuditTrailPage: React.FC = () => {
                     <React.Fragment key={rec.id}>
                       <tr
                         onClick={() => setExpandedId(isExpanded ? null : rec.id)}
-                        className="hover:bg-white/[0.02] cursor-pointer transition-colors"
+                        className="hover:bg-[#FAF8F5] cursor-pointer transition-colors duration-300"
                       >
-                        <td className="py-3.5 px-4 font-mono text-slate-400 whitespace-nowrap text-[11px]">
+                        <td className="py-3.5 px-4 font-mono text-[#6C6863] whitespace-nowrap text-[11px]">
                           {new Date(rec.timestamp).toLocaleTimeString()}
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded ${getActionBadge(rec.action)}`}>
+                          <span className={`px-2.5 py-0.5 text-[9px] font-sans font-semibold tracking-wider uppercase ${getActionBadge(rec.action)}`}>
                             {rec.action}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-[#6C6863]">
                           {rec.agentId}
                         </td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-white">
+                        <td className="py-3.5 px-4 font-serif font-bold text-[#1A1A1A]">
                           {rec.amount ? `₹${rec.amount.toLocaleString()}` : '—'}
                         </td>
-                        <td className="py-3.5 px-4 max-w-sm truncate text-slate-300">
+                        <td className="py-3.5 px-4 max-w-sm truncate text-[#6C6863] font-sans">
                           {rec.reasoning}
                         </td>
-                        <td className="py-3.5 px-4 text-right font-mono text-[10px] text-emerald-400">
-                          <span className="inline-flex items-center space-x-1">
-                            <Lock className="w-3 h-3" />
+                        <td className="py-3.5 px-4 text-right font-mono text-[10px] text-[#1A1A1A]">
+                          <span className="inline-flex items-center space-x-1 font-semibold">
+                            <Lock className="w-3 h-3 text-[#D4AF37]" />
                             <span>{rec.signature.slice(0, 8)}...</span>
                           </span>
                         </td>
                       </tr>
 
                       {isExpanded && (
-                        <tr className="bg-[#090d16]">
-                          <td colSpan={6} className="p-4 border-y border-white/[0.08]">
-                            <div className="p-3 rounded-lg bg-black/60 border border-white/5 font-mono text-[11px] space-y-2">
-                              <div className="flex justify-between text-slate-400">
+                        <tr className="bg-[#FAF8F5]">
+                          <td colSpan={6} className="p-4 border-y border-[#1A1A1A]/10">
+                            <div className="p-4 bg-[#1A1A1A] text-[#F9F8F6] font-mono text-[11px] space-y-2 border border-[#1A1A1A]">
+                              <div className="flex justify-between text-[#D4AF37] border-b border-white/10 pb-1 font-semibold">
                                 <span>Record ID: {rec.id}</span>
                                 <span>Full Signature: {rec.signature}</span>
                               </div>
-                              <div className="text-emerald-400/90 overflow-x-auto max-h-40">
+                              <div className="text-emerald-400 overflow-x-auto max-h-40">
                                 <pre>{JSON.stringify(rec.details, null, 2)}</pre>
                               </div>
                             </div>
@@ -179,3 +182,4 @@ export const AuditTrailPage: React.FC = () => {
     </div>
   );
 };
+

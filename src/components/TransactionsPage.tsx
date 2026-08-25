@@ -100,6 +100,8 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
   const handleTrackDelivery = (e: React.MouseEvent, item: DisplayTransaction) => {
     e.stopPropagation();
     const outcome: AgentTransactionOutcome = {
+      transactionId: `tx_${item.id}`,
+      intent: item.userPrompt,
       status: 'COMPLETED',
       selectedProduct: {
         id: item.id,
@@ -107,30 +109,42 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
         price: item.amount,
         currency: item.currency,
         category: 'Athletics & Apparel',
+        description: item.productName,
         stock: 12,
         merchantId: item.merchantId,
         merchantName: item.merchantName,
         rating: 4.8,
+        tags: ['shoes', 'running'],
         specifications: {},
+        bundleDeals: [],
       },
       quote: {
         quoteId: `quote_${item.id}`,
-        productId: item.id,
         merchantId: item.merchantId,
-        merchantName: item.merchantName,
-        originalPrice: item.amount,
-        discountApplied: 0,
+        items: [
+          {
+            productId: item.id,
+            name: item.productName,
+            quantity: 1,
+            unitPrice: item.amount,
+            appliedDiscount: 0,
+          }
+        ],
+        grossAmount: item.amount,
+        discountAmount: 0,
         netAmount: item.amount,
         currency: item.currency,
+        nonce: 'nonce_123',
         merchantSignature: 'sig_verified',
         expiresAt: new Date(Date.now() + 3600000).toISOString(),
+        inventoryLockId: 'lock_123',
       },
       policyResult: {
-        isAllowed: true,
-        mandateId: 'mandate_active',
+        allowed: true,
         requiresStepUp: false,
+        reason: 'Within spending limit',
+        policyCode: 'RULE_OK',
         enclaveHash: item.enclaveHash,
-        checkedRules: ['Budget limit', 'Merchant whitelist'],
       },
       razorpayOrder: {
         id: item.orderId,
@@ -138,14 +152,14 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
         currency: 'INR',
         receipt: `rcpt_${item.id}`,
         status: 'created',
+        created_at: Math.floor(Date.now() / 1000),
       },
       receipt: {
+        receiptId: `rcpt_${item.id}`,
         paymentId: item.paymentId || 'pay_live_01',
-        orderId: item.orderId,
-        amount: item.amount,
+        totalPaid: item.amount,
         currency: 'INR',
-        status: 'CAPTURED',
-        timestamp: item.timestamp,
+        paidAt: item.timestamp,
         auditEnclaveHash: item.enclaveHash,
       },
       fulfillment: {
@@ -176,94 +190,101 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200 max-w-5xl">
+    <div className="space-y-10 animate-in max-w-5xl">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
         <div>
+          <div className="luxury-eyebrow mb-2">
+            Cryptographic Enclave Proofs
+          </div>
           <div className="flex items-center space-x-3">
-            <h1 className="text-2xl font-extrabold text-white">Purchase History</h1>
+            <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+              History & Audit Ledger
+            </h1>
             <RazorpayLogo variant="badge" height={16} />
           </div>
-          <p className="text-sm text-slate-400 mt-1">
-            Review all orders, live delivery tracking, and Razorpay payment proofs.
+          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
+            Review all autonomous orders, cryptographic enclave hashes, and Razorpay payment proofs.
           </p>
         </div>
       </div>
 
       {/* Filters & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex space-x-2 text-xs">
+        <div className="flex space-x-2 text-xs border-b border-[#1A1A1A]/15 pb-1">
           <button
             onClick={() => setFilter('ALL')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
               filter === 'ALL'
-                ? 'bg-[#0c83ff] text-white'
-                : 'bg-[#090d16] text-slate-400 hover:text-white border border-white/[0.06]'
+                ? 'border-b-[#1A1A1A] text-[#1A1A1A] font-bold'
+                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
-            All Purchases
+            All Ledger
           </button>
           <button
             onClick={() => setFilter('COMPLETED')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
               filter === 'COMPLETED'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                : 'bg-[#090d16] text-slate-400 hover:text-white border border-white/[0.06]'
+                ? 'border-b-emerald-700 text-emerald-800 font-bold'
+                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
-            Paid
+            Settled
           </button>
           <button
             onClick={() => setFilter('STEP_UP_REQUIRED')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
               filter === 'STEP_UP_REQUIRED'
-                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                : 'bg-[#090d16] text-slate-400 hover:text-white border border-white/[0.06]'
+                ? 'border-b-amber-700 text-amber-800 font-bold'
+                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
-            Needs Approval
+            Review Gated
           </button>
           <button
             onClick={() => setFilter('BLOCKED')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
               filter === 'BLOCKED'
-                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                : 'bg-[#090d16] text-slate-400 hover:text-white border border-white/[0.06]'
+                ? 'border-b-rose-700 text-rose-800 font-bold'
+                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
             }`}
           >
             Blocked
           </button>
         </div>
 
-        <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+        <div className="luxury-input-wrapper w-full sm:w-64">
+          <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search items or stores..."
-            className="w-full pl-9 pr-3 py-2 bg-[#090d16] border border-white/[0.08] rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0c83ff]"
+            placeholder="Search transactions..."
+            className="luxury-input text-xs"
           />
         </div>
       </div>
 
-      {/* Purchases List */}
-      <div className="fintech-card overflow-hidden">
-        <div className="divide-y divide-white/[0.05]">
+      {/* Purchases Ledger with Editorial Top-Border Style */}
+      <div className="luxury-card p-0 overflow-hidden">
+        <div className="divide-y divide-[#1A1A1A]/10">
           {filtered.map((item) => (
             <div
               key={item.id}
               onClick={() => setSelectedTx(item)}
-              className="p-4 flex items-center justify-between gap-4 hover:bg-white/[0.02] cursor-pointer transition-colors"
+              className="p-5 flex items-center justify-between gap-4 hover:bg-[#FAF8F5] cursor-pointer transition-colors duration-300"
             >
-              <div className="flex items-center space-x-3.5">
-                <div className="w-9 h-9 rounded-xl bg-[#090d16] border border-white/[0.06] flex items-center justify-center text-slate-400 flex-shrink-0">
-                  <ShoppingBag className="w-4 h-4" />
+              <div className="flex items-center space-x-4">
+                <div className="w-9 h-9 flex items-center justify-center border border-[#1A1A1A]/15 bg-[#FAF8F5] text-[#1A1A1A] shrink-0">
+                  <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-white">{item.productName}</div>
-                  <div className="text-xs text-slate-400 mt-0.5">
+                  <div className="font-serif text-sm font-bold text-[#1A1A1A]">
+                    {item.productName}
+                  </div>
+                  <div className="text-xs text-[#6C6863] font-sans mt-0.5">
                     {item.merchantName} · {new Date(item.timestamp).toLocaleDateString()}
                   </div>
                 </div>
@@ -271,44 +292,44 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
 
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-sm font-bold text-white font-mono">
+                  <div className="font-serif text-base font-bold text-[#1A1A1A]">
                     ₹{item.amount.toLocaleString()}
                   </div>
                 </div>
 
                 {item.status === 'COMPLETED' && (
                   <div className="flex items-center space-x-2">
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs flex items-center space-x-1">
+                    <span className="px-3 py-1 border border-emerald-600/30 text-emerald-800 bg-emerald-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
                       <CheckCircle2 className="w-3 h-3" />
-                      <span>Paid</span>
+                      <span>PAID</span>
                     </span>
 
                     <button
                       onClick={(e) => handleTrackDelivery(e, item)}
-                      className="px-2.5 py-1 rounded-lg bg-[#0c83ff]/15 hover:bg-[#0c83ff]/25 text-[#38bdf8] border border-[#0c83ff]/30 text-xs font-bold flex items-center space-x-1 transition-all"
+                      className="luxury-btn-secondary text-[10px] py-1 px-3 h-8 flex items-center space-x-1"
                       title="Track Order Delivery"
                     >
-                      <Truck className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Track Delivery</span>
+                      <Truck className="w-3 h-3 text-[#D4AF37]" />
+                      <span className="hidden sm:inline">Track</span>
                     </button>
                   </div>
                 )}
 
                 {item.status === 'STEP_UP_REQUIRED' && (
-                  <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-400 font-bold text-xs flex items-center space-x-1">
+                  <span className="px-3 py-1 border border-amber-600/30 text-amber-800 bg-amber-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
                     <AlertCircle className="w-3 h-3" />
-                    <span>Needs approval</span>
+                    <span>GATED</span>
                   </span>
                 )}
 
                 {item.status === 'BLOCKED' && (
-                  <span className="px-2.5 py-1 rounded-full bg-rose-500/15 text-rose-400 font-bold text-xs flex items-center space-x-1">
+                  <span className="px-3 py-1 border border-rose-600/30 text-rose-800 bg-rose-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
                     <XCircle className="w-3 h-3" />
-                    <span>Blocked</span>
+                    <span>BLOCKED</span>
                   </span>
                 )}
 
-                <ChevronRight className="w-4 h-4 text-slate-600" />
+                <ChevronRight className="w-4 h-4 text-[#1A1A1A]/40" />
               </div>
             </div>
           ))}
@@ -317,7 +338,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = () => {
 
       {selectedTx && (
         <TransactionDetailModal
-          tx={selectedTx}
+          transaction={selectedTx}
           onClose={() => setSelectedTx(null)}
         />
       )}

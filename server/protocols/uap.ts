@@ -1,10 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const catalogPath = path.resolve(__dirname, '../data/catalog.json');
+import crypto from 'crypto';
+import { AgentPayDatabase, CatalogProductRecord } from '../db/database.js';
+import { CONFIG } from '../config.js';
 
 export interface ProductItem {
   id: string;
@@ -25,121 +21,143 @@ export interface ProductItem {
     addonPrice: number;
     bundleDiscountPct: number;
   }>;
+  imageUrl?: string;
 }
 
 export class UAPCatalogEngine {
-  private static getCatalog(): ProductItem[] {
-    try {
-      const raw = fs.readFileSync(catalogPath, 'utf8');
-      return JSON.parse(raw);
-    } catch (e) {
-      console.error('Error reading catalog file:', e);
-      return [];
-    }
+  public static getAgentSchemaDescription() {
+    return {
+      protocol: 'Universal Agent Protocol (UAP/1.0)',
+      version: '1.0.0',
+      description: 'Canonical agent-readable e-commerce catalog and semantic discovery specification.',
+      endpoints: {
+        catalogDiscovery: 'GET /api/uap/catalog',
+        productDetails: 'GET /api/uap/products/:id',
+        quoteNegotiation: 'POST /api/uap/quote',
+        csvCatalogImport: 'POST /api/uap/catalog/import-csv',
+      },
+      itemSchema: {
+        id: 'string (unique product identifier)',
+        name: 'string (product title)',
+        category: 'string (authorized merchant category)',
+        description: 'string (detailed specs and characteristics)',
+        price: 'number (base INR price)',
+        currency: 'string (default: INR)',
+        stock: 'integer (available live units)',
+        rating: 'number (0.0 to 5.0)',
+        merchantId: 'string (authorized merchant identifier)',
+        merchantName: 'string (human-readable merchant title)',
+        tags: 'string[] (semantic indexing keywords)',
+        specifications: 'object (key-value technical specs)',
+        bundleDeals: 'array of addon deals with discount percentages'
+      }
+    };
   }
 
-  public static queryCatalog(params: {
+  public static queryCatalog(filters: {
     query?: string;
     category?: string;
     maxPrice?: number;
     minRating?: number;
     inStockOnly?: boolean;
-    tags?: string[];
+    merchantId?: string;
   }): ProductItem[] {
-    const catalog = this.getCatalog();
-    const q = params.query ? params.query.toLowerCase() : '';
+    const rawProducts = AgentPayDatabase.getCatalogProducts();
+    const items: ProductItem[] = rawProducts.map(this.mapDbRecordToProductItem);
 
-    return catalog.filter((item) => {
-      if (params.inStockOnly !== false && item.stock <= 0) {
-        if (params.query?.toLowerCase().includes('ultrahuman') || params.query?.toLowerCase().includes('ring')) {
-          // keep for failure demonstration
-        } else if (params.inStockOnly === true) {
-          return false;
-        }
-      }
+    let filtered = items;
 
-      if (params.category && item.category.toLowerCase() !== params.category.toLowerCase()) {
-        return false;
-      }
-
-      if (params.maxPrice && item.price > params.maxPrice) {
-        return false;
-      }
-
-      if (params.minRating && item.rating < params.minRating) {
-        return false;
-      }
-
-      if (q) {
-        const matchesName = item.name.toLowerCase().includes(q);
-        const matchesDesc = item.description.toLowerCase().includes(q);
-        const matchesTags = item.tags.some((t) => t.toLowerCase().includes(q));
-        const matchesSpecs = Object.values(item.specifications).some((val) =>
-          val.toLowerCase().includes(q)
+    if (filters.query && filters.query.trim()) {
+      const q = filters.query.toLowerCase().trim();
+      filtered = filtered.filter(item => {
+        const titleMatch = item.name.toLowerCase().includes(q);
+        const descMatch = item.description.toLowerCase().includes(q);
+        const catMatch = item.category.toLowerCase().includes(q);
+        const tagMatch = item.tags.some(t => t.toLowerCase().includes(q));
+        const specMatch = Object.values(item.specifications).some(val =>
+          typeof val === 'string' && val.toLowerCase().includes(q)
         );
-        if (!matchesName && !matchesDesc && !matchesTags && !matchesSpecs) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }
-
-  public static getProductById(id: string): ProductItem | undefined {
-    const catalog = this.getCatalog();
-    return catalog.find((item) => item.id === id);
-  }
-
-  public static updateStock(productId: string, delta: number): boolean {
-    const catalog = this.getCatalog();
-    const item = catalog.find((i) => i.id === productId);
-    if (item && item.stock + delta >= 0) {
-      item.stock += delta;
-      fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2), 'utf8');
-      return true;
+        return titleMatch || descMatch || catMatch || tagMatch || specMatch;
+      });
     }
-    return false;
+
+    if (filters.category && filters.category.trim() && filters.category !== 'All') {
+      filtered = filtered.filter(item =>
+        item.category.toLowerCase() === filters.category!.toLowerCase()
+      );
+    }
+
+    if (filters.merchantId && filters.merchantId.trim()) {
+      filtered = filtered.filter(item =>
+        item.merchantId.toLowerCase() === filters.merchantId!.toLowerCase()
+      );
+    }
+
+    if (filters.maxPrice !== undefined && !isNaN(filters.maxPrice)) {
+      filtered = filtered.filter(item => item.price <= filters.maxPrice!);
+    }
+
+    if (filters.minRating !== undefined && !isNaN(filters.minRating)) {
+      filtered = filtered.filter(item => item.rating >= filters.minRating!);
+    }
+
+    if (filters.inStockOnly) {
+      filtered = filtered.filter(item => item.stock > 0);
+    }
+
+    return filtered;
   }
 
-  public static listCategories(): string[] {
-    const catalog = this.getCatalog();
-    return Array.from(new Set(catalog.map((i) => i.category)));
+  public static getProductById(id: string): ProductItem | null {
+    const record = AgentPayDatabase.getProductById(id);
+    if (!record) return null;
+    return this.mapDbRecordToProductItem(record);
   }
 
-  public static getInventory(productId: string): { productId: string; inStock: boolean; stock: number } {
-    const item = this.getProductById(productId);
-    return {
-      productId,
-      inStock: item ? item.stock > 0 : false,
-      stock: item ? item.stock : 0,
-    };
+  public static decrementInventory(productId: string, qty: number = 1): boolean {
+    return AgentPayDatabase.decrementStock(productId, qty);
   }
 
-  public static importFromCsv(csvText: string): { addedCount: number; catalog: ProductItem[] } {
-    const lines = csvText.trim().split('\n');
-    if (lines.length < 2) throw new Error('CSV must contain a header row and at least one data row');
+  public static importFromCsv(csvText: string): { importedCount: number; catalog: ProductItem[] } {
+    if (!csvText || !csvText.trim()) {
+      throw new Error('CSV text content is empty or invalid.');
+    }
 
-    const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
-    const catalog = this.getCatalog();
-    let addedCount = 0;
+    const lines = csvText.trim().split(/\r?\n/);
+    if (lines.length < 2) {
+      throw new Error('CSV must contain a header row and at least one data row.');
+    }
+
+    const header = lines[0].split(',').map(h => h.trim().toLowerCase());
+    const idIdx = header.indexOf('id');
+    const nameIdx = header.indexOf('name');
+    const catIdx = header.indexOf('category');
+    const priceIdx = header.indexOf('price');
+    const stockIdx = header.indexOf('stock');
+    const merchIdIdx = header.indexOf('merchantid');
+    const merchNameIdx = header.indexOf('merchantname');
+    const descIdx = header.indexOf('description');
+
+    if (nameIdx === -1 || priceIdx === -1) {
+      throw new Error("CSV header missing required columns: 'name' and 'price'.");
+    }
+
+    let importedCount = 0;
 
     for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-      const values = line.split(',').map((v) => v.trim());
+      const row = lines[i].split(',').map(c => c.trim());
+      if (row.length < 2 || !row[nameIdx]) continue;
 
-      const id = values[headers.indexOf('id')] || `prod_csv_${Date.now()}_${i}`;
-      const name = values[headers.indexOf('name')] || 'Imported Product';
-      const category = values[headers.indexOf('category')] || 'General Merchandise';
-      const description = values[headers.indexOf('description')] || '';
-      const price = parseFloat(values[headers.indexOf('price')] || '999');
-      const stock = parseInt(values[headers.indexOf('stock')] || '10', 10);
-      const merchantId = values[headers.indexOf('merchantid')] || 'merch_imported';
-      const merchantName = values[headers.indexOf('merchantname')] || 'Verified Merchant';
+      const name = row[nameIdx];
+      const price = parseFloat(row[priceIdx]) || 100;
+      const id = idIdx !== -1 && row[idIdx] ? row[idIdx] : `prod_${crypto.randomBytes(4).toString('hex')}`;
+      const category = catIdx !== -1 && row[catIdx] ? row[catIdx] : 'Electronics';
+      const stock = stockIdx !== -1 && row[stockIdx] ? parseInt(row[stockIdx], 10) : 10;
+      const merchantId = merchIdIdx !== -1 && row[merchIdIdx] ? row[merchIdIdx] : 'merch_apex_gear';
+      const merchantName = merchNameIdx !== -1 && row[merchNameIdx] ? row[merchNameIdx] : 'Apex Gear India';
+      const description = descIdx !== -1 && row[descIdx] ? row[descIdx] : `${name} available on AgentPay UAP network.`;
 
-      const existingIdx = catalog.findIndex((c) => c.id === id);
-      const newItem: ProductItem = {
+      AgentPayDatabase.upsertProduct({
         id,
         name,
         category,
@@ -152,82 +170,41 @@ export class UAPCatalogEngine {
         merchantName,
         tags: [category.toLowerCase(), name.toLowerCase()],
         specifications: { source: 'CSV Importer' },
-        bundleDeals: [],
-      };
+        bundleDeals: []
+      });
 
-      if (existingIdx >= 0) {
-        catalog[existingIdx] = newItem;
-      } else {
-        catalog.push(newItem);
-        addedCount++;
-      }
+      importedCount++;
     }
 
-    fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2), 'utf8');
-    return { addedCount, catalog };
+    AgentPayDatabase.insertAuditLog({
+      agentId: 'merchant_uap_catalog_manager',
+      principalUser: CONFIG.DEFAULT_BUYER_ID,
+      action: 'CATALOG_DISCOVERY',
+      currency: 'INR',
+      details: { importedCount },
+      reasoning: `Dynamically imported and indexed ${importedCount} product items via UAP CSV pipeline.`
+    });
+
+    const currentCatalog = AgentPayDatabase.getCatalogProducts().map(this.mapDbRecordToProductItem);
+    return { importedCount, catalog: currentCatalog };
   }
 
-  public static getAgentTools() {
-    return [
-      {
-        name: 'search_products',
-        description: 'Semantic & keyword search across merchant catalogs with price and stock filters',
-        parameters: {
-          type: 'object',
-          properties: {
-            query: { type: 'string', description: 'Search term or product name' },
-            category: { type: 'string', description: 'Product category' },
-            maxPrice: { type: 'number', description: 'Maximum price in INR' },
-          },
-        },
-      },
-      {
-        name: 'get_product',
-        description: 'Retrieve full specifications, rating, and merchant quote parameters by product ID',
-        parameters: {
-          type: 'object',
-          properties: { productId: { type: 'string' } },
-          required: ['productId'],
-        },
-      },
-      {
-        name: 'list_categories',
-        description: 'List all authorized product categories available in the merchant catalog',
-        parameters: { type: 'object', properties: {} },
-      },
-      {
-        name: 'get_inventory',
-        description: 'Check real-time stock levels and warehouse reservation availability',
-        parameters: {
-          type: 'object',
-          properties: { productId: { type: 'string' } },
-          required: ['productId'],
-        },
-      },
-    ];
-  }
-
-  public static getAgentSchemaDescription(): object {
+  private static mapDbRecordToProductItem(record: CatalogProductRecord): ProductItem {
     return {
-      protocol: 'UAP/1.0',
-      version: '2026.08',
-      standard: 'NPCI-UAP & ACP Compliant Agentic Commerce Gateway',
-      tools: this.getAgentTools(),
-      supportedCapabilities: [
-        'semantic-catalog-search',
-        'real-time-inventory-lock',
-        'dynamic-bundle-pricing',
-        'ap2-cryptographic-quotes',
-        'razorpay-bounded-checkout',
-        'csv-catalog-import',
-      ],
-      endpoints: {
-        searchCatalog: '/api/uap/catalog',
-        requestQuote: '/api/uap/quote',
-        reserveInventory: '/api/uap/reserve',
-        executePayment: '/api/uap/transact',
-        importCsv: '/api/uap/catalog/import-csv',
-      },
+      id: record.id,
+      name: record.name,
+      category: record.category,
+      description: record.description,
+      price: record.price,
+      currency: record.currency,
+      stock: record.stock,
+      rating: record.rating,
+      merchantId: record.merchant_id,
+      merchantName: record.merchant_name,
+      tags: JSON.parse(record.tags_json || '[]'),
+      specifications: JSON.parse(record.specifications_json || '{}'),
+      bundleDeals: JSON.parse(record.bundle_deals_json || '[]'),
+      imageUrl: record.image_url || undefined,
     };
   }
 }

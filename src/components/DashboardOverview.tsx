@@ -5,7 +5,7 @@ import {
   Search,
   CheckCircle2,
   AlertCircle,
-  XCircle,
+  ShieldCheck,
 } from 'lucide-react';
 import { AP2DelegationMandate, AuditRecord } from '../types';
 import { NavSection } from './Sidebar';
@@ -39,11 +39,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     onRunPrompt(quickPrompt);
   };
 
-  // Plain-English mock transactions for clear customer view
   const recentPurchases = [
     {
       id: 'tx_1',
-      name: 'Nike Air Zoom Pegasus 40',
+      name: 'Nike Air Zoom Pegasus 40 Running Shoes',
       store: 'Amazon India',
       amount: 1709,
       status: 'PAID',
@@ -51,7 +50,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     },
     {
       id: 'tx_2',
-      name: 'Anker USB-C Hub & Cable',
+      name: 'Anker USB-C Hub & Cable Bundle',
       store: 'Anker Official Store',
       amount: 1499,
       status: 'PAID',
@@ -59,7 +58,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     },
     {
       id: 'tx_3',
-      name: 'Keychron Q1 Pro Mechanical Keyboard',
+      name: 'Keychron Q1 Pro Custom Mechanical Keyboard',
       store: 'Keychron Store',
       amount: 3509,
       status: 'NEEDS_APPROVAL',
@@ -68,147 +67,190 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200 max-w-5xl">
+    <div className="space-y-10 animate-in max-w-5xl">
       
       {/* Header Greeting */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">Overview</h1>
-          <p className="text-sm text-slate-400 mt-0.5">
-            Your purchases and spending limits at a glance.
+          <div className="luxury-eyebrow mb-2">
+            Overview & Metrics
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+            Executive Ledger & Metrics
+          </h1>
+          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
+            Real-time spending limits, autonomous commerce activity, and double-entry ledger proofs.
           </p>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => onNavigate('policies')}
+            className="luxury-btn-secondary text-xs h-11"
+          >
+            <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+            <span>Spending Limits</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate('agent')}
+            className="luxury-btn-primary text-xs h-11"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>New Purchase</span>
+          </button>
         </div>
       </div>
 
-      {/* 4 Simple Numbers */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 4 Metric Cards with Top-Border Architectural Framing */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Metric 1: Spent Today */}
-        <div className="fintech-card p-5 space-y-1.5">
-          <div className="text-xs text-slate-400 font-medium">Spent today</div>
-          <div className="text-2xl font-extrabold text-white font-mono">
+        <div className="luxury-card space-y-2">
+          <div className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em] flex items-center justify-between">
+            <span>Spent Today</span>
+            <span className="font-mono text-xs text-[#1A1A1A] font-bold">{spentPct}%</span>
+          </div>
+          <div className="font-serif text-3xl font-bold text-[#1A1A1A]">
             ₹{dailySpent.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500">
-            of ₹{ceiling.toLocaleString()} daily limit
+          <div className="text-xs text-[#6C6863] font-sans">
+            of ₹{ceiling.toLocaleString()} ceiling
+          </div>
+          <div className="h-1 bg-[#EBE5DE] mt-3 overflow-hidden">
+            <div
+              className="h-full bg-[#1A1A1A] transition-all duration-700"
+              style={{ width: `${spentPct}%` }}
+            />
           </div>
         </div>
 
         {/* Metric 2: Max per purchase */}
-        <div className="fintech-card p-5 space-y-1.5">
-          <div className="text-xs text-slate-400 font-medium">Max per purchase</div>
-          <div className="text-2xl font-extrabold text-white font-mono">
+        <div className="luxury-card space-y-2">
+          <div className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em]">Auto-Approval</div>
+          <div className="font-serif text-3xl font-bold text-[#1A1A1A]">
             ₹{singleLimit.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500">
-            Auto-approved
+          <div className="text-xs text-emerald-700 flex items-center space-x-1.5 font-medium font-sans">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            <span>Instant Settle</span>
           </div>
         </div>
 
-        {/* Metric 3: Successful Purchases */}
-        <div className="fintech-card p-5 space-y-1.5">
-          <div className="text-xs text-slate-400 font-medium">Completed purchases</div>
-          <div className="text-2xl font-extrabold text-emerald-400 font-mono">
+        {/* Metric 3: Completed Purchases */}
+        <div className="luxury-card space-y-2">
+          <div className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em]">Orders Settled</div>
+          <div className="font-serif text-3xl font-bold text-[#1A1A1A]">
             {auditLedger.length > 0 ? auditLedger.length + 12 : 14}
           </div>
-          <div className="text-xs text-slate-500">
-            Paid with Razorpay
+          <div className="text-xs text-[#6C6863] font-sans">
+            Razorpay Test Mode Captured
           </div>
         </div>
 
         {/* Metric 4: Needs Approval */}
-        <div className="fintech-card p-5 space-y-1.5">
-          <div className="text-xs text-slate-400 font-medium">Needs approval</div>
-          <div className="text-2xl font-extrabold text-amber-400 font-mono">
-            1
+        <div className="luxury-card space-y-2">
+          <div className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em]">Gated Review</div>
+          <div className="font-serif text-3xl font-bold text-amber-700">
+            01
           </div>
-          <div className="text-xs text-slate-500">
-            Over ₹{singleLimit.toLocaleString()} limit
+          <div className="text-xs text-amber-800 font-medium font-sans">
+            Over ₹{singleLimit.toLocaleString()} Limit
           </div>
         </div>
 
       </div>
 
-      {/* Quick Buy Bar */}
-      <section className="fintech-card p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="text-xs font-bold text-white flex items-center space-x-2">
-            <ShoppingBag className="w-4 h-4 text-[#0c83ff]" />
-            <span>Make a purchase</span>
+      {/* Quick Buy Bar with Refined Underline */}
+      <section className="luxury-card space-y-4">
+        <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-3">
+          <div className="font-serif text-sm font-bold text-[#1A1A1A] tracking-tight flex items-center space-x-2">
+            <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+            <span>Autonomous Purchase Dispatch</span>
           </div>
-          <span className="text-xs text-slate-400">
-            Auto-approved up to ₹{singleLimit.toLocaleString()}
+          <span className="text-xs font-mono text-[#6C6863]">
+            Auto-approved ≤ ₹{singleLimit.toLocaleString()}
           </span>
         </div>
 
-        <form onSubmit={handleQuickSubmit} className="flex gap-2">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+        <form onSubmit={handleQuickSubmit} className="flex flex-col sm:flex-row gap-4 pt-1">
+          <div className="luxury-input-wrapper flex-1">
+            <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
             <input
               type="text"
               value={quickPrompt}
               onChange={(e) => setQuickPrompt(e.target.value)}
-              placeholder="e.g. Running shoes under ₹2,000"
-              className="w-full pl-10 pr-4 py-2.5 bg-[#090d16] border border-white/[0.08] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#0c83ff]"
+              placeholder="e.g. Search Amazon for running shoes under ₹2,000"
+              className="luxury-input text-sm"
             />
           </div>
           <button
             type="submit"
             disabled={loading || !quickPrompt.trim()}
-            className="px-6 py-2.5 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-lg shadow-sm flex items-center space-x-2 transition-all disabled:opacity-50"
+            className="luxury-btn-primary px-6 h-11 text-xs shrink-0"
           >
-            <span>{loading ? 'Finding...' : 'Buy'}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>{loading ? 'Transacting...' : 'Buy'}</span>
+            <ArrowRight className="w-3.5 h-3.5 shrink-0" />
           </button>
         </form>
       </section>
 
       {/* Recent Purchases List */}
-      <section className="fintech-card p-6 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/[0.07]">
+      <section className="luxury-card space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[#1A1A1A]/10">
           <div>
-            <h3 className="text-sm font-bold text-white">Recent purchases</h3>
-            <p className="text-xs text-slate-400">All payments made according to your limits</p>
+            <h3 className="font-serif text-base font-bold text-[#1A1A1A]">
+              Recent Transactions
+            </h3>
+            <p className="text-xs text-[#6C6863] font-sans">
+              All autonomous money movements verified by Bounded Spending Enclave
+            </p>
           </div>
 
           <button
             onClick={() => onNavigate('transactions')}
-            className="text-xs text-[#0c83ff] hover:text-[#38bdf8] font-bold flex items-center space-x-1"
+            className="font-sans text-xs text-[#1A1A1A] hover:text-[#D4AF37] flex items-center space-x-1 uppercase tracking-[0.15em] font-semibold transition-colors"
           >
-            <span>See all history</span>
+            <span>View Full Ledger</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="divide-y divide-white/[0.05]">
+        <div className="divide-y divide-[#1A1A1A]/10">
           {recentPurchases.map((item) => (
-            <div key={item.id} className="py-3.5 flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-slate-400">
-                  <ShoppingBag className="w-4 h-4" />
+            <div key={item.id} className="py-4 flex items-center justify-between gap-4 hover:bg-[#FAF8F5] px-2 transition-colors duration-300">
+              <div className="flex items-center space-x-4">
+                <div className="w-9 h-9 flex items-center justify-center border border-[#1A1A1A]/15 bg-[#FAF8F5] text-[#1A1A1A]">
+                  <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
                 </div>
                 <div>
-                  <div className="font-bold text-white text-sm">{item.name}</div>
-                  <div className="text-slate-400 text-xs">{item.store} · {item.time}</div>
+                  <div className="font-serif text-sm font-bold text-[#1A1A1A]">
+                    {item.name}
+                  </div>
+                  <div className="text-xs text-[#6C6863] font-sans mt-0.5">
+                    {item.store} · {item.time}
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="font-bold text-white font-mono text-sm">₹{item.amount.toLocaleString()}</div>
+                  <div className="font-serif text-base font-bold text-[#1A1A1A]">
+                    ₹{item.amount.toLocaleString()}
+                  </div>
                 </div>
 
                 {item.status === 'PAID' && (
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs flex items-center space-x-1">
+                  <span className="px-3 py-1 border border-emerald-600/30 text-emerald-800 bg-emerald-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
                     <CheckCircle2 className="w-3 h-3" />
-                    <span>Paid</span>
+                    <span>PAID</span>
                   </span>
                 )}
 
                 {item.status === 'NEEDS_APPROVAL' && (
-                  <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-400 font-bold text-xs flex items-center space-x-1">
+                  <span className="px-3 py-1 border border-amber-600/30 text-amber-800 bg-amber-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
                     <AlertCircle className="w-3 h-3" />
-                    <span>Needs approval</span>
+                    <span>GATED</span>
                   </span>
                 )}
               </div>
@@ -220,3 +262,4 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     </div>
   );
 };
+

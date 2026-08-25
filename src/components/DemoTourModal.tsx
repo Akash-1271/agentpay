@@ -2,18 +2,11 @@ import React, { useState } from 'react';
 import {
   X,
   Play,
-  CheckCircle2,
-  ShieldCheck,
-  TrendingUp,
-  Activity,
   ArrowRight,
   ChevronRight,
   ChevronLeft,
-  Sparkles,
-  ShoppingBag,
 } from 'lucide-react';
 import { NavSection } from './Sidebar';
-import { RazorpayLogo } from './RazorpayLogo';
 
 interface DemoTourModalProps {
   isOpen: boolean;
@@ -25,41 +18,45 @@ interface DemoTourModalProps {
 const TOUR_STEPS = [
   {
     step: 1,
-    title: '1. Instant Auto-Approved Purchase (≤ ₹2,000)',
+    numeral: 'I',
+    title: 'Auto-Approved Purchase Flow (≤ ₹2,000)',
     badge: 'Core Track 01 Flow',
     description:
-      'Watch the buyer agent parse natural language intent ("Search Amazon for running shoes under ₹2,000"), query the UAP Catalog, verify spending limits, and settle via Razorpay test mode in milliseconds.',
+      'The buyer agent parses your intent ("Search Amazon for running shoes under ₹2,000"), checks enclave limits, and settles via Razorpay in milliseconds.',
     prompt: 'Search Amazon for running shoes under ₹2,000',
     targetSection: 'agent' as NavSection,
-    actionLabel: 'Execute Auto-Approved Order',
+    actionLabel: 'Execute Order I',
   },
   {
     step: 2,
-    title: '2. High-Value Step-Up Gating (> ₹2,000)',
-    badge: 'Human-in-the-Loop Governance',
+    numeral: 'II',
+    title: 'High-Value Passkey Gating (> ₹2,000)',
+    badge: 'Human-in-the-Loop Enclave',
     description:
-      'Every high-value transaction (e.g. ₹3,509 Keychron custom keyboard) triggers a Biometric Passkey / OTP Step-Up authorization modal. Money never leaves without permission.',
+      'High-value transactions (e.g. ₹3,509 Keychron custom keyboard) trigger biometric passkey verification. Money never moves without authorization.',
     prompt: 'Order Keychron Q1 Pro custom mechanical keyboard',
     targetSection: 'agent' as NavSection,
-    actionLabel: 'Trigger Step-Up Gated Order',
+    actionLabel: 'Trigger Gated Order II',
   },
   {
     step: 3,
-    title: '3. Merchant Yield & Cart Recovery Hub',
+    numeral: 'III',
+    title: 'Merchant Yield & Cart Recovery Hub',
     badge: 'AI Growth Engine',
     description:
-      'Grow merchant revenue via +18.4% AOV bundle lifts, automated AI SMS/WhatsApp abandoned cart recovery payment links, and a strict double-entry FinOps ledger.',
+      'Grow merchant revenue via +18.4% AOV bundle lifts, automated AI SMS/WhatsApp abandoned cart recovery payment links, and double-entry FinOps.',
     targetSection: 'growth' as NavSection,
-    actionLabel: 'Open Merchant Yield Hub',
+    actionLabel: 'Open Yield Hub III',
   },
   {
     step: 4,
-    title: '4. 50-Transaction Benchmark Stress Suite',
-    badge: 'Judge Evaluation Suite',
+    numeral: 'IV',
+    title: '50-Transaction Benchmark Stress Suite',
+    badge: 'Evaluation Suite',
     description:
       'Stress-test 50 synthetic transactions across stockout fallbacks, rogue merchants, and budget breaches in ~380ms with 100.0% policy adherence.',
     targetSection: 'benchmark' as NavSection,
-    actionLabel: 'Open Benchmark Suite',
+    actionLabel: 'Open Benchmark IV',
   },
 ];
 
@@ -84,74 +81,78 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="relative w-full max-w-lg bg-[#0a0f1d] border border-[#0c83ff]/40 rounded-2xl shadow-2xl overflow-hidden p-6 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
+      <div className="relative w-full max-w-lg bg-[#FFFFFF] border-2 border-[#1A1A1A] p-7 space-y-6 shadow-[0_16px_48px_rgba(0,0,0,0.25)]">
         
+        {/* Top Gold Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#D4AF37]" />
+
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#0c83ff] text-white flex items-center justify-center font-bold">
-              <Play className="w-4 h-4 fill-current ml-0.5" />
+        <div className="flex items-center justify-between border-b border-[#1A1A1A]/12 pb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 border border-[#1A1A1A]/20 bg-[#FAF8F5] flex items-center justify-center text-[#1A1A1A]">
+              <Play className="w-3.5 h-3.5 fill-[#1A1A1A] text-[#1A1A1A]" />
             </div>
             <div>
-              <div className="text-sm font-bold text-white flex items-center space-x-2">
-                <span>Judge & Evaluator Interactive Tour</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#0c83ff]/20 text-[#38bdf8] font-bold">
-                  2 MIN
-                </span>
+              <div className="font-serif text-base font-bold text-[#1A1A1A]">
+                Guided System Walkthrough
               </div>
-              <p className="text-xs text-slate-400">Step {currentStepIndex + 1} of {TOUR_STEPS.length}</p>
+              <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.2em] text-[#6C6863]">
+                Stage {currentTour.numeral} of IV
+              </p>
             </div>
           </div>
 
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white">
+          <button onClick={onClose} className="p-1 text-[#6C6863] hover:text-[#1A1A1A]">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Step Progress Bar */}
+        {/* Progress Bars */}
         <div className="grid grid-cols-4 gap-2">
           {TOUR_STEPS.map((s, idx) => (
             <div
               key={s.step}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
+              className={`h-1.5 transition-all duration-300 ${
                 idx === currentStepIndex
-                  ? 'bg-[#0c83ff]'
+                  ? 'bg-[#1A1A1A]'
                   : idx < currentStepIndex
-                  ? 'bg-emerald-400'
-                  : 'bg-slate-800'
+                  ? 'bg-emerald-600'
+                  : 'bg-[#EBE5DE]'
               }`}
             />
           ))}
         </div>
 
         {/* Tour Step Body */}
-        <div className="p-5 rounded-xl bg-[#090d16] border border-white/[0.06] space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/5 text-[#38bdf8] border border-white/5">
-              {currentTour.badge}
-            </span>
-          </div>
+        <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/10 space-y-2">
+          <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em] block">
+            ◆ {currentTour.badge} ◆
+          </span>
 
-          <h3 className="text-base font-bold text-white leading-snug">{currentTour.title}</h3>
-          <p className="text-xs text-slate-300 leading-relaxed">{currentTour.description}</p>
+          <h3 className="font-serif text-lg font-bold text-[#1A1A1A] leading-snug">
+            {currentTour.title}
+          </h3>
+          <p className="text-xs text-[#6C6863] font-sans leading-relaxed">
+            {currentTour.description}
+          </p>
         </div>
 
         {/* Primary Action Button */}
         <button
           onClick={handleRunCurrentAction}
-          className="w-full py-3 bg-[#0c83ff] hover:bg-[#0270e0] text-white text-xs font-bold rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all"
+          className="luxury-btn-primary w-full h-11 text-xs flex items-center justify-center space-x-2"
         >
-          <Play className="w-4 h-4 fill-current" />
+          <Play className="w-3.5 h-3.5 fill-current" />
           <span>{currentTour.actionLabel}</span>
         </button>
 
-        {/* Footer Navigation Controls */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] text-xs">
+        {/* Footer Navigation */}
+        <div className="flex items-center justify-between pt-2 border-t border-[#1A1A1A]/10 text-xs font-sans uppercase tracking-[0.15em] font-semibold text-[#1A1A1A]">
           <button
             onClick={() => setCurrentStepIndex(Math.max(0, currentStepIndex - 1))}
             disabled={currentStepIndex === 0}
-            className="text-slate-400 hover:text-white disabled:opacity-30 flex items-center space-x-1"
+            className="hover:text-[#D4AF37] disabled:opacity-30 flex items-center space-x-1 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Previous</span>
@@ -160,7 +161,7 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
           <button
             onClick={() => setCurrentStepIndex(Math.min(TOUR_STEPS.length - 1, currentStepIndex + 1))}
             disabled={currentStepIndex === TOUR_STEPS.length - 1}
-            className="text-[#38bdf8] font-bold hover:text-white disabled:opacity-30 flex items-center space-x-1"
+            className="hover:text-[#D4AF37] disabled:opacity-30 flex items-center space-x-1 transition-colors"
           >
             <span>Next Stage</span>
             <ChevronRight className="w-4 h-4" />
@@ -171,3 +172,4 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
     </div>
   );
 };
+

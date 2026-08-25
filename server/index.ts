@@ -15,11 +15,15 @@ import { FulfillmentEngine } from './merchants/fulfillmentEngine.js';
 import { RevenueGrowthEngine } from './agents/growthEngine.js';
 import { DoubleEntryLedgerEngine } from './protocols/doubleEntryLedger.js';
 import { A2APayeeProtocolEngine } from './protocols/payeeAgent.js';
+import { AgentPayDatabase } from './db/database.js';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Initialize SQLite database on boot
+AgentPayDatabase.getDb();
 
 // ----------------------------------------------------
 // SYSTEM & PROTOCOL DISCOVERY
@@ -57,7 +61,8 @@ app.get('/api/uap/catalog', (req: Request, res: Response) => {
 });
 
 app.get('/api/uap/products/:id', (req: Request, res: Response) => {
-  const item = UAPCatalogEngine.getProductById(req.params.id);
+  const productId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const item = UAPCatalogEngine.getProductById(productId);
   if (!item) {
     return res.status(404).json({ error: 'Product not found' });
   }
@@ -68,7 +73,7 @@ app.get('/api/uap/products/:id', (req: Request, res: Response) => {
 // AP2 QUOTES & MERCHANT YIELD OPTIMIZATION
 // ----------------------------------------------------
 app.post('/api/uap/quote', (req: Request, res: Response) => {
-  const { productId, quantity, acceptBundles, customDiscountCoupon } = req.body;
+  const { productId, quantity, acceptBundles, forceBundleIds, customDiscountCoupon } = req.body;
   if (!productId) {
     return res.status(400).json({ error: 'productId is required' });
   }
@@ -77,6 +82,7 @@ app.post('/api/uap/quote', (req: Request, res: Response) => {
     productId,
     quantity,
     acceptBundles,
+    forceBundleIds,
     customDiscountCoupon
   });
 
@@ -107,13 +113,14 @@ app.post('/api/enclave/mandate', (req: Request, res: Response) => {
 
 app.post('/api/enclave/reset-spend', (req: Request, res: Response) => {
   BoundedSpendingEnclave.resetSpend();
-  res.json({ message: 'Spend accumulator reset to initial benchmark state', dailySpent: BoundedSpendingEnclave.getDailySpent() });
+  res.json({ message: 'Spend accumulator reset to initial state', dailySpent: BoundedSpendingEnclave.getDailySpent() });
 });
 
 app.get('/api/enclave/audit', (req: Request, res: Response) => {
+  const ledger = BoundedSpendingEnclave.getAuditLedger();
   res.json({
-    count: BoundedSpendingEnclave.getAuditLedger().length,
-    ledger: BoundedSpendingEnclave.getAuditLedger()
+    count: ledger.length,
+    ledger
   });
 });
 
@@ -150,9 +157,11 @@ app.post('/api/enclave/approve-step-up', async (req: Request, res: Response) => 
     policyResult: {
       allowed: true,
       requiresStepUp: false,
-      reason: 'Human Step-Up authorization verified via Biometric/OTP signature',
+      reason: 'Human Step-Up authorization verified via Biometric/Passkey signature',
       policyCode: 'AUTO_APPROVED',
-      enclaveHash: 'hash_stepup_verified_manual'
+      enclaveHash: 'hash_stepup_verified_manual',
+      currentDailySpend: BoundedSpendingEnclave.getDailySpent(),
+      dailyCeiling: BoundedSpendingEnclave.getMandate().dailyCeiling
     },
     reasoningTrail: record.callbackData.reasoningTrail,
     upsellOffers: record.callbackData.upsellOffers
@@ -213,11 +222,17 @@ app.post('/api/razorpay/webhook', (req: Request, res: Response) => {
 app.post('/api/benchmark/run', async (req: Request, res: Response) => {
   try {
     const { batchSize } = req.body;
-    const results = await BenchmarkEngine.runEvaluationSuite(batchSize ? parseInt(batchSize, 10) : 50);
+    const results = await BenchmarkEngine.runEvaluationSuite(batchSize ? parseInt(batchSize, 10) : 20);
     res.json(results);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get('/api/protocol/wire-trace/:txId', (req: Request, res: Response) => {
+  const txId = Array.isArray(req.params.txId) ? req.params.txId[0] : req.params.txId;
+  const wireFrame = ProtocolWireEngine.generateWireTrace(txId);
+  res.json(wireFrame);
 });
 
 // ----------------------------------------------------
@@ -287,6 +302,7 @@ app.get('/api/finops/ledger', (req: Request, res: Response) => {
     count: DoubleEntryLedgerEngine.getJournal().length,
     journal: DoubleEntryLedgerEngine.getJournal(),
     balances: DoubleEntryLedgerEngine.getBalances(),
+    integrity: DoubleEntryLedgerEngine.verifyLedgerIntegrity(),
   });
 });
 

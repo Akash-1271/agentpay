@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Package,
   Search,
-  Filter,
   Sparkles,
-  Bot,
   FileCode,
-  CheckCircle2,
   RefreshCw,
   X,
   ArrowRight,
@@ -18,6 +15,20 @@ import { api } from '../services/api';
 interface CatalogPageProps {
   onQuickBuy: (productName: string) => void;
 }
+
+const PRODUCT_IMAGE_MAP: Record<string, string> = {
+  prod_kb_01: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=800&auto=format&fit=crop',
+  prod_audio_02: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
+  prod_mouse_03: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=800&auto=format&fit=crop',
+  prod_saas_04: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop',
+  prod_gadget_05: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop',
+  prod_hub_06: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?q=80&w=800&auto=format&fit=crop',
+  prod_shoe_07: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop',
+  prod_shoe_08: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=800&auto=format&fit=crop',
+  prod_shoe_09: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=800&auto=format&fit=crop',
+};
+
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop';
 
 export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
   const [products, setProducts] = useState<ProductItem[]>([]);
@@ -59,22 +70,24 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
   });
 
   return (
-    <div className="space-y-9 animate-in">
+    <div className="space-y-10 animate-in">
       
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Editorial Lookbook Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
         <div>
-          <div className="eyebrow">Agent-ready inventory</div>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-[-0.045em] text-white sm:text-4xl">Product catalog</h1>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
-            A machine-readable inventory designed for confident autonomous discovery and comparison.
+          <div className="luxury-eyebrow mb-2">Curated Machine-Readable Inventory</div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+            Merchant Catalog & Lookbook
+          </h1>
+          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
+            Machine-readable inventory designed for autonomous discovery, bundle yield incentives, and instant Razorpay checkout.
           </p>
         </div>
 
         <button
           onClick={fetchCatalog}
           disabled={loading}
-          className="premium-button-secondary self-start px-3.5 py-2.5 text-xs font-semibold sm:self-auto"
+          className="luxury-btn-secondary self-start text-xs h-11 px-5 sm:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Inventory</span>
@@ -82,27 +95,27 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
+        <div className="luxury-input-wrapper flex-1 max-w-md">
+          <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search catalog by name, category, merchant, specs..."
-            className="premium-input w-full py-3 pl-10 pr-4 text-xs sm:text-sm"
+            className="luxury-input text-xs sm:text-sm"
           />
         </div>
 
-        <div className="flex space-x-1.5 overflow-x-auto rounded-xl border border-slate-400/[0.12] bg-slate-950/25 p-1">
+        <div className="flex space-x-1.5 overflow-x-auto border-b border-[#1A1A1A]/15 pb-1">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 text-xs font-sans tracking-[0.15em] uppercase whitespace-nowrap transition-all duration-300 border-b-2 ${
                 selectedCategory === cat
-                  ? 'bg-blue-400/20 text-blue-50 shadow-[inset_0_0_0_1px_rgba(147,197,253,0.2)]'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'border-b-[#1A1A1A] text-[#1A1A1A] font-bold'
+                  : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
               }`}
             >
               {cat}
@@ -111,96 +124,112 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
         </div>
       </div>
 
-      {/* Product Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Editorial Product Grid with Grayscale-to-Color Cinematic Images */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filtered.map((product) => {
           const isOutOfStock = product.stock <= 0;
-          const aiScore = Math.round(product.rating * 20); // e.g. 4.9 -> 98%
+          const aiScore = Math.round(product.rating * 20);
+          const imgSrc = PRODUCT_IMAGE_MAP[product.id] || DEFAULT_IMAGE;
 
           return (
             <div
               key={product.id}
-              className="fintech-card-interactive flex flex-col justify-between space-y-4 p-5"
+              className="luxury-card group flex flex-col justify-between p-0 overflow-hidden"
             >
-              <div>
-                {/* Badges */}
-                <div className="flex justify-between items-start mb-2.5">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/5">
+              {/* Product Image Frame */}
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#EBE5DE] border-b border-[#1A1A1A]/10">
+                <img
+                  src={imgSrc}
+                  alt={product.name}
+                  className="luxury-image w-full h-full object-cover"
+                />
+                
+                {/* Category & Stock Floating Tags */}
+                <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
+                  <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] px-2.5 py-1 bg-[#1A1A1A]/90 text-[#FFFFFF] backdrop-blur-md">
                     {product.category}
                   </span>
                   <span
-                    className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                    className={`text-[9px] font-mono font-bold px-2 py-0.5 border backdrop-blur-md ${
                       isOutOfStock
-                        ? 'bg-rose-500/15 text-rose-400 border border-rose-500/20'
-                        : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-rose-500/90 text-white border-rose-600'
+                        : 'bg-[#FFFFFF]/90 text-[#1A1A1A] border-[#1A1A1A]/20'
                     }`}
                   >
-                    {isOutOfStock ? '0 in stock (Stockout)' : `${product.stock} units`}
+                    {isOutOfStock ? '0 (Stockout)' : `${product.stock} units`}
                   </span>
                 </div>
-
-                {/* Name & Desc */}
-                <h3 className="text-sm font-bold text-white mb-1 leading-snug">
-                  {product.name}
-                </h3>
-                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">
-                  {product.description}
-                </p>
-
-                {/* AI Score & Merchant */}
-                <div className="mb-3 flex items-center justify-between rounded-lg border border-slate-400/[0.1] bg-slate-950/25 p-2.5 text-[11px]">
-                  <span className="text-slate-400 flex items-center space-x-1">
-                    <Store className="w-3 h-3 text-slate-500" />
-                    <span>{product.merchantName}</span>
-                  </span>
-                  <span className="text-[#38bdf8] font-mono font-semibold">
-                    AI Match: {aiScore}%
-                  </span>
-                </div>
-
-                {/* Dynamic Bundles if present */}
-                {product.bundleDeals && product.bundleDeals.length > 0 && (
-                  <div className="space-y-1 mb-2">
-                    <div className="text-[10px] font-semibold text-purple-400 uppercase flex items-center space-x-1">
-                      <Sparkles className="w-3 h-3" />
-                      <span>Dynamic Upsell Deal</span>
-                    </div>
-                    {product.bundleDeals.map((b, i) => (
-                      <div key={i} className="text-[11px] text-slate-300 flex justify-between p-1.5 rounded bg-purple-950/20 border border-purple-500/20">
-                        <span className="truncate max-w-[170px]">{b.addonName}</span>
-                        <span className="font-mono text-purple-300 font-bold">-{b.bundleDiscountPct}%</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
 
-              {/* Price & Action Footer */}
-              <div className="pt-3 border-t border-white/[0.05] flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-slate-500 font-mono">AP2 Price</div>
-                  <div className="text-base font-bold font-mono text-white">
-                    ₹{product.price.toLocaleString()}
-                  </div>
+              {/* Product Details Area */}
+              <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <h3 className="font-serif text-lg font-bold text-[#1A1A1A] leading-snug tracking-tight">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs text-[#6C6863] line-clamp-2 leading-relaxed font-sans">
+                    {product.description}
+                  </p>
                 </div>
 
-                <div className="flex space-x-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMetaProduct(product)}
-                    className="rounded-lg border border-slate-400/[0.12] bg-white/[0.04] p-2 text-xs text-slate-300 transition hover:bg-white/[0.09]"
-                    title="View Machine-Readable JSON-LD"
-                  >
-                    <FileCode className="w-3.5 h-3.5" />
-                  </button>
+                <div className="space-y-3 pt-2">
+                  {/* Store & Match Meta */}
+                  <div className="flex items-center justify-between border-t border-b border-[#1A1A1A]/10 py-2 text-[11px] font-sans">
+                    <span className="text-[#6C6863] flex items-center space-x-1.5">
+                      <Store className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                      <span className="text-[#1A1A1A] font-semibold">{product.merchantName}</span>
+                    </span>
+                    <span className="text-[#1A1A1A] font-mono font-semibold">
+                      Match: {aiScore}%
+                    </span>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => onQuickBuy(product.name)}
-                    className="premium-button px-3 py-2 text-xs font-semibold"
-                  >
-                    Buy via Agent
-                  </button>
+                  {/* Dynamic Bundles if present */}
+                  {product.bundleDeals && product.bundleDeals.length > 0 && (
+                    <div className="space-y-1">
+                      <div className="text-[9px] font-sans uppercase font-semibold text-[#6C6863] tracking-[0.2em] flex items-center space-x-1">
+                        <Sparkles className="w-3 h-3 text-[#D4AF37] shrink-0" />
+                        <span>Dynamic Bundle Offer</span>
+                      </div>
+                      {product.bundleDeals.map((b, i) => (
+                        <div key={i} className="text-[11px] text-[#1A1A1A] flex justify-between p-2 bg-[#FAF8F5] border border-[#1A1A1A]/10">
+                          <span className="truncate max-w-[180px] font-sans">{b.addonName}</span>
+                          <span className="font-mono text-[#D4AF37] font-bold">-{b.bundleDiscountPct}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Price & Action Footer */}
+                <div className="pt-3 border-t border-[#1A1A1A]/12 flex items-center justify-between">
+                  <div>
+                    <div className="text-[9px] text-[#6C6863] font-mono uppercase tracking-wider">AP2 Settlement</div>
+                    <div className="font-serif text-2xl font-bold text-[#1A1A1A]">
+                      ₹{product.price.toLocaleString()}
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedMetaProduct(product)}
+                      className="border border-[#1A1A1A]/20 bg-transparent p-2 text-xs text-[#1A1A1A] hover:bg-[#EBE5DE] transition-colors"
+                      title="View Machine-Readable JSON-LD Schema"
+                    >
+                      <FileCode className="w-3.5 h-3.5 shrink-0" />
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={isOutOfStock}
+                      onClick={() => onQuickBuy(product.name)}
+                      className="luxury-btn-primary text-xs px-4 h-10 flex items-center space-x-1.5"
+                    >
+                      <span>Buy</span>
+                      <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -210,23 +239,23 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
       {/* AI Metadata / JSON-LD Modal */}
       {selectedMetaProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="relative w-full max-w-xl bg-[#0d121f] border border-white/[0.1] rounded-xl p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.07]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl bg-[#FFFFFF] border-2 border-[#1A1A1A] p-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-[0_12px_40px_rgba(0,0,0,0.2)]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1A1A1A]/15">
               <div>
-                <h3 className="text-sm font-bold text-white">UAP Machine-Readable Catalog Schema</h3>
-                <p className="text-xs text-slate-400 font-mono">{selectedMetaProduct.id}</p>
+                <h3 className="font-serif text-base font-bold text-[#1A1A1A]">UAP Machine-Readable Catalog Schema</h3>
+                <p className="text-xs text-[#6C6863] font-mono">{selectedMetaProduct.id}</p>
               </div>
               <button
                 onClick={() => setSelectedMetaProduct(null)}
-                className="p-1 text-slate-400 hover:text-white"
+                className="p-1 text-[#6C6863] hover:text-[#1A1A1A]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-3.5 rounded-lg bg-black/70 border border-white/5 font-mono text-[11px] text-emerald-400 overflow-x-auto max-h-96">
-              <pre>{JSON.stringify(selectedMetaProduct, null, 2)}</pre>
+            <div className="p-4 bg-[#1A1A1A] text-[#F9F8F6] font-mono text-[11px] overflow-x-auto max-h-96 border border-[#1A1A1A]">
+              <pre className="text-emerald-400">{JSON.stringify(selectedMetaProduct, null, 2)}</pre>
             </div>
           </div>
         </div>
@@ -235,3 +264,4 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
     </div>
   );
 };
+
