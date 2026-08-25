@@ -28,8 +28,8 @@ async function runTest(name: string, fn: () => Promise<void> | void) {
 async function runTestSuite() {
   console.log('\n🧪 Running AgentPay Track 01 Comprehensive Production Test Suite...\n');
 
-  // Initialize DB & clean state
-  AgentPayDatabase.getDb();
+  // Initialize DB & clean deterministic state
+  AgentPayDatabase.resetForTesting();
 
   // Test 1: Canonical UAP Catalog Search & Schema
   await runTest('1. Canonical UAP Catalog Semantic Search & Specs', () => {

@@ -168,6 +168,23 @@ export class AgentPayDatabase {
     return this.db;
   }
 
+  public static resetForTesting() {
+    const db = this.getDb();
+    db.exec(`
+      DELETE FROM journal_lines;
+      DELETE FROM journal_entries;
+      DELETE FROM audit_logs;
+      DELETE FROM pending_step_ups;
+      DELETE FROM abandoned_carts;
+      DELETE FROM orders;
+      DELETE FROM a2a_requests;
+      DELETE FROM accounts;
+      DELETE FROM spending_mandates;
+      DELETE FROM catalog_products;
+    `);
+    this.seedInitialData();
+  }
+
   private static initSchema() {
     const db = this.db!;
     db.exec(`

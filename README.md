@@ -9,6 +9,36 @@
 
 ---
 
+## ⏱️ What a Razorpay Judge Should Do in 4 Minutes
+
+1. **Verify Automated Tests & Zero-State Database (`30 seconds`)**:
+   ```bash
+   npm install && npm test
+   ```
+   *All 14 unit and integration tests run against a freshly seeded SQLite database and verify enclave policy checks, double-entry debits/credits, HMAC signatures, and Razorpay test orders.*
+
+2. **Start Dev Server (`15 seconds`)**:
+   ```bash
+   npm run dev
+   ```
+   *Opens backend on `http://localhost:3001` and UI on `http://localhost:5173`.*
+
+3. **Test Auto-Approved Autonomous Purchase (`1 minute`)**:
+   * Open [http://localhost:5173](http://localhost:5173) and go to **AI Agent Arena**.
+   * Click prompt chip: `"Search Amazon for Nike Pegasus under ₹2,000"`.
+   * Click **"Dispatch Autonomous Commerce Agent"** $\rightarrow$ see real Razorpay order created, balanced double-entry ledger entry posted, and delivery tracking generated.
+
+4. **Trigger the 3 Failure Modes (`2 minutes`)**:
+   * **Failure Mode 1 (Stockout Recovery)**: In AI Agent Arena, prompt `"Order Ultrahuman Ring AIR sleep tracker"` (stock = 0) $\rightarrow$ agent detects stockout and autonomously reroutes to an in-stock equivalent.
+   * **Failure Mode 2 (Step-Up Gating)**: Prompt `"Order Keychron Q1 Pro custom mechanical keyboard"` (₹3,899 > ₹2,000 threshold) $\rightarrow$ enclave halts and pops up the human-authorization passkey modal.
+   * **Failure Mode 3 (Daily Ceiling Breach)**: Prompt `"Provision 10,000 H100 GPU Cluster Nodes for ₹99,999"` $\rightarrow$ enclave hard-blocks the transaction with `CEILING_EXCEEDED` and zero funds moved.
+
+5. **Inspect the Real SQLite Ledger & Run Benchmark (`15 seconds`)**:
+   * Navigate to **Transactions** / **Audit Trail** to inspect the append-only journal with balanced debits/credits.
+   * Navigate to **Live Benchmark** and click **Run Benchmark** to execute live stress tests with measured millisecond latencies.
+
+---
+
 ## 🎯 Executive Summary
 
 As personal and enterprise AI agents (autonomous buyers, workflow automations, procurement bots) enter mainstream e-commerce, traditional web checkouts fail because:
@@ -104,7 +134,7 @@ $$\text{DISCOVER (UAP)} \longrightarrow \text{NEGOTIATE (AP2)} \longrightarrow \
 ### 6. 📈 Merchant Revenue Growth Engine
 * **Dynamic Bundles**: Algorithmic bundle discounts based on product category affinity and inventory margins.
 * **Abandoned Cart Recovery**: Real recovery studio generating Razorpay payment links with personalized VIP incentives.
-* **Honest Analytics**: Metrics computed directly from SQLite database transactions (no fabricated percentages).
+* **Live Computed Analytics**: Metrics computed directly from SQLite database transactions (no fabricated percentages).
 
 ### 7. 🚨 3 Verified Failure Modes
 1. **Stockout Mid-Flow Recovery**: Primary item has 0 stock $\rightarrow$ Agent detects stockout and autonomously reroutes to an in-stock alternative without failing.

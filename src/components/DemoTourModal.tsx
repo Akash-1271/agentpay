@@ -54,7 +54,7 @@ const TOUR_STEPS = [
     title: '50-Transaction Benchmark Stress Suite',
     badge: 'Evaluation Suite',
     description:
-      'Stress-test 50 synthetic transactions across stockout fallbacks, rogue merchants, and budget breaches in ~380ms with 100.0% policy adherence.',
+      'Stress-test synthetic transactions across stockout fallbacks, rogue merchants, and budget breaches with live measured latencies and non-bypassable policy gating.',
     targetSection: 'benchmark' as NavSection,
     actionLabel: 'Open Benchmark IV',
   },

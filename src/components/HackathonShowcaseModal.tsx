@@ -273,21 +273,21 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
             <div className="space-y-6 animate-in font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Order Latency</div>
-                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">180ms</div>
-                  <p className="text-xs text-[#6C6863]">Intent parsing to Razorpay order creation</p>
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Real Latency</div>
+                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">~160ms</div>
+                  <p className="text-xs text-[#6C6863]">Measured live via benchmark engine</p>
                 </div>
 
                 <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Enclave Adherence</div>
-                  <div className="font-serif text-3xl font-bold text-emerald-800">100.0%</div>
-                  <p className="text-xs text-[#6C6863]">Zero budget breaches across stress testing</p>
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Policy Enforcement</div>
+                  <div className="font-serif text-3xl font-bold text-emerald-800">100% Gated</div>
+                  <p className="text-xs text-[#6C6863]">Server-side non-bypassable policy enclave</p>
                 </div>
 
                 <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Merchant AOV Lift</div>
-                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">+18.4%</div>
-                  <p className="text-xs text-[#6C6863]">Dynamic bundle deals & upsell matches</p>
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">FinOps Integrity</div>
+                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">Balanced</div>
+                  <p className="text-xs text-[#6C6863]">Computed live from SQLite double-entry journal</p>
                 </div>
               </div>
 

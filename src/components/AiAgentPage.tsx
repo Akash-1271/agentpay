@@ -157,11 +157,13 @@ export const AiAgentPage: React.FC<AiAgentPageProps> = ({
               <div>
                 <h3 className="font-serif text-lg text-[#1A1A1A] font-semibold tracking-tight">
                   {lastOutcome.status === 'COMPLETED' && 'Settled Successfully via Razorpay'}
+                  {lastOutcome.status === 'FAILED_RECOVERED' && 'Recovered & Settled with In-Stock Alternative'}
                   {lastOutcome.status === 'STEP_UP_REQUIRED' && 'Human Authorization Required'}
                   {lastOutcome.status === 'REJECTED_POLICY' && 'Blocked by Spending Mandate'}
                 </h3>
                 <p className="text-xs text-[#6C6863] mt-0.5 font-sans">
                   {lastOutcome.status === 'COMPLETED' && 'Order confirmed and registered for courier logistics.'}
+                  {lastOutcome.status === 'FAILED_RECOVERED' && 'Original item was out-of-stock; agent autonomously substituted verified in-stock equivalent.'}
                   {lastOutcome.status === 'STEP_UP_REQUIRED' && 'Transaction exceeds single-purchase autonomous limit.'}
                   {lastOutcome.status === 'REJECTED_POLICY' && 'Exceeds authorized daily ceiling or merchant policy.'}
                 </p>
