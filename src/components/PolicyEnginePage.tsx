@@ -7,6 +7,9 @@ import {
   ChevronUp,
   Plus,
   X,
+  Sparkles,
+  Lock,
+  Zap,
 } from 'lucide-react';
 import { AP2DelegationMandate } from '../types';
 
@@ -15,6 +18,17 @@ interface PolicyEnginePageProps {
   dailySpent: number;
   onUpdateMandate: (updates: Partial<AP2DelegationMandate>) => Promise<void>;
 }
+
+const SANDBOX_PREVIEW_PRODUCTS = [
+  { name: 'Anker 65W GaN Fast Charger', price: 1499, store: 'Amazon India' },
+  { name: 'Nike Air Zoom Pegasus 40', price: 1709, store: 'Nike Store' },
+  { name: 'Puma Velocity Nitro 2 Shoes', price: 1499, store: 'Puma India' },
+  { name: 'Redragon K552 RGB Keyboard', price: 2499, store: 'Amazon India' },
+  { name: 'Royal Kludge RK84 Keyboard', price: 3499, store: 'Flipkart India' },
+  { name: 'Keychron Q1 Pro Custom Keyboard', price: 3899, store: 'Apex Gear' },
+  { name: 'Ultrahuman Titanium Ring AIR', price: 4999, store: 'Ultrahuman' },
+  { name: 'Sony WH-1000XM5 ANC Headphones', price: 24990, store: 'Appario Retail' },
+];
 
 export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
   mandate,
@@ -71,6 +85,9 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
     }
   };
 
+  const autoApprovedItems = SANDBOX_PREVIEW_PRODUCTS.filter((p) => p.price <= maxAutoTx);
+  const gatedItems = SANDBOX_PREVIEW_PRODUCTS.filter((p) => p.price > maxAutoTx);
+
   return (
     <div className="space-y-10 animate-in max-w-4xl">
       
@@ -97,7 +114,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
       </div>
 
       {savedSuccess && (
-        <div className="p-3.5 border border-emerald-600/30 bg-emerald-50 text-emerald-800 text-xs font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-2 animate-in">
+        <div className="p-3.5 border border-emerald-600/30 bg-emerald-50 text-emerald-800 text-xs font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-2 animate-in rounded-xl">
           <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-700" />
           <span>Limits updated successfully in cryptographic enclave!</span>
         </div>
@@ -126,7 +143,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           step="500"
           value={maxAutoTx}
           onChange={(e) => setMaxAutoTx(Number(e.target.value))}
-          className="w-full accent-[#1A1A1A] cursor-pointer h-1.5 bg-[#EBE5DE]"
+          className="w-full accent-[#D4AF37] cursor-pointer h-2 bg-[#EBE5DE] rounded-lg"
         />
 
         <div className="flex justify-between text-[10px] font-mono text-[#6C6863]">
@@ -134,6 +151,56 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           <span className="text-[#1A1A1A] font-bold">Current: ₹{maxAutoTx.toLocaleString()}</span>
           <span>Max: ₹10,000</span>
         </div>
+
+        {/* Live Interactive Sandbox Split Matrix */}
+        <div className="pt-3 border-t border-[#1A1A1A]/10 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono font-bold text-[#D4AF37] uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-[#D4AF37]" />
+              LIVE ENCLAVE SIMULATION MATRIX
+            </span>
+            <span className="text-[10px] font-mono text-[#6C6863]">
+              {autoApprovedItems.length} Instant · {gatedItems.length} Gated
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            
+            {/* Auto Approved Column */}
+            <div className="p-3.5 bg-emerald-50/60 border border-emerald-600/20 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono uppercase font-bold text-emerald-800 flex items-center gap-1">
+                <Zap className="w-3 h-3 text-emerald-600" />
+                <span>Auto-Approved (&le; ₹{maxAutoTx.toLocaleString()})</span>
+              </div>
+              <div className="space-y-1.5 text-xs font-sans">
+                {autoApprovedItems.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-emerald-950 text-[11px] bg-white/70 px-2 py-1 rounded border border-emerald-600/10">
+                    <span className="truncate">{item.name}</span>
+                    <strong className="font-mono ml-2">₹{item.price.toLocaleString()}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Step-Up Required Column */}
+            <div className="p-3.5 bg-amber-50/60 border border-amber-600/20 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono uppercase font-bold text-amber-800 flex items-center gap-1">
+                <Lock className="w-3 h-3 text-amber-600" />
+                <span>Passkey Step-Up (&gt; ₹{maxAutoTx.toLocaleString()})</span>
+              </div>
+              <div className="space-y-1.5 text-xs font-sans">
+                {gatedItems.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-amber-950 text-[11px] bg-white/70 px-2 py-1 rounded border border-amber-600/10">
+                    <span className="truncate">{item.name}</span>
+                    <strong className="font-mono ml-2">₹{item.price.toLocaleString()}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
       {/* Control 2: Daily budget ceiling */}
@@ -159,7 +226,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           step="5000"
           value={dailyCeiling}
           onChange={(e) => setDailyCeiling(Number(e.target.value))}
-          className="w-full accent-[#1A1A1A] cursor-pointer h-1.5 bg-[#EBE5DE]"
+          className="w-full accent-[#D4AF37] cursor-pointer h-2 bg-[#EBE5DE] rounded-lg"
         />
 
         <div className="flex justify-between text-[10px] font-mono text-[#6C6863]">
@@ -184,7 +251,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           {merchants.map((store) => (
             <span
               key={store}
-              className="inline-flex items-center space-x-2 px-3 py-1.5 border border-[#1A1A1A]/20 bg-[#FAF8F5] text-xs font-sans text-[#1A1A1A]"
+              className="inline-flex items-center space-x-2 px-3 py-1.5 border border-[#1A1A1A]/15 bg-[#FFFFFF] rounded-lg text-xs font-sans text-[#1A1A1A] shadow-sm"
             >
               <span>{store}</span>
               <button
@@ -230,7 +297,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
         </button>
 
         {showTechnical && (
-          <div className="mt-3 p-5 border border-[#1A1A1A]/15 bg-[#1A1A1A] space-y-2 text-xs font-mono text-[#F9F8F6] animate-in shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+          <div className="mt-3 p-5 border border-[#1A1A1A]/15 bg-[#1A1A1A] space-y-2 text-xs font-mono text-[#F9F8F6] animate-in shadow-[0_4px_16px_rgba(0,0,0,0.12)] rounded-xl">
             <div className="text-[#D4AF37] uppercase text-[10px] font-bold tracking-widest pb-1 border-b border-white/10">
               Hardware-Signed Mandate Payload
             </div>
@@ -255,4 +322,3 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
     </div>
   );
 };
-

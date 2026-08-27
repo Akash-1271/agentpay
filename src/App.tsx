@@ -18,18 +18,19 @@ import { ApiDocsModal } from './components/ApiDocsModal';
 import { RazorpayLogo } from './components/RazorpayLogo';
 import { DemoTourModal } from './components/DemoTourModal';
 import { playPaymentSuccessChime } from './utils/soundEffects';
+import { isVoiceEnabled, setVoiceEnabled, speakAgentMessage } from './utils/speechNarrator';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
-import { Menu, Zap, Search, Play } from 'lucide-react';
+import { Menu, Zap, Search, Play, Volume2, VolumeX } from 'lucide-react';
 
 export const App: React.FC = () => {
-
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
   const [mandate, setMandate] = useState<AP2DelegationMandate | null>(null);
   const [dailySpent, setDailySpent] = useState<number>(1250);
   const [auditLedger, setAuditLedger] = useState<AuditRecord[]>([]);
   const [lastOutcome, setLastOutcome] = useState<AgentTransactionOutcome | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [voiceOn, setVoiceOn] = useState<boolean>(false);
   const [isStepUpOpen, setIsStepUpOpen] = useState<boolean>(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState<boolean>(false);
   const [isWireTraceOpen, setIsWireTraceOpen] = useState<boolean>(false);
@@ -63,9 +64,17 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const toggleVoice = () => {
+    const nextState = !voiceOn;
+    setVoiceOn(nextState);
+    setVoiceEnabled(nextState);
+  };
+
   const handleRunTransaction = async (prompt: string, options: any = {}) => {
     try {
       setLoading(true);
+      speakAgentMessage(`Evaluating intent: ${prompt}`);
+
       const outcome = await api.runAgentTransaction({
         userPrompt: prompt,
         autoAcceptBundles: options.autoAcceptBundles,
@@ -78,8 +87,12 @@ export const App: React.FC = () => {
 
       if (outcome.status === 'COMPLETED') {
         playPaymentSuccessChime();
+        speakAgentMessage(`Enclave bounds verified. Order captured and settled via Razorpay.`);
       } else if (outcome.status === 'STEP_UP_REQUIRED') {
         setIsStepUpOpen(true);
+        speakAgentMessage(`Single-purchase threshold exceeded. Biometric passkey step-up required.`);
+      } else if (outcome.status === 'REJECTED_POLICY') {
+        speakAgentMessage(`Transaction blocked by spending mandate. Zero card exposure.`);
       }
       return outcome;
     } catch (err: any) {
@@ -103,6 +116,7 @@ export const App: React.FC = () => {
       setLastOutcome(res.outcome);
       if (res.outcome.status === 'COMPLETED') {
         playPaymentSuccessChime();
+        speakAgentMessage(`Biometric authorization verified. Payment captured.`);
       }
       setIsStepUpOpen(false);
       await fetchEnclaveData();
@@ -133,7 +147,7 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F9F8F6] text-[#1A1A1A] flex flex-col selection:bg-[#D4AF37] selection:text-[#FFFFFF] font-body antialiased relative">
       
-      {/* Luxury Editorial Background Accents: Paper Grain Noise Overlay & 4-Line Architectural Grid */}
+      {/* Background Paper Grain & Grid Accents */}
       <div className="paper-noise-overlay" aria-hidden="true" />
       <div className="architectural-gridlines" aria-hidden="true">
         <div className="grid-line" />
@@ -142,7 +156,7 @@ export const App: React.FC = () => {
         <div className="grid-line" />
       </div>
 
-      {/* Sidebar Navigation */}
+      {/* Modern Redesigned Sidebar Navigation */}
       <Sidebar
         currentSection={currentSection}
         onSelectSection={setCurrentSection}
@@ -154,15 +168,15 @@ export const App: React.FC = () => {
         onToggleMobile={() => setIsMobileNavOpen(!isMobileNavOpen)}
       />
 
-      {/* Main Layout Area */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 relative z-10">
+      {/* Main Content Layout with 72-unit Offset */}
+      <div className="flex-1 lg:pl-72 flex flex-col min-w-0 relative z-10">
         
-        {/* Top App Header with Editorial Architectural Line */}
-        <header className="h-16 px-4 sm:px-8 border-b border-[#1A1A1A]/12 bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+        {/* Top App Header */}
+        <header className="h-16 px-4 sm:px-8 border-b border-[#1A1A1A]/10 bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsMobileNavOpen(true)}
-              className="lg:hidden p-2 text-[#1A1A1A] hover:bg-[#EBE5DE] transition-colors"
+              className="lg:hidden p-2 text-[#1A1A1A] hover:bg-[#EBE5DE] rounded-lg transition-colors"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5" />
@@ -170,31 +184,51 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="hidden sm:flex items-center space-x-2.5 px-4 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] text-xs text-[#6C6863] hover:text-[#1A1A1A] transition-all group shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
+              className="hidden sm:flex items-center space-x-2.5 px-4 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] rounded-xl text-xs text-[#6C6863] hover:text-[#1A1A1A] transition-all group shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
             >
               <Search className="w-3.5 h-3.5 text-[#D4AF37] group-hover:scale-110 transition-transform" />
               <span className="font-serif italic tracking-wide text-xs">Search commands, orders, or policies...</span>
-              <kbd className="font-mono text-[10px] text-[#1A1A1A] bg-[#EBE5DE] px-1.5 py-0.5 ml-4 border border-[#1A1A1A]/15">
+              <kbd className="font-mono text-[10px] text-[#1A1A1A] bg-[#FAF8F5] px-1.5 py-0.5 ml-4 border border-[#1A1A1A]/15 rounded-md">
                 ⌘K
               </kbd>
             </button>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs">
+          <div className="flex items-center space-x-2.5 text-xs">
+            {/* Voice Narrator Toggle */}
             <button
-              onClick={() => setIsDemoTourOpen(true)}
-              className="luxury-btn-secondary px-4 py-2 text-xs"
+              onClick={toggleVoice}
+              title={voiceOn ? 'Voice Narration ON' : 'Voice Narration OFF'}
+              className={`px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
+                voiceOn
+                  ? 'border-[#D4AF37] bg-[#D4AF37]/15 text-[#1A1A1A] font-semibold'
+                  : 'border-[#1A1A1A]/15 bg-[#FFFFFF] text-[#6C6863] hover:text-[#1A1A1A]'
+              }`}
             >
-              <Play className="w-3 h-3 fill-current text-[#D4AF37]" />
-              <span>Editorial Tour</span>
+              {voiceOn ? (
+                <Volume2 className="w-3.5 h-3.5 text-[#D4AF37] animate-pulse" />
+              ) : (
+                <VolumeX className="w-3.5 h-3.5 text-[#6C6863]" />
+              )}
+              <span className="hidden sm:inline font-sans">{voiceOn ? 'Voice Active' : 'Voice'}</span>
             </button>
 
+            {/* Editorial Tour */}
+            <button
+              onClick={() => setIsDemoTourOpen(true)}
+              className="luxury-btn-secondary px-3.5 py-2 text-xs rounded-xl"
+            >
+              <Play className="w-3 h-3 fill-current text-[#D4AF37]" />
+              <span className="hidden sm:inline">Tour</span>
+            </button>
+
+            {/* Protocol Wire */}
             <button
               onClick={() => setIsWireTraceOpen(true)}
-              className="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] text-[#1A1A1A] font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
+              className="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] rounded-xl text-[#1A1A1A] font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
             >
               <Zap className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span className="tracking-wider uppercase">Protocol Wire</span>
+              <span className="tracking-wider uppercase">Wire</span>
             </button>
 
             <div className="pl-1">
@@ -205,7 +239,7 @@ export const App: React.FC = () => {
 
         {/* Global Toast Alert */}
         {toastMessage && (
-          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-600 border border-rose-200 bg-[#FFFFFF] text-rose-900 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-600 border border-rose-200 bg-[#FFFFFF] text-rose-900 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.04)] rounded-r-xl">
             <span>⚠️ {toastMessage}</span>
             <button
               onClick={() => setToastMessage(null)}
@@ -294,7 +328,7 @@ export const App: React.FC = () => {
         </main>
 
         {/* Editorial Architectural Footer */}
-        <footer className="border-t border-[#1A1A1A]/12 py-6 px-4 sm:px-8 text-[#6C6863] text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#F9F8F6]/90 backdrop-blur-md">
+        <footer className="border-t border-[#1A1A1A]/10 py-6 px-4 sm:px-8 text-[#6C6863] text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#F9F8F6]/90 backdrop-blur-md">
           <span className="tracking-[0.25em] uppercase font-serif text-[11px] text-[#1A1A1A] font-semibold">
             AgentPay · Autonomous Commerce Protocol
           </span>
