@@ -42,8 +42,8 @@ interface AmazonAdvisorPageProps {
 }
 
 const SAMPLE_QUERIES = [
-  'Best running shoes under ₹2,000 across Nike, Adidas, Puma, Asics',
   'Mechanical keyboards for coding under ₹4,000 (Keychron vs Royal Kludge)',
+  'Best running shoes under ₹2,000 across Nike, Adidas, Puma, Asics',
   'Fast charging 65W GaN chargers with multi-port USB-C (Anker vs Spigen)',
   'Sony vs Bose wireless noise cancelling headphones',
   'Smart fitness rings and smartwatches under ₹5,000',
@@ -62,9 +62,10 @@ export const AmazonAdvisorPage: React.FC<AmazonAdvisorPageProps> = ({ onBuyItem 
       setLoading(true);
       const res = await api.analyzeAmazonReviews(query);
       const items = (res.items || res.products || []) as ProductReviewAnalysis[];
-      if (items.length > 0) {
+      if (items && items.length > 0) {
         setAnalysisItems(items);
         setSelectedBrand(null);
+        setSelectedSource(null);
         if (res.brandSummary) {
           setBrandSummary(res.brandSummary);
         }
@@ -233,133 +234,171 @@ export const AmazonAdvisorPage: React.FC<AmazonAdvisorPageProps> = ({ onBuyItem 
         </span>
       </div>
 
+      {/* Loading Skeleton */}
+      {loading && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="luxury-card p-6 space-y-4 bg-white/60">
+              <div className="h-4 bg-black/10 rounded w-1/3" />
+              <div className="h-6 bg-black/10 rounded w-3/4" />
+              <div className="h-10 bg-black/5 rounded w-full" />
+              <div className="h-20 bg-black/5 rounded w-full" />
+              <div className="h-10 bg-black/10 rounded w-full" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Empty State Fallback */}
+      {!loading && filteredItems.length === 0 && (
+        <div className="luxury-card p-12 text-center space-y-4">
+          <Sparkles className="w-8 h-8 text-[#D4AF37] mx-auto" />
+          <h3 className="font-serif text-lg font-bold text-[#1A1A1A]">No products matching current filter</h3>
+          <p className="text-xs text-[#6C6863] max-w-md mx-auto">
+            Try resetting platform or brand filters, or choose one of the curated search prompts above.
+          </p>
+          <button
+            onClick={() => {
+              setSelectedBrand(null);
+              setSelectedSource(null);
+              fetchAnalysis('Mechanical keyboards for coding under ₹4,000');
+            }}
+            className="luxury-btn-primary text-xs h-10 px-6"
+          >
+            Reset Filters & View Recommendations
+          </button>
+        </div>
+      )}
+
       {/* Product Comparison Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {filteredItems.map((item, idx) => {
-          const isAmazon = (item.source || 'Amazon.in').includes('Amazon');
-          const totalRev = item.totalReviews || item.reviewCount || 1000;
-          const sentSummary = item.sentimentSummary || item.reviewSummary || '';
-          const bestUse = item.bestUseFor || item.bestFor || 'Everyday Use';
+      {!loading && filteredItems.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {filteredItems.map((item, idx) => {
+            const isAmazon = (item.source || 'Amazon.in').includes('Amazon');
+            const totalRev = item.totalReviews || item.reviewCount || 1000;
+            const sentSummary = item.sentimentSummary || item.reviewSummary || '';
+            const bestUse = item.bestUseFor || item.bestFor || 'Everyday Use';
 
-          return (
-            <div
-              key={item.asin || idx}
-              className={`luxury-card flex flex-col justify-between space-y-5 ${
-                item.isBestValue ? 'border-t-2 border-t-[#D4AF37] shadow-[0_8px_24px_rgba(212,175,55,0.15)]' : ''
-              }`}
-            >
-              <div className="space-y-4">
-                
-                {/* Header Badge, Source & Score */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {item.isBestValue ? (
-                      <span className="px-2 py-0.5 bg-[#1A1A1A] text-[#D4AF37] font-sans text-[9px] font-bold tracking-[0.18em] uppercase flex items-center space-x-1">
-                        <Award className="w-3 h-3 fill-current" />
-                        <span>TOP PICK</span>
+            return (
+              <div
+                key={item.asin || idx}
+                className={`luxury-card flex flex-col justify-between space-y-5 ${
+                  item.isBestValue ? 'border-t-2 border-t-[#D4AF37] shadow-[0_8px_24px_rgba(212,175,55,0.15)]' : ''
+                }`}
+              >
+                <div className="space-y-4">
+                  
+                  {/* Header Badge, Source & Score */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {item.isBestValue ? (
+                        <span className="px-2 py-0.5 bg-[#1A1A1A] text-[#D4AF37] font-sans text-[9px] font-bold tracking-[0.18em] uppercase flex items-center space-x-1">
+                          <Award className="w-3 h-3 fill-current" />
+                          <span>TOP PICK</span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em]">
+                          Rank 0{idx + 1}
+                        </span>
+                      )}
+
+                      {/* Source Platform Badge */}
+                      <span
+                        className={`text-[9px] font-sans font-bold px-2 py-0.5 border tracking-wider uppercase ${
+                          isAmazon
+                            ? 'border-amber-600/30 text-amber-900 bg-amber-50'
+                            : 'border-blue-600/30 text-blue-900 bg-blue-50'
+                        }`}
+                      >
+                        {item.source || 'Amazon.in'}
                       </span>
-                    ) : (
-                      <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em]">
-                        Rank 0{idx + 1}
-                      </span>
-                    )}
+                    </div>
 
-                    {/* Source Platform Badge */}
-                    <span
-                      className={`text-[9px] font-sans font-bold px-2 py-0.5 border tracking-wider uppercase ${
-                        isAmazon
-                          ? 'border-amber-600/30 text-amber-900 bg-amber-50'
-                          : 'border-blue-600/30 text-blue-900 bg-blue-50'
-                      }`}
-                    >
-                      {item.source || 'Amazon.in'}
-                    </span>
+                    <div className="flex items-center space-x-1 font-mono text-xs text-[#1A1A1A] font-semibold">
+                      <TrendingUp className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      <span>Score {item.agentRecommendationScore || 90}/100</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center space-x-1 font-mono text-xs text-[#1A1A1A] font-semibold">
-                    <TrendingUp className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Score {item.agentRecommendationScore || 90}/100</span>
+                  {/* Title & Brand */}
+                  <div>
+                    <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.18em]">{item.brand}</span>
+                    <h3 className="font-serif text-base font-bold text-[#1A1A1A] leading-snug tracking-tight mt-1">
+                      {item.title}
+                    </h3>
                   </div>
-                </div>
 
-                {/* Title & Brand */}
-                <div>
-                  <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.18em]">{item.brand}</span>
-                  <h3 className="font-serif text-base font-bold text-[#1A1A1A] leading-snug tracking-tight mt-1">
-                    {item.title}
-                  </h3>
-                </div>
-
-                {/* Price & Rating */}
-                <div className="flex items-center justify-between border-y border-[#1A1A1A]/10 py-2.5">
-                  <div className="font-serif text-2xl font-bold text-[#1A1A1A]">
-                    ₹{item.price.toLocaleString()}
+                  {/* Price & Rating */}
+                  <div className="flex items-center justify-between border-y border-[#1A1A1A]/10 py-2.5">
+                    <div className="font-serif text-2xl font-bold text-[#1A1A1A]">
+                      ₹{item.price.toLocaleString()}
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-[#6C6863]">
+                      <div className="flex text-[#D4AF37]">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3.5 h-3.5 ${
+                              i < Math.floor(item.rating) ? 'fill-[#D4AF37]' : 'text-[#6C6863]/30'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-bold text-[#1A1A1A]">{item.rating}</span>
+                      <span>({totalRev.toLocaleString()})</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-1.5 text-xs text-[#6C6863]">
-                    <div className="flex text-[#D4AF37]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3.5 h-3.5 ${
-                            i < Math.floor(item.rating) ? 'fill-[#D4AF37]' : 'text-[#6C6863]/30'
-                          }`}
-                        />
+
+                  {/* Sentiment Summary */}
+                  {sentSummary && (
+                    <p className="text-xs text-[#6C6863] leading-relaxed italic border-l-2 border-[#D4AF37] pl-3 py-1 font-serif">
+                      "{sentSummary}"
+                    </p>
+                  )}
+
+                  {/* Best For */}
+                  <div className="p-3 border border-[#1A1A1A]/10 bg-[#FAF8F5] text-xs">
+                    <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.18em] block mb-0.5">Best Application</span>
+                    <span className="font-serif font-bold text-[#1A1A1A]">{bestUse}</span>
+                  </div>
+
+                  {/* Pros & Cons */}
+                  <div className="space-y-2 text-xs">
+                    <div className="space-y-1">
+                      {item.pros?.map((p, i) => (
+                        <div key={i} className="flex items-center space-x-1.5 text-emerald-800 text-[11px] font-sans">
+                          <span className="text-[#D4AF37] font-bold">◆</span>
+                          <span>{p}</span>
+                        </div>
                       ))}
                     </div>
-                    <span className="font-bold text-[#1A1A1A]">{item.rating}</span>
-                    <span>({totalRev.toLocaleString()})</span>
-                  </div>
-                </div>
-
-                {/* Sentiment Summary */}
-                {sentSummary && (
-                  <p className="text-xs text-[#6C6863] leading-relaxed italic border-l-2 border-[#D4AF37] pl-3 py-1 font-serif">
-                    "{sentSummary}"
-                  </p>
-                )}
-
-                {/* Best For */}
-                <div className="p-3 border border-[#1A1A1A]/10 bg-[#FAF8F5] text-xs">
-                  <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.18em] block mb-0.5">Best Application</span>
-                  <span className="font-serif font-bold text-[#1A1A1A]">{bestUse}</span>
-                </div>
-
-                {/* Pros & Cons */}
-                <div className="space-y-2 text-xs">
-                  <div className="space-y-1">
-                    {item.pros?.map((p, i) => (
-                      <div key={i} className="flex items-center space-x-1.5 text-emerald-800 text-[11px] font-sans">
-                        <span className="text-[#D4AF37] font-bold">◆</span>
-                        <span>{p}</span>
+                    {item.cons?.map((c, i) => (
+                      <div key={i} className="flex items-center space-x-1.5 text-amber-800 text-[11px] font-sans">
+                        <span className="text-amber-600 font-bold">▲</span>
+                        <span>{c}</span>
                       </div>
                     ))}
                   </div>
-                  {item.cons?.map((c, i) => (
-                    <div key={i} className="flex items-center space-x-1.5 text-amber-800 text-[11px] font-sans">
-                      <span className="text-amber-600 font-bold">▲</span>
-                      <span>{c}</span>
-                    </div>
-                  ))}
+
+                </div>
+
+                {/* Buy CTA */}
+                <div className="pt-4 border-t border-[#1A1A1A]/10">
+                  <button
+                    type="button"
+                    onClick={() => onBuyItem(`Buy ${item.title} from ${item.source || 'Amazon.in'} under ₹${item.price + 500}`)}
+                    className="luxury-btn-primary w-full h-11 text-xs flex items-center justify-center space-x-2"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <span>Buy via AgentPay Enclave</span>
+                  </button>
                 </div>
 
               </div>
-
-              {/* Buy CTA */}
-              <div className="pt-4 border-t border-[#1A1A1A]/10">
-                <button
-                  type="button"
-                  onClick={() => onBuyItem(`Buy ${item.title} from ${item.source || 'Amazon.in'} under ₹${item.price + 500}`)}
-                  className="luxury-btn-primary w-full h-11 text-xs flex items-center justify-center space-x-2"
-                >
-                  <ShoppingBag className="w-3.5 h-3.5" />
-                  <span>Buy via AgentPay Enclave</span>
-                </button>
-              </div>
-
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
     </div>
   );
