@@ -393,9 +393,9 @@ export const OrderFulfillmentModal: React.FC<OrderFulfillmentModalProps> = ({ ou
 
       {isInvoicePreviewOpen && (
         <TaxInvoiceViewModal
-          invoiceId={fulfillment.taxInvoiceId}
+          invoiceId={fulfillment.taxInvoiceId || 'INV-2026-001'}
           orderId={fulfillment.orderId}
-          paymentId={fulfillment.razorpayPaymentId}
+          paymentId={fulfillment.razorpayPaymentId || 'pay_live_001'}
           productName={fulfillment.items[0]?.name || 'Autonomous Purchase'}
           amount={fulfillment.totalAmount}
           customerName={fulfillment.customerName}
