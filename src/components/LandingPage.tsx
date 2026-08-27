@@ -5,12 +5,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   Lock,
-  Zap,
-  Sparkles,
-  Layers,
-  Fingerprint,
 } from 'lucide-react';
 import { NavSection } from './Sidebar';
+import { VerticalTabs } from './ui/vertical-tabs';
 
 interface LandingPageProps {
   onNavigate: (section: NavSection) => void;
@@ -121,82 +118,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onRunLiveD
 
       </section>
 
-      {/* ── Protocol Workflow (Numbered Editorial Pillars I - IV) ── */}
-      <section className="space-y-10 pt-8 border-t border-[#1A1A1A]/15">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <span className="text-[10px] font-sans uppercase tracking-[0.25em] text-[#6C6863] font-semibold flex items-center gap-2">
-              <span className="w-3 h-px bg-[#D4AF37]" />
-              <span>Architectural Execution Flow</span>
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] mt-1.5">
-              How Autonomous Commerce Settles
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-[#1A1A1A] px-3 py-1.5 border border-[#1A1A1A]/20 bg-[#FFFFFF] self-start md:self-auto">
-            AP2 PROTOCOL SPECIFICATION
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Step 01 */}
-          <div className="luxury-card space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-3">
-              <span className="font-serif text-3xl font-normal text-[#1A1A1A]">01</span>
-              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-[#1A1A1A] tracking-tight">
-              Natural Intent
-            </h3>
-            <p className="text-xs text-[#6C6863] leading-relaxed font-sans">
-              Buyer prompt parsed into canonical merchant query (e.g. "Running shoes under ₹2,000" or custom mechanical keyboards).
-            </p>
-          </div>
-
-          {/* Step 02 */}
-          <div className="luxury-card space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-3">
-              <span className="font-serif text-3xl font-normal text-[#1A1A1A]">02</span>
-              <Layers className="w-4 h-4 text-[#D4AF37]" />
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-[#1A1A1A] tracking-tight">
-              UAP Discovery
-            </h3>
-            <p className="text-xs text-[#6C6863] leading-relaxed font-sans">
-              Real-time merchant inventory lock, automatic dynamic bundle discounts, and cryptographically signed quotes.
-            </p>
-          </div>
-
-          {/* Step 03 */}
-          <div className="luxury-card space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-3">
-              <span className="font-serif text-3xl font-normal text-[#1A1A1A]">03</span>
-              <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-[#1A1A1A] tracking-tight">
-              Enclave Gating
-            </h3>
-            <p className="text-xs text-[#6C6863] leading-relaxed font-sans">
-              Deterministic verification against spending policies; triggers biometric passkey step-up when limits are exceeded.
-            </p>
-          </div>
-
-          {/* Step 04 */}
-          <div className="luxury-card space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-3">
-              <span className="font-serif text-3xl font-normal text-[#1A1A1A]">04</span>
-              <Zap className="w-4 h-4 text-[#D4AF37]" />
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-[#1A1A1A] tracking-tight">
-              Razorpay Settle
-            </h3>
-            <p className="text-xs text-[#6C6863] leading-relaxed font-sans">
-              Test mode capture, GST-compliant tax invoice generation, and real-time courier tracking assignment.
-            </p>
-          </div>
-
-        </div>
+      {/* ── Protocol Workflow: Interactive VerticalTabs Section ── */}
+      <section className="pt-4 border-t border-[#1A1A1A]/15">
+        <VerticalTabs />
       </section>
 
       {/* ── Inverted Dark Section: The Architecture of Trust ── */}
@@ -258,4 +182,3 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onRunLiveD
     </div>
   );
 };
-
