@@ -25,4 +25,6 @@ jobs:
         run: npm ci
 
       - name: Run Test Suite
+        env:
+          DB_PATH: ':memory:'
         run: npm test
