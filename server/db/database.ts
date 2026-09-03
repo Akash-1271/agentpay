@@ -154,13 +154,19 @@ export class AgentPayDatabase {
 
   public static getDb(): Database.Database {
     if (!this.db) {
-      const dataDir = path.dirname(CONFIG.DB_PATH);
-      if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
+      if (CONFIG.DB_PATH !== ':memory:') {
+        const dataDir = path.dirname(CONFIG.DB_PATH);
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir, { recursive: true });
+        }
       }
 
       this.db = new Database(CONFIG.DB_PATH);
-      this.db.pragma('journal_mode = WAL');
+      try {
+        this.db.pragma('journal_mode = WAL');
+      } catch (_) {
+        this.db.pragma('journal_mode = DELETE');
+      }
       this.db.pragma('foreign_keys = ON');
       this.initSchema();
       this.seedInitialData();
