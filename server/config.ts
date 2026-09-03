@@ -15,7 +15,9 @@ export const CONFIG = {
   DEFAULT_BUYER_ID: 'user_akash_ai_shopper',
   DEFAULT_MERCHANT_ID: 'merch_apex_gear',
   ENCLAVE_SECRET_SALT: process.env.ENCLAVE_SECRET_SALT || 'agentpay-cryptographic-enclave-salt-2026',
-  DB_PATH: process.env.DB_PATH || path.join(__dirname, 'data', 'agentpay.db'),
+  get DB_PATH(): string {
+    return process.env.DB_PATH || path.join(__dirname, 'data', 'agentpay.db');
+  },
   OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
