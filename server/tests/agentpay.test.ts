@@ -31,7 +31,9 @@ async function runTestSuite() {
   console.log('\n🧪 Running AgentPay Track 01 Comprehensive Production Test Suite...\n');
 
   // Initialize DB & clean deterministic state
+  console.log('[DEBUG] Calling resetForTesting()...');
   AgentPayDatabase.resetForTesting();
+  console.log('[DEBUG] resetForTesting() completed successfully.');
 
   // Test 1: Canonical UAP Catalog Search & Schema
   await runTest('1. Canonical UAP Catalog Semantic Search & Specs', () => {
