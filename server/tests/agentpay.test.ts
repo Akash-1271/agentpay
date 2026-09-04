@@ -1,4 +1,15 @@
-process.env.DB_PATH = ':memory:';
+import fs from 'fs';
+import path from 'path';
+
+const testCacheDir = path.join(process.cwd(), 'node_modules', '.cache');
+if (!fs.existsSync(testCacheDir)) {
+  fs.mkdirSync(testCacheDir, { recursive: true });
+}
+const testDbPath = path.join(testCacheDir, 'agentpay-test.db');
+if (fs.existsSync(testDbPath)) {
+  try { fs.unlinkSync(testDbPath); } catch (_) {}
+}
+process.env.DB_PATH = testDbPath;
 
 import { UAPCatalogEngine } from '../protocols/uap.js';
 import { BoundedSpendingEnclave } from '../protocols/guardEnclave.js';
@@ -29,9 +40,11 @@ async function runTest(name: string, fn: () => Promise<void> | void) {
 
 async function runTestSuite() {
   console.log('\n🧪 Running AgentPay Track 01 Comprehensive Production Test Suite...\n');
+  console.log(`[TEST SETUP] Using test database: ${process.env.DB_PATH}`);
 
   // Initialize DB & clean deterministic state
   AgentPayDatabase.resetForTesting();
+  console.log('[TEST SETUP] Database initialized and clean.');
 
   // Test 1: Canonical UAP Catalog Search & Schema
   await runTest('1. Canonical UAP Catalog Semantic Search & Specs', () => {
