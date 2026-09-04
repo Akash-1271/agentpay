@@ -6,6 +6,12 @@
 [![Enclave](https://img.shields.io/badge/Spending%20Guard-Non--Bypassable%20Enclave-10b981?style=flat)]()
 [![Ledger](https://img.shields.io/badge/FinOps-SQLite%20Double--Entry-059669?style=flat)]()
 [![Tests](https://img.shields.io/badge/Tests-14%2F14%20Passed-10b981?style=flat)]()
+[![CI](https://github.com/Akash-1271/agentpay/actions/workflows/ci.yml/badge.svg)](https://github.com/Akash-1271/agentpay/actions)
+
+> 📑 **Buildathon Submission Assets**:
+> - 📐 **[System Architecture & Trust Boundaries](docs/architecture.md)**
+> - 🎙️ **[5-Minute Pitch Video Script (0:00–5:00)](docs/pitch-video-script.md)**
+> - 🐳 **Docker One-Liner**: `docker compose up --build` (Backend `:3001` + Frontend `:5173`)
 
 ---
 

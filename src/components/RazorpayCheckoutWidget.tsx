@@ -50,7 +50,7 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
       }
 
       const options = {
-        key: 'rzp_test_AgentPayLiveDemo2026',
+        key: (import.meta as any).env?.VITE_RAZORPAY_KEY_ID || 'rzp_test_AgentPayLiveDemo2026',
         amount: (outcome.quote?.netAmount || 1709) * 100,
         currency: outcome.quote?.currency || 'INR',
         name: 'AgentPay Autonomous Commerce',

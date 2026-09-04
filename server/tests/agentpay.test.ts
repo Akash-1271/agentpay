@@ -1,3 +1,5 @@
+process.env.DB_PATH = ':memory:';
+
 import { UAPCatalogEngine } from '../protocols/uap.js';
 import { BoundedSpendingEnclave } from '../protocols/guardEnclave.js';
 import { BuyerAgent } from '../agents/buyerAgent.js';
