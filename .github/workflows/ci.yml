@@ -22,9 +22,9 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install better-sqlite3@11.10.0
 
       - name: Run Test Suite
-        env:
-          DB_PATH: ':memory:'
         run: npm test
