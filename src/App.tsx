@@ -25,6 +25,20 @@ import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './ty
 import { api } from './services/api';
 import { Menu, Zap, Search, Play, Volume2, VolumeX, Trophy, Radio } from 'lucide-react';
 
+const SECTION_TITLES: Record<NavSection, string> = {
+  landing: 'Cinematic Landing',
+  overview: 'Executive Overview',
+  agent: 'AI Agent Arena',
+  amazon: 'Advisor & Reviews',
+  transactions: 'History & Cryptographic Ledger',
+  policies: 'Spending Mandates & Enclave',
+  catalog: 'Verified Merchant Catalog',
+  growth: 'Merchant Yield & Cart Recovery',
+  benchmark: 'Multi-Agent Stress Benchmarks',
+  failures: 'Exception Containment & Gating',
+  audit: 'Cryptographic Audit Trail',
+};
+
 export const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
   const [mandate, setMandate] = useState<AP2DelegationMandate | null>(null);
@@ -149,7 +163,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#080B11] text-slate-100 flex flex-col selection:bg-[#0C83FF]/30 selection:text-white font-sans antialiased relative">
+    <div className="min-h-screen bg-[#0a0a0a] text-stone-100 flex flex-col selection:bg-[#a78b71]/30 selection:text-white font-sans antialiased relative dot-grid-bg">
       
       {/* ── A. Full-Bleed Cinematic Landing Page ── */}
       {currentSection === 'landing' ? (
@@ -174,107 +188,119 @@ export const App: React.FC = () => {
             onToggleMobile={() => setIsMobileNavOpen(!isMobileNavOpen)}
           />
 
-          {/* Main Content Layout with 72-unit Offset */}
-          <div className="flex-1 lg:pl-72 flex flex-col min-w-0 relative z-10">
+          {/* Main Content Layout with 64-unit (256px) Offset */}
+          <div className="flex-1 lg:pl-64 flex flex-col min-w-0 relative z-10">
             {/* Top App Header */}
-            <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0A0E17]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => setIsMobileNavOpen(true)}
-              className="lg:hidden p-2 text-slate-300 hover:bg-white/5 rounded-lg transition-colors"
-              aria-label="Open navigation menu"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
+            <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0a0a0a]/85 backdrop-blur-xl sticky top-0 z-30 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setIsMobileNavOpen(true)}
+                  className="lg:hidden p-2 text-stone-300 hover:bg-white/5 rounded-lg transition-colors"
+                  aria-label="Open navigation menu"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
 
-            <button
-              onClick={() => setIsCommandPaletteOpen(true)}
-              className="hidden sm:flex items-center space-x-2.5 px-3.5 py-2 border border-white/10 hover:border-[#0C83FF]/50 bg-[#0E131F] rounded-xl text-xs text-slate-400 hover:text-slate-200 transition-all group shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
-            >
-              <Search className="w-3.5 h-3.5 text-[#0C83FF] group-hover:scale-110 transition-transform" />
-              <span className="font-sans text-xs">Search commands, orders, or policies...</span>
-              <kbd className="font-mono text-[10px] text-slate-300 bg-white/10 px-1.5 py-0.5 ml-4 border border-white/10 rounded-md">
-                ⌘K
-              </kbd>
-            </button>
-          </div>
+                {/* Section Title in Playfair Display Italic */}
+                <h1 className="font-playfair text-lg sm:text-xl text-stone-100 font-bold tracking-tight hidden md:block">
+                  {SECTION_TITLES[currentSection] || 'AgentPay'}
+                </h1>
 
-          <div className="flex items-center space-x-2.5 text-xs">
-            {/* Hackathon Judging Rubric & Demo Scenarios */}
-            <button
-              onClick={() => setIsRubricOpen(true)}
-              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-2 border border-emerald-500/30 hover:border-emerald-500/60 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-medium transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)]"
-            >
-              <Trophy className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Rubric & Scenarios</span>
-            </button>
+                <button
+                  onClick={() => setIsCommandPaletteOpen(true)}
+                  className="hidden sm:flex items-center space-x-2.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/50 bg-white/[0.03] rounded-xl text-xs text-stone-400 hover:text-stone-200 transition-all group shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+                >
+                  <Search className="w-3.5 h-3.5 text-[#c9b8a0] group-hover:scale-110 transition-transform" />
+                  <span className="font-sans text-xs">Search commands, orders, or policies...</span>
+                  <kbd className="font-mono text-[10px] text-stone-300 bg-white/10 px-1.5 py-0.5 ml-3 border border-white/10 rounded-md">
+                    ⌘K
+                  </kbd>
+                </button>
+              </div>
 
-            {/* Live Webhook Stream Inspector */}
-            <button
-              onClick={() => setIsWebhookStreamOpen(true)}
-              className="hidden md:inline-flex items-center space-x-1.5 px-3 py-2 border border-[#0C83FF]/30 hover:border-[#0C83FF]/60 bg-[#0C83FF]/10 hover:bg-[#0C83FF]/20 text-[#38BDF8] rounded-xl text-xs font-mono transition-all shadow-[0_0_15px_rgba(12,131,255,0.15)]"
-            >
-              <Radio className="w-3.5 h-3.5 text-[#0C83FF] animate-pulse" />
-              <span>Webhooks</span>
-            </button>
+              <div className="flex items-center space-x-2.5 text-xs">
+                {/* Live Status Pill */}
+                <div className="hidden sm:inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-xs shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="font-bold text-emerald-400 text-[10px] tracking-wider uppercase">LIVE</span>
+                  <span className="text-stone-400 text-[10px] border-l border-emerald-500/20 pl-2 font-mono">Enclave Bounded</span>
+                </div>
 
-            {/* Voice Narrator Toggle */}
-            <button
-              onClick={toggleVoice}
-              title={voiceOn ? 'Voice Narration ON' : 'Voice Narration OFF'}
-              className={`px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
-                voiceOn
-                  ? 'border-[#0C83FF] bg-[#0C83FF]/15 text-[#38BDF8] font-semibold shadow-[0_0_15px_rgba(12,131,255,0.2)]'
-                  : 'border-white/10 bg-[#0E131F] text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {voiceOn ? (
-                <Volume2 className="w-3.5 h-3.5 text-[#0C83FF] animate-pulse" />
-              ) : (
-                <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-              )}
-              <span className="hidden sm:inline font-sans">{voiceOn ? 'Voice Active' : 'Voice'}</span>
-            </button>
+                {/* Hackathon Judging Rubric & Demo Scenarios */}
+                <button
+                  onClick={() => setIsRubricOpen(true)}
+                  className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-[#a78b71]/30 hover:border-[#a78b71]/60 bg-[#a78b71]/10 hover:bg-[#a78b71]/20 text-[#e8d5b7] rounded-xl text-xs font-medium transition-all shadow-[0_0_15px_rgba(167,139,113,0.15)]"
+                >
+                  <Trophy className="w-3.5 h-3.5 text-[#c9b8a0]" />
+                  <span>Rubric</span>
+                </button>
 
-            {/* Editorial Tour */}
-            <button
-              onClick={() => setIsDemoTourOpen(true)}
-              className="luxury-btn-secondary px-3.5 py-2 text-xs rounded-xl"
-            >
-              <Play className="w-3 h-3 fill-current text-[#0C83FF]" />
-              <span className="hidden sm:inline">Tour</span>
-            </button>
+                {/* Live Webhook Stream Inspector */}
+                <button
+                  onClick={() => setIsWebhookStreamOpen(true)}
+                  className="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/40 bg-white/[0.03] text-stone-300 rounded-xl text-xs font-mono transition-all"
+                >
+                  <Radio className="w-3.5 h-3.5 text-[#c9b8a0] animate-pulse" />
+                  <span>Webhooks</span>
+                </button>
 
-            {/* Protocol Wire */}
-            <button
-              onClick={() => setIsWireTraceOpen(true)}
-              className="hidden lg:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-white/10 hover:border-[#0C83FF]/40 bg-[#0E131F] rounded-xl text-slate-300 font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(12,131,255,0.1)] transition-all"
-            >
-              <Zap className="w-3.5 h-3.5 text-[#0C83FF]" />
-              <span className="tracking-wider uppercase">Wire</span>
-            </button>
+                {/* Voice Narrator Toggle */}
+                <button
+                  onClick={toggleVoice}
+                  title={voiceOn ? 'Voice Narration ON' : 'Voice Narration OFF'}
+                  className={`px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
+                    voiceOn
+                      ? 'border-[#a78b71] bg-[#a78b71]/20 text-[#e8d5b7] font-semibold shadow-[0_0_15px_rgba(167,139,113,0.25)]'
+                      : 'border-white/10 bg-white/[0.02] text-stone-400 hover:text-stone-200'
+                  }`}
+                >
+                  {voiceOn ? (
+                    <Volume2 className="w-3.5 h-3.5 text-[#e8d5b7] animate-pulse" />
+                  ) : (
+                    <VolumeX className="w-3.5 h-3.5 text-stone-400" />
+                  )}
+                  <span className="hidden sm:inline font-sans">{voiceOn ? 'Voice Active' : 'Voice'}</span>
+                </button>
 
-            <div className="pl-1">
-              <RazorpayLogo variant="badge" height={18} />
-            </div>
-          </div>
-        </header>
+                {/* Editorial Tour */}
+                <button
+                  onClick={() => setIsDemoTourOpen(true)}
+                  className="btn-gold-secondary px-3.5 py-1.5 text-xs rounded-xl"
+                >
+                  <Play className="w-3 h-3 fill-current text-[#c9b8a0]" />
+                  <span className="hidden sm:inline">Tour</span>
+                </button>
 
-        {/* Global Toast Alert */}
-        {toastMessage && (
-          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-500 border border-rose-500/20 bg-[#131929] text-rose-300 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.3)] rounded-r-xl">
-            <span>⚠️ {toastMessage}</span>
-            <button
-              onClick={() => setToastMessage(null)}
-              className="text-rose-400 hover:text-rose-200 font-bold ml-4 uppercase tracking-widest text-[10px]"
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
+                {/* Protocol Wire */}
+                <button
+                  onClick={() => setIsWireTraceOpen(true)}
+                  className="hidden lg:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/40 bg-white/[0.02] rounded-xl text-stone-300 font-mono text-[11px] transition-all"
+                >
+                  <Zap className="w-3.5 h-3.5 text-[#c9b8a0]" />
+                  <span className="tracking-wider uppercase">Wire</span>
+                </button>
 
-        {/* Main Content Router */}
-        <main className="flex-1 px-4 sm:px-8 lg:px-12 py-10 max-w-7xl w-full mx-auto">
+                <div className="pl-1">
+                  <RazorpayLogo variant="badge" height={18} />
+                </div>
+              </div>
+            </header>
+
+            {/* Global Toast Alert */}
+            {toastMessage && (
+              <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-500 border border-rose-500/20 bg-black/60 backdrop-blur-md text-rose-300 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.5)] rounded-r-xl">
+                <span>⚠️ {toastMessage}</span>
+                <button
+                  onClick={() => setToastMessage(null)}
+                  className="text-rose-400 hover:text-rose-200 font-bold ml-4 uppercase tracking-widest text-[10px]"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+
+            {/* Main Content Router */}
+            <main className="flex-1 px-4 sm:px-8 lg:px-12 py-10 max-w-7xl w-full mx-auto">
           {currentSection === 'overview' && (
             <DashboardOverview
               mandate={mandate}
