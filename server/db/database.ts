@@ -154,13 +154,21 @@ export class AgentPayDatabase {
 
   public static getDb(): Database.Database {
     if (!this.db) {
-      const dataDir = path.dirname(CONFIG.DB_PATH);
-      if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
+      if (CONFIG.DB_PATH !== ':memory:') {
+        const dataDir = path.dirname(CONFIG.DB_PATH);
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir, { recursive: true });
+        }
       }
 
       this.db = new Database(CONFIG.DB_PATH);
-      this.db.pragma('journal_mode = WAL');
+      if (CONFIG.DB_PATH !== ':memory:') {
+        try {
+          this.db.pragma('journal_mode = WAL');
+        } catch (_) {
+          this.db.pragma('journal_mode = DELETE');
+        }
+      }
       this.db.pragma('foreign_keys = ON');
       this.initSchema();
       this.seedInitialData();
@@ -399,8 +407,13 @@ export class AgentPayDatabase {
     // 3. Seed Catalog Products from catalog.json if empty
     const productCount = db.prepare('SELECT COUNT(*) as count FROM catalog_products').get() as { count: number };
     if (productCount.count === 0) {
-      const catalogPath = path.join(__dirname, '..', 'data', 'catalog.json');
-      if (fs.existsSync(catalogPath)) {
+      const candidatePaths = [
+        path.join(process.cwd(), 'server', 'data', 'catalog.json'),
+        path.join(__dirname, '..', 'data', 'catalog.json'),
+        path.join(__dirname, 'data', 'catalog.json'),
+      ];
+      const catalogPath = candidatePaths.find((p) => fs.existsSync(p));
+      if (catalogPath) {
         try {
           const raw = fs.readFileSync(catalogPath, 'utf8');
           const products = JSON.parse(raw);

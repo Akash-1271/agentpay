@@ -17,11 +17,13 @@ import { StepUpModal } from './components/StepUpModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { RazorpayLogo } from './components/RazorpayLogo';
 import { DemoTourModal } from './components/DemoTourModal';
+import { HackathonShowcaseModal } from './components/HackathonShowcaseModal';
+import { LiveWebhookStreamModal } from './components/LiveWebhookStreamModal';
 import { playPaymentSuccessChime } from './utils/soundEffects';
 import { isVoiceEnabled, setVoiceEnabled, speakAgentMessage } from './utils/speechNarrator';
 import { AP2DelegationMandate, AgentTransactionOutcome, AuditRecord } from './types';
 import { api } from './services/api';
-import { Menu, Zap, Search, Play, Volume2, VolumeX } from 'lucide-react';
+import { Menu, Zap, Search, Play, Volume2, VolumeX, Trophy, Radio } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<NavSection>('landing');
@@ -37,6 +39,8 @@ export const App: React.FC = () => {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
   const [isDemoTourOpen, setIsDemoTourOpen] = useState<boolean>(false);
+  const [isRubricOpen, setIsRubricOpen] = useState<boolean>(false);
+  const [isWebhookStreamOpen, setIsWebhookStreamOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const fetchEnclaveData = async () => {
@@ -145,17 +149,8 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6] text-[#1A1A1A] flex flex-col selection:bg-[#D4AF37] selection:text-[#FFFFFF] font-body antialiased relative">
+    <div className="min-h-screen bg-[#080B11] text-slate-100 flex flex-col selection:bg-[#0C83FF]/30 selection:text-white font-body antialiased relative">
       
-      {/* Background Paper Grain & Grid Accents */}
-      <div className="paper-noise-overlay" aria-hidden="true" />
-      <div className="architectural-gridlines" aria-hidden="true">
-        <div className="grid-line" />
-        <div className="grid-line" />
-        <div className="grid-line" />
-        <div className="grid-line" />
-      </div>
-
       {/* Modern Redesigned Sidebar Navigation */}
       <Sidebar
         currentSection={currentSection}
@@ -172,11 +167,11 @@ export const App: React.FC = () => {
       <div className="flex-1 lg:pl-72 flex flex-col min-w-0 relative z-10">
         
         {/* Top App Header */}
-        <header className="h-16 px-4 sm:px-8 border-b border-[#1A1A1A]/10 bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+        <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0A0E17]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsMobileNavOpen(true)}
-              className="lg:hidden p-2 text-[#1A1A1A] hover:bg-[#EBE5DE] rounded-lg transition-colors"
+              className="lg:hidden p-2 text-slate-300 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5" />
@@ -184,31 +179,49 @@ export const App: React.FC = () => {
 
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="hidden sm:flex items-center space-x-2.5 px-4 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] rounded-xl text-xs text-[#6C6863] hover:text-[#1A1A1A] transition-all group shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
+              className="hidden sm:flex items-center space-x-2.5 px-3.5 py-2 border border-white/10 hover:border-[#0C83FF]/50 bg-[#0E131F] rounded-xl text-xs text-slate-400 hover:text-slate-200 transition-all group shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
             >
-              <Search className="w-3.5 h-3.5 text-[#D4AF37] group-hover:scale-110 transition-transform" />
-              <span className="font-serif italic tracking-wide text-xs">Search commands, orders, or policies...</span>
-              <kbd className="font-mono text-[10px] text-[#1A1A1A] bg-[#FAF8F5] px-1.5 py-0.5 ml-4 border border-[#1A1A1A]/15 rounded-md">
+              <Search className="w-3.5 h-3.5 text-[#0C83FF] group-hover:scale-110 transition-transform" />
+              <span className="font-sans text-xs">Search commands, orders, or policies...</span>
+              <kbd className="font-mono text-[10px] text-slate-300 bg-white/10 px-1.5 py-0.5 ml-4 border border-white/10 rounded-md">
                 ⌘K
               </kbd>
             </button>
           </div>
 
           <div className="flex items-center space-x-2.5 text-xs">
+            {/* Hackathon Judging Rubric & Demo Scenarios */}
+            <button
+              onClick={() => setIsRubricOpen(true)}
+              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-2 border border-emerald-500/30 hover:border-emerald-500/60 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-medium transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+            >
+              <Trophy className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Rubric & Scenarios</span>
+            </button>
+
+            {/* Live Webhook Stream Inspector */}
+            <button
+              onClick={() => setIsWebhookStreamOpen(true)}
+              className="hidden md:inline-flex items-center space-x-1.5 px-3 py-2 border border-[#0C83FF]/30 hover:border-[#0C83FF]/60 bg-[#0C83FF]/10 hover:bg-[#0C83FF]/20 text-[#38BDF8] rounded-xl text-xs font-mono transition-all shadow-[0_0_15px_rgba(12,131,255,0.15)]"
+            >
+              <Radio className="w-3.5 h-3.5 text-[#0C83FF] animate-pulse" />
+              <span>Webhooks</span>
+            </button>
+
             {/* Voice Narrator Toggle */}
             <button
               onClick={toggleVoice}
               title={voiceOn ? 'Voice Narration ON' : 'Voice Narration OFF'}
               className={`px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
                 voiceOn
-                  ? 'border-[#D4AF37] bg-[#D4AF37]/15 text-[#1A1A1A] font-semibold'
-                  : 'border-[#1A1A1A]/15 bg-[#FFFFFF] text-[#6C6863] hover:text-[#1A1A1A]'
+                  ? 'border-[#0C83FF] bg-[#0C83FF]/15 text-[#38BDF8] font-semibold shadow-[0_0_15px_rgba(12,131,255,0.2)]'
+                  : 'border-white/10 bg-[#0E131F] text-slate-400 hover:text-slate-200'
               }`}
             >
               {voiceOn ? (
-                <Volume2 className="w-3.5 h-3.5 text-[#D4AF37] animate-pulse" />
+                <Volume2 className="w-3.5 h-3.5 text-[#0C83FF] animate-pulse" />
               ) : (
-                <VolumeX className="w-3.5 h-3.5 text-[#6C6863]" />
+                <VolumeX className="w-3.5 h-3.5 text-slate-400" />
               )}
               <span className="hidden sm:inline font-sans">{voiceOn ? 'Voice Active' : 'Voice'}</span>
             </button>
@@ -218,16 +231,16 @@ export const App: React.FC = () => {
               onClick={() => setIsDemoTourOpen(true)}
               className="luxury-btn-secondary px-3.5 py-2 text-xs rounded-xl"
             >
-              <Play className="w-3 h-3 fill-current text-[#D4AF37]" />
+              <Play className="w-3 h-3 fill-current text-[#0C83FF]" />
               <span className="hidden sm:inline">Tour</span>
             </button>
 
             {/* Protocol Wire */}
             <button
               onClick={() => setIsWireTraceOpen(true)}
-              className="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-[#1A1A1A]/15 hover:border-[#1A1A1A] bg-[#FFFFFF] rounded-xl text-[#1A1A1A] font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
+              className="hidden lg:inline-flex items-center space-x-1.5 px-3.5 py-2 border border-white/10 hover:border-[#0C83FF]/40 bg-[#0E131F] rounded-xl text-slate-300 font-mono text-[11px] hover:shadow-[0_2px_8px_rgba(12,131,255,0.1)] transition-all"
             >
-              <Zap className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <Zap className="w-3.5 h-3.5 text-[#0C83FF]" />
               <span className="tracking-wider uppercase">Wire</span>
             </button>
 
@@ -239,11 +252,11 @@ export const App: React.FC = () => {
 
         {/* Global Toast Alert */}
         {toastMessage && (
-          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-600 border border-rose-200 bg-[#FFFFFF] text-rose-900 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.04)] rounded-r-xl">
+          <div className="mx-4 sm:mx-8 mt-4 p-3.5 border-l-2 border-l-rose-500 border border-rose-500/20 bg-[#131929] text-rose-300 text-xs font-mono flex items-center justify-between animate-in shadow-[0_2px_8px_rgba(0,0,0,0.3)] rounded-r-xl">
             <span>⚠️ {toastMessage}</span>
             <button
               onClick={() => setToastMessage(null)}
-              className="text-rose-700 hover:text-rose-950 font-bold ml-4 uppercase tracking-widest text-[10px]"
+              className="text-rose-400 hover:text-rose-200 font-bold ml-4 uppercase tracking-widest text-[10px]"
             >
               Dismiss
             </button>
@@ -328,12 +341,13 @@ export const App: React.FC = () => {
         </main>
 
         {/* Editorial Architectural Footer */}
-        <footer className="border-t border-[#1A1A1A]/10 py-6 px-4 sm:px-8 text-[#6C6863] text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#F9F8F6]/90 backdrop-blur-md">
-          <span className="tracking-[0.25em] uppercase font-serif text-[11px] text-[#1A1A1A] font-semibold">
+        <footer className="border-t border-white/10 py-6 px-4 sm:px-8 text-slate-400 text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#080B11]/90 backdrop-blur-md">
+          <span className="tracking-[0.2em] uppercase font-mono text-[11px] text-slate-200 font-semibold flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#0C83FF]" />
             AgentPay · Autonomous Commerce Protocol
           </span>
-          <span className="text-[#6C6863] tracking-[0.2em] uppercase text-[10px]">
-            Editorial Vol. 01 · Razorpay AI Architecture
+          <span className="text-slate-400 tracking-[0.15em] uppercase text-[10px] font-mono">
+            Track 01 · Razorpay AI Architecture
           </span>
         </footer>
       </div>
@@ -361,6 +375,18 @@ export const App: React.FC = () => {
         onClose={() => setIsDemoTourOpen(false)}
         onNavigate={setCurrentSection}
         onRunTransaction={handleRunTransaction}
+      />
+
+      <HackathonShowcaseModal
+        isOpen={isRubricOpen}
+        onClose={() => setIsRubricOpen(false)}
+        onNavigate={setCurrentSection}
+        onRunTransaction={handleRunTransaction}
+      />
+
+      <LiveWebhookStreamModal
+        isOpen={isWebhookStreamOpen}
+        onClose={() => setIsWebhookStreamOpen(false)}
       />
 
       <CommandPalette
