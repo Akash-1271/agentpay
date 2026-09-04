@@ -94,25 +94,25 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#FFFFFF] border-2 border-[#1A1A1A] shadow-[0_16px_48px_rgba(0,0,0,0.25)] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#0A0A0A] border border-[#1F1F1F] shadow-[0_24px_64px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden rounded-2xl">
         
-        {/* Top Gold Accent Bar */}
-        <div className="h-1 bg-[#D4AF37] w-full" />
+        {/* Top Monochrome Accent Bar */}
+        <div className="h-1 bg-white/20 w-full" />
 
         {/* Header */}
-        <div className="p-6 border-b border-[#1A1A1A]/12 bg-[#FAF8F5] flex items-center justify-between">
+        <div className="p-6 border-b border-[#1F1F1F] bg-[#0D0D0D] flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-11 h-11 border border-[#1A1A1A]/20 bg-[#FFFFFF] flex items-center justify-center shrink-0">
-              <Trophy className="w-6 h-6 text-[#D4AF37]" />
+            <div className="w-11 h-11 border border-[#1F1F1F] bg-[#141414] flex items-center justify-center shrink-0 rounded-xl">
+              <Trophy className="w-6 h-6 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.25em]">
+                <span className="text-[10px] font-sans font-semibold text-[#71717A] uppercase tracking-[0.25em]">
                   Razorpay AI Buildathon 2026 · Track 01 Submission
                 </span>
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#1A1A1A] mt-0.5">
+              <h2 className="font-playfair text-2xl font-bold text-white mt-0.5">
                 AgentPay — Showcase & Architecture Hub
               </h2>
             </div>
@@ -122,7 +122,7 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
             <RazorpayLogo variant="badge" height={18} />
             <button
               onClick={onClose}
-              className="p-1.5 text-[#6C6863] hover:text-[#1A1A1A] transition-colors"
+              className="p-1.5 text-[#71717A] hover:text-white rounded-lg hover:bg-white/5 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -130,13 +130,13 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-[#1A1A1A]/12 bg-[#FAF8F5] px-6 text-xs font-sans font-semibold tracking-wider uppercase">
+        <div className="flex border-b border-[#1F1F1F] bg-[#0D0D0D] px-6 text-xs font-sans font-semibold tracking-wider uppercase">
           <button
             onClick={() => setActiveTab('rubric')}
             className={`py-3.5 px-4 border-b-2 transition-all ${
               activeTab === 'rubric'
-                ? 'border-[#1A1A1A] text-[#1A1A1A] bg-[#FFFFFF]'
-                : 'border-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-white text-white bg-white/[0.04]'
+                : 'border-transparent text-[#71717A] hover:text-white'
             }`}
           >
             🏆 1-Click Interactive Demos
@@ -145,8 +145,8 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
             onClick={() => setActiveTab('architecture')}
             className={`py-3.5 px-4 border-b-2 transition-all ${
               activeTab === 'architecture'
-                ? 'border-[#1A1A1A] text-[#1A1A1A] bg-[#FFFFFF]'
-                : 'border-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-white text-white bg-white/[0.04]'
+                : 'border-transparent text-[#71717A] hover:text-white'
             }`}
           >
             ⚡ Protocol Architecture
@@ -155,8 +155,8 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
             onClick={() => setActiveTab('metrics')}
             className={`py-3.5 px-4 border-b-2 transition-all ${
               activeTab === 'metrics'
-                ? 'border-[#1A1A1A] text-[#1A1A1A] bg-[#FFFFFF]'
-                : 'border-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-white text-white bg-white/[0.04]'
+                : 'border-transparent text-[#71717A] hover:text-white'
             }`}
           >
             📊 Verified Impact & KPIs
@@ -165,8 +165,8 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
             onClick={() => setActiveTab('specs')}
             className={`py-3.5 px-4 border-b-2 transition-all ${
               activeTab === 'specs'
-                ? 'border-[#1A1A1A] text-[#1A1A1A] bg-[#FFFFFF]'
-                : 'border-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-white text-white bg-white/[0.04]'
+                : 'border-transparent text-[#71717A] hover:text-white'
             }`}
           >
             📜 AP2 & UAP Spec
@@ -179,11 +179,11 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
           {/* TAB 1: JUDGE DEMO PLAYLIST */}
           {activeTab === 'rubric' && (
             <div className="space-y-5 animate-in">
-              <div className="p-4 border border-[#1A1A1A]/10 bg-[#FAF8F5] space-y-1 text-xs font-sans">
-                <span className="font-serif text-sm font-bold text-[#1A1A1A] block">
+              <div className="p-4 border border-[#1F1F1F] bg-[#0D0D0D] rounded-xl space-y-1 text-xs font-sans">
+                <span className="font-playfair text-sm font-bold text-white block">
                   Quick Evaluation Guide:
                 </span>
-                <p className="text-[#6C6863] leading-relaxed">
+                <p className="text-[#A1A1AA] leading-relaxed">
                   Click any scenario below to instantly execute the end-to-end Track 01 autonomous commerce flow in real time with live Razorpay Test Mode transactions.
                 </p>
               </div>
@@ -192,28 +192,28 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
                 {demoScenarios.map((sc) => (
                   <div
                     key={sc.id}
-                    className="p-4 border border-[#1A1A1A]/12 hover:border-[#1A1A1A] bg-[#FAF8F5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group"
+                    className="p-4 border border-[#1F1F1F] hover:border-[#333333] bg-[#0D0D0D] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group"
                   >
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center space-x-2">
-                        <span className="text-[10px] font-mono uppercase text-[#6C6863] font-bold">
+                        <span className="text-[10px] font-mono uppercase text-[#71717A] font-bold">
                           {sc.category}
                         </span>
-                        <span className="px-2 py-0.5 text-[9px] font-sans font-bold bg-[#FFFFFF] text-[#1A1A1A] border border-[#1A1A1A]/15 uppercase tracking-wider">
+                        <span className="px-2 py-0.5 text-[9px] font-sans font-bold bg-[#141414] text-white border border-[#1F1F1F] uppercase tracking-wider rounded-md">
                           {sc.badge}
                         </span>
                       </div>
-                      <h4 className="font-serif text-base font-bold text-[#1A1A1A]">
+                      <h4 className="font-sans text-base font-semibold text-white">
                         {sc.title}
                       </h4>
-                      <p className="text-xs text-[#6C6863] font-sans leading-relaxed">
+                      <p className="text-xs text-[#A1A1AA] font-sans leading-relaxed">
                         {sc.desc}
                       </p>
                     </div>
 
                     <button
                       onClick={() => handleRunScenario(sc)}
-                      className="luxury-btn-primary text-xs px-5 h-10 shrink-0 self-start sm:self-auto flex items-center space-x-2"
+                      className="btn-primary text-xs px-5 h-10 shrink-0 self-start sm:self-auto flex items-center space-x-2 rounded-xl"
                     >
                       <Play className="w-3 h-3 fill-current" />
                       <span>Run Scenario</span>
@@ -227,42 +227,42 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
           {/* TAB 2: PROTOCOL ARCHITECTURE */}
           {activeTab === 'architecture' && (
             <div className="space-y-6 animate-in font-sans">
-              <div className="p-5 border border-[#1A1A1A]/10 bg-[#FAF8F5] space-y-4">
-                <h3 className="font-serif text-base font-bold text-[#1A1A1A]">
+              <div className="p-5 border border-[#1F1F1F] bg-[#0D0D0D] rounded-xl space-y-4">
+                <h3 className="font-playfair text-base font-bold text-white">
                   The AP2 & UAP Cryptographic Handshake Sequence
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center text-xs">
-                  <div className="p-3 border border-[#1A1A1A]/12 bg-[#FFFFFF] space-y-2">
-                    <div className="font-serif font-bold text-[#1A1A1A]">1. Natural Intent</div>
-                    <p className="text-[11px] text-[#6C6863]">User specifies desire in plain text</p>
+                  <div className="p-3 border border-[#1F1F1F] bg-[#141414] rounded-xl space-y-2">
+                    <div className="font-sans font-bold text-white">1. Natural Intent</div>
+                    <p className="text-[11px] text-[#A1A1AA]">User specifies desire in plain text</p>
                   </div>
-                  <div className="p-3 border border-[#1A1A1A]/12 bg-[#FFFFFF] space-y-2">
-                    <div className="font-serif font-bold text-[#1A1A1A]">2. UAP Discovery</div>
-                    <p className="text-[11px] text-[#6C6863]">Merchant locks inventory + signs quote</p>
+                  <div className="p-3 border border-[#1F1F1F] bg-[#141414] rounded-xl space-y-2">
+                    <div className="font-sans font-bold text-white">2. UAP Discovery</div>
+                    <p className="text-[11px] text-[#A1A1AA]">Merchant locks inventory + signs quote</p>
                   </div>
-                  <div className="p-3 border border-[#1A1A1A]/12 bg-[#FFFFFF] space-y-2">
-                    <div className="font-serif font-bold text-[#1A1A1A]">3. Enclave Bounds</div>
-                    <p className="text-[11px] text-[#6C6863]">Hardware policy verifies ₹ ceiling</p>
+                  <div className="p-3 border border-[#1F1F1F] bg-[#141414] rounded-xl space-y-2">
+                    <div className="font-sans font-bold text-white">3. Enclave Bounds</div>
+                    <p className="text-[11px] text-[#A1A1AA]">Hardware policy verifies ₹ ceiling</p>
                   </div>
-                  <div className="p-3 border border-[#1A1A1A]/12 bg-[#FFFFFF] space-y-2">
-                    <div className="font-serif font-bold text-[#1A1A1A]">4. Razorpay Capture</div>
-                    <p className="text-[11px] text-[#6C6863]">Orders API executes payment token</p>
+                  <div className="p-3 border border-[#1F1F1F] bg-[#141414] rounded-xl space-y-2">
+                    <div className="font-sans font-bold text-white">4. Razorpay Capture</div>
+                    <p className="text-[11px] text-[#A1A1AA]">Orders API executes payment token</p>
                   </div>
-                  <div className="p-3 border border-[#1A1A1A]/12 bg-[#FFFFFF] space-y-2">
-                    <div className="font-serif font-bold text-[#1A1A1A]">5. Double-Entry</div>
-                    <p className="text-[11px] text-[#6C6863]">Balanced journal + GST invoice</p>
+                  <div className="p-3 border border-[#1F1F1F] bg-[#141414] rounded-xl space-y-2">
+                    <div className="font-sans font-bold text-white">5. Double-Entry</div>
+                    <p className="text-[11px] text-[#A1A1AA]">Balanced journal + GST invoice</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#FFFFFF] border border-[#1A1A1A]/12 font-mono text-xs text-[#1A1A1A] space-y-1.5">
-                  <div className="text-[#1A1A1A] font-bold pb-1 border-b border-[#1A1A1A]/10 font-sans uppercase text-[10px] tracking-wider">
+                <div className="p-4 bg-[#141414] border border-[#1F1F1F] rounded-xl font-mono text-xs text-white space-y-1.5">
+                  <div className="text-white font-bold pb-1 border-b border-[#1F1F1F] font-sans uppercase text-[10px] tracking-wider">
                     Live Security Attestation:
                   </div>
-                  <div>• Mandate Nonce: <span className="text-emerald-800 font-semibold">0x9f82bc194a</span> (replay protection verified)</div>
-                  <div>• Enclave Proof: <span className="text-emerald-800 font-semibold">SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span></div>
-                  <div>• Razorpay Environment: <span className="text-emerald-800 font-semibold">TEST_MODE_ACTIVE (Key ID: rzp_test_...)</span></div>
-                  <div>• Courier Partner: <span className="text-emerald-800 font-semibold">Amazon Logistics Express (Air Priority)</span></div>
+                  <div>• Mandate Nonce: <span className="text-emerald-400 font-semibold">0x9f82bc194a</span> (replay protection verified)</div>
+                  <div>• Enclave Proof: <span className="text-emerald-400 font-semibold">SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span></div>
+                  <div>• Razorpay Environment: <span className="text-emerald-400 font-semibold">TEST_MODE_ACTIVE (Key ID: rzp_test_...)</span></div>
+                  <div>• Courier Partner: <span className="text-emerald-400 font-semibold">Amazon Logistics Express (Air Priority)</span></div>
                 </div>
               </div>
             </div>
@@ -272,45 +272,45 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
           {activeTab === 'metrics' && (
             <div className="space-y-6 animate-in font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Real Latency</div>
-                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">~160ms</div>
-                  <p className="text-xs text-[#6C6863]">Measured live via benchmark engine</p>
+                <div className="p-5 bg-[#0D0D0D] border border-[#1F1F1F] rounded-xl space-y-2 text-center">
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#71717A]">Real Latency</div>
+                  <div className="font-playfair text-3xl font-bold text-white">~160ms</div>
+                  <p className="text-xs text-[#A1A1AA]">Measured live via benchmark engine</p>
                 </div>
 
-                <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">Policy Enforcement</div>
-                  <div className="font-serif text-3xl font-bold text-emerald-800">100% Gated</div>
-                  <p className="text-xs text-[#6C6863]">Server-side non-bypassable policy enclave</p>
+                <div className="p-5 bg-[#0D0D0D] border border-[#1F1F1F] rounded-xl space-y-2 text-center">
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#71717A]">Policy Enforcement</div>
+                  <div className="font-playfair text-3xl font-bold text-emerald-400">100% Gated</div>
+                  <p className="text-xs text-[#A1A1AA]">Server-side non-bypassable policy enclave</p>
                 </div>
 
-                <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/12 space-y-2 text-center">
-                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#6C6863]">FinOps Integrity</div>
-                  <div className="font-serif text-3xl font-bold text-[#1A1A1A]">Balanced</div>
-                  <p className="text-xs text-[#6C6863]">Computed live from SQLite double-entry journal</p>
+                <div className="p-5 bg-[#0D0D0D] border border-[#1F1F1F] rounded-xl space-y-2 text-center">
+                  <div className="text-[10px] font-sans font-semibold uppercase tracking-widest text-[#71717A]">FinOps Integrity</div>
+                  <div className="font-playfair text-3xl font-bold text-white">Balanced</div>
+                  <p className="text-xs text-[#A1A1AA]">Computed live from SQLite double-entry journal</p>
                 </div>
               </div>
 
-              <div className="p-5 border border-[#1A1A1A]/12 bg-[#FAF8F5] space-y-3">
-                <h4 className="font-serif text-sm font-bold text-[#1A1A1A]">
+              <div className="p-5 border border-[#1F1F1F] bg-[#0D0D0D] rounded-xl space-y-3">
+                <h4 className="font-playfair text-sm font-bold text-white">
                   Real-World Commercial Readiness:
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
-                    <span className="text-[#6C6863]"><strong className="text-[#1A1A1A]">Standardized GST Invoicing:</strong> Automated tax invoices compliant with Indian e-commerce laws.</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-[#A1A1AA]"><strong className="text-white">Standardized GST Invoicing:</strong> Automated tax invoices compliant with Indian e-commerce laws.</span>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
-                    <span className="text-[#6C6863]"><strong className="text-[#1A1A1A]">Live Courier Dispatch:</strong> Automatic tracking generation (AWB) for physical goods delivery.</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-[#A1A1AA]"><strong className="text-white">Live Courier Dispatch:</strong> Automatic tracking generation (AWB) for physical goods delivery.</span>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
-                    <span className="text-[#6C6863]"><strong className="text-[#1A1A1A]">Replay-Safe Cryptographic Nonces:</strong> Guaranteed zero double-spending under agent retry conditions.</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-[#A1A1AA]"><strong className="text-white">Replay-Safe Cryptographic Nonces:</strong> Guaranteed zero double-spending under agent retry conditions.</span>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
-                    <span className="text-[#6C6863]"><strong className="text-[#1A1A1A]">Universal Catalog Schema:</strong> Import any CSV or JSON product catalog in seconds.</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-[#A1A1AA]"><strong className="text-white">Universal Catalog Schema:</strong> Import any CSV or JSON product catalog in seconds.</span>
                   </div>
                 </div>
               </div>
@@ -319,12 +319,12 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
 
           {/* TAB 4: SPECIFICATIONS */}
           {activeTab === 'specs' && (
-            <div className="space-y-4 font-mono text-xs text-[#1A1A1A] animate-in">
-              <div className="p-4 border border-[#1A1A1A]/12 bg-[#FAF8F5] space-y-2">
-                <div className="text-[#1A1A1A] font-bold font-sans uppercase text-[11px] pb-1 border-b border-[#1A1A1A]/10">
+            <div className="space-y-4 font-mono text-xs text-white animate-in">
+              <div className="p-4 border border-[#1F1F1F] bg-[#0D0D0D] rounded-xl space-y-2">
+                <div className="text-white font-bold font-sans uppercase text-[11px] pb-1 border-b border-[#1F1F1F]">
                   AP2 (Agent Payment Protocol) Delegation Mandate Spec
                 </div>
-                <pre className="text-[11px] leading-relaxed overflow-x-auto text-[#1A1A1A]">
+                <pre className="text-[11px] leading-relaxed overflow-x-auto text-[#D4D4D8]">
 {`{
   "protocol": "AP2_BOUNDED_ENCLAVE_V1",
   "mandateId": "mandate_user_main_001",
@@ -344,9 +344,9 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[#1A1A1A]/12 bg-[#FAF8F5] flex flex-col sm:flex-row justify-between items-center gap-3 text-xs font-sans">
-          <span className="text-[#6C6863] text-[11px]">
-            Created for <strong className="text-[#1A1A1A]">Razorpay AI Buildathon</strong> · Track 01 (Agentic Commerce)
+        <div className="p-4 border-t border-[#1F1F1F] bg-[#0D0D0D] flex flex-col sm:flex-row justify-between items-center gap-3 text-xs font-sans">
+          <span className="text-[#71717A] text-[11px]">
+            Created for <strong className="text-white">Razorpay AI Buildathon</strong> · Track 01 (Agentic Commerce)
           </span>
 
           <div className="flex items-center space-x-3">
@@ -356,7 +356,7 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
                 onRunTransaction('Search Amazon for running shoes under ₹2,000', { autoAcceptBundles: true });
                 onClose();
               }}
-              className="luxury-btn-primary text-xs px-5 h-10 flex items-center space-x-2"
+              className="btn-primary text-xs px-5 h-10 flex items-center space-x-2 rounded-xl"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Launch Live Hackathon Demo</span>
@@ -368,4 +368,3 @@ export const HackathonShowcaseModal: React.FC<HackathonShowcaseModalProps> = ({
     </div>
   );
 };
-

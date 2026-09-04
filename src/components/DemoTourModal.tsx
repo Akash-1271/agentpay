@@ -81,29 +81,29 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
-      <div className="relative w-full max-w-lg bg-[#FFFFFF] border-2 border-[#1A1A1A] p-7 space-y-6 shadow-[0_16px_48px_rgba(0,0,0,0.25)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
+      <div className="relative w-full max-w-lg bg-[#0A0A0A] border border-[#1F1F1F] p-7 space-y-6 shadow-[0_24px_64px_rgba(0,0,0,0.9)] rounded-2xl">
         
-        {/* Top Gold Accent Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-[#D4AF37]" />
+        {/* Top Monochrome Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 rounded-t-2xl" />
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#1A1A1A]/12 pb-4">
+        <div className="flex items-center justify-between border-b border-[#1F1F1F] pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 border border-[#1A1A1A]/20 bg-[#FAF8F5] flex items-center justify-center text-[#1A1A1A]">
-              <Play className="w-3.5 h-3.5 fill-[#1A1A1A] text-[#1A1A1A]" />
+            <div className="w-8 h-8 border border-[#1F1F1F] bg-[#141414] flex items-center justify-center text-white rounded-lg">
+              <Play className="w-3.5 h-3.5 fill-white text-white" />
             </div>
             <div>
-              <div className="font-serif text-base font-bold text-[#1A1A1A]">
+              <div className="font-playfair text-base font-bold text-white">
                 Guided System Walkthrough
               </div>
-              <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.2em] text-[#6C6863]">
+              <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.2em] text-[#71717A]">
                 Stage {currentTour.numeral} of IV
               </p>
             </div>
           </div>
 
-          <button onClick={onClose} className="p-1 text-[#6C6863] hover:text-[#1A1A1A]">
+          <button onClick={onClose} className="p-1 text-[#71717A] hover:text-white rounded-lg hover:bg-white/5 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -113,27 +113,27 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
           {TOUR_STEPS.map((s, idx) => (
             <div
               key={s.step}
-              className={`h-1.5 transition-all duration-300 ${
+              className={`h-1.5 rounded-full transition-all duration-300 ${
                 idx === currentStepIndex
-                  ? 'bg-[#1A1A1A]'
+                  ? 'bg-white'
                   : idx < currentStepIndex
-                  ? 'bg-emerald-600'
-                  : 'bg-[#EBE5DE]'
+                  ? 'bg-emerald-500'
+                  : 'bg-[#1F1F1F]'
               }`}
             />
           ))}
         </div>
 
         {/* Tour Step Body */}
-        <div className="p-5 bg-[#FAF8F5] border border-[#1A1A1A]/10 space-y-2">
-          <span className="text-[10px] font-sans font-semibold text-[#6C6863] uppercase tracking-[0.2em] block">
+        <div className="p-5 bg-[#0D0D0D] border border-[#1F1F1F] rounded-xl space-y-2">
+          <span className="text-[10px] font-sans font-semibold text-[#71717A] uppercase tracking-[0.2em] block">
             ◆ {currentTour.badge} ◆
           </span>
 
-          <h3 className="font-serif text-lg font-bold text-[#1A1A1A] leading-snug">
+          <h3 className="font-sans text-lg font-bold text-white leading-snug">
             {currentTour.title}
           </h3>
-          <p className="text-xs text-[#6C6863] font-sans leading-relaxed">
+          <p className="text-xs text-[#A1A1AA] font-sans leading-relaxed">
             {currentTour.description}
           </p>
         </div>
@@ -141,18 +141,18 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
         {/* Primary Action Button */}
         <button
           onClick={handleRunCurrentAction}
-          className="luxury-btn-primary w-full h-11 text-xs flex items-center justify-center space-x-2"
+          className="btn-primary w-full h-11 text-xs flex items-center justify-center space-x-2 rounded-xl"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           <span>{currentTour.actionLabel}</span>
         </button>
 
         {/* Footer Navigation */}
-        <div className="flex items-center justify-between pt-2 border-t border-[#1A1A1A]/10 text-xs font-sans uppercase tracking-[0.15em] font-semibold text-[#1A1A1A]">
+        <div className="flex items-center justify-between pt-2 border-t border-[#1F1F1F] text-xs font-sans uppercase tracking-[0.15em] font-semibold text-[#A1A1AA]">
           <button
             onClick={() => setCurrentStepIndex(Math.max(0, currentStepIndex - 1))}
             disabled={currentStepIndex === 0}
-            className="hover:text-[#D4AF37] disabled:opacity-30 flex items-center space-x-1 transition-colors"
+            className="hover:text-white disabled:opacity-30 flex items-center space-x-1 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Previous</span>
@@ -161,7 +161,7 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
           <button
             onClick={() => setCurrentStepIndex(Math.min(TOUR_STEPS.length - 1, currentStepIndex + 1))}
             disabled={currentStepIndex === TOUR_STEPS.length - 1}
-            className="hover:text-[#D4AF37] disabled:opacity-30 flex items-center space-x-1 transition-colors"
+            className="hover:text-white disabled:opacity-30 flex items-center space-x-1 transition-colors"
           >
             <span>Next Stage</span>
             <ChevronRight className="w-4 h-4" />
@@ -172,4 +172,3 @@ export const DemoTourModal: React.FC<DemoTourModalProps> = ({
     </div>
   );
 };
-

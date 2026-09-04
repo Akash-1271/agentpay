@@ -7,19 +7,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: '#080B11',
-        surface: '#0E131F',
-        'surface-elevated': '#131929',
-        'surface-border': 'rgba(255, 255, 255, 0.08)',
-        ground: {
-          deep: '#080B11',
-          secondary: '#0E131F',
-        },
+        canvas: '#000000',
+        ground: '#000000',
+        surface: '#0A0A0A',
+        'surface-elevated': '#141414',
+        'surface-card': '#0D0D0D',
+        'border-dark': '#1F1F1F',
+        'border-subtle': '#262626',
+        'border-muted': '#333333',
+        'surface-border': '#1F1F1F',
         ink: {
-          primary: '#F1F5F9',
-          bone: '#EDE7DC',
-          secondary: '#94A3B8',
-          muted: '#64748B',
+          primary: '#FFFFFF',
+          secondary: '#A1A1AA',
+          muted: '#71717A',
+          dark: '#52525B',
         },
         accent: {
           blue: '#0C83FF',

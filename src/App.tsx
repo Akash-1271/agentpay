@@ -163,7 +163,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-stone-100 flex flex-col selection:bg-[#a78b71]/30 selection:text-white font-sans antialiased relative dot-grid-bg">
+    <div className="min-h-screen bg-[#000000] text-white flex flex-col selection:bg-white/20 selection:text-white font-sans antialiased relative dot-grid-bg">
       
       {/* ── A. Full-Bleed Cinematic Landing Page ── */}
       {currentSection === 'landing' ? (
@@ -191,28 +191,28 @@ export const App: React.FC = () => {
           {/* Main Content Layout with 64-unit (256px) Offset */}
           <div className="flex-1 lg:pl-64 flex flex-col min-w-0 relative z-10">
             {/* Top App Header */}
-            <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0a0a0a]/85 backdrop-blur-xl sticky top-0 z-30 flex items-center justify-between">
+            <header className="h-16 px-4 sm:px-8 border-b border-[#1F1F1F] bg-[#000000]/90 backdrop-blur-xl sticky top-0 z-30 flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setIsMobileNavOpen(true)}
-                  className="lg:hidden p-2 text-stone-300 hover:bg-white/5 rounded-lg transition-colors"
+                  className="lg:hidden p-2 text-[#A1A1AA] hover:bg-white/5 rounded-lg transition-colors"
                   aria-label="Open navigation menu"
                 >
                   <Menu className="w-5 h-5" />
                 </button>
 
                 {/* Section Title in Playfair Display Italic */}
-                <h1 className="font-playfair text-lg sm:text-xl text-stone-100 font-bold tracking-tight hidden md:block">
+                <h1 className="font-playfair text-lg sm:text-xl text-white font-bold tracking-tight hidden md:block">
                   {SECTION_TITLES[currentSection] || 'AgentPay'}
                 </h1>
 
                 <button
                   onClick={() => setIsCommandPaletteOpen(true)}
-                  className="hidden sm:flex items-center space-x-2.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/50 bg-white/[0.03] rounded-xl text-xs text-stone-400 hover:text-stone-200 transition-all group shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+                  className="hidden sm:flex items-center space-x-2.5 px-3 py-1.5 border border-[#1F1F1F] hover:border-[#404040] bg-[#0D0D0D] rounded-xl text-xs text-[#A1A1AA] hover:text-white transition-all group shadow-sm"
                 >
-                  <Search className="w-3.5 h-3.5 text-[#c9b8a0] group-hover:scale-110 transition-transform" />
+                  <Search className="w-3.5 h-3.5 text-[#A1A1AA] group-hover:text-white transition-colors" />
                   <span className="font-sans text-xs">Search commands, orders, or policies...</span>
-                  <kbd className="font-mono text-[10px] text-stone-300 bg-white/10 px-1.5 py-0.5 ml-3 border border-white/10 rounded-md">
+                  <kbd className="font-mono text-[10px] text-[#A1A1AA] bg-[#1A1A1A] px-1.5 py-0.5 ml-3 border border-[#262626] rounded-md">
                     ⌘K
                   </kbd>
                 </button>
@@ -223,24 +223,24 @@ export const App: React.FC = () => {
                 <div className="hidden sm:inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-xs shadow-[0_0_15px_rgba(16,185,129,0.15)]">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="font-bold text-emerald-400 text-[10px] tracking-wider uppercase">LIVE</span>
-                  <span className="text-stone-400 text-[10px] border-l border-emerald-500/20 pl-2 font-mono">Enclave Bounded</span>
+                  <span className="text-[#A1A1AA] text-[10px] border-l border-emerald-500/20 pl-2 font-mono">Enclave Bounded</span>
                 </div>
 
                 {/* Hackathon Judging Rubric & Demo Scenarios */}
                 <button
                   onClick={() => setIsRubricOpen(true)}
-                  className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-[#a78b71]/30 hover:border-[#a78b71]/60 bg-[#a78b71]/10 hover:bg-[#a78b71]/20 text-[#e8d5b7] rounded-xl text-xs font-medium transition-all shadow-[0_0_15px_rgba(167,139,113,0.15)]"
+                  className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-[#1F1F1F] hover:border-[#404040] bg-[#0D0D0D] hover:bg-[#141414] text-white rounded-xl text-xs font-medium transition-all"
                 >
-                  <Trophy className="w-3.5 h-3.5 text-[#c9b8a0]" />
+                  <Trophy className="w-3.5 h-3.5 text-white" />
                   <span>Rubric</span>
                 </button>
 
                 {/* Live Webhook Stream Inspector */}
                 <button
                   onClick={() => setIsWebhookStreamOpen(true)}
-                  className="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/40 bg-white/[0.03] text-stone-300 rounded-xl text-xs font-mono transition-all"
+                  className="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-[#1F1F1F] hover:border-[#404040] bg-[#0D0D0D] hover:bg-[#141414] text-[#A1A1AA] hover:text-white rounded-xl text-xs font-mono transition-all"
                 >
-                  <Radio className="w-3.5 h-3.5 text-[#c9b8a0] animate-pulse" />
+                  <Radio className="w-3.5 h-3.5 text-[#A1A1AA] animate-pulse" />
                   <span>Webhooks</span>
                 </button>
 
@@ -250,14 +250,14 @@ export const App: React.FC = () => {
                   title={voiceOn ? 'Voice Narration ON' : 'Voice Narration OFF'}
                   className={`px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 border transition-all ${
                     voiceOn
-                      ? 'border-[#a78b71] bg-[#a78b71]/20 text-[#e8d5b7] font-semibold shadow-[0_0_15px_rgba(167,139,113,0.25)]'
-                      : 'border-white/10 bg-white/[0.02] text-stone-400 hover:text-stone-200'
+                      ? 'border-white/30 bg-white/10 text-white font-semibold shadow-sm'
+                      : 'border-[#1F1F1F] bg-[#0D0D0D] text-[#A1A1AA] hover:text-white'
                   }`}
                 >
                   {voiceOn ? (
-                    <Volume2 className="w-3.5 h-3.5 text-[#e8d5b7] animate-pulse" />
+                    <Volume2 className="w-3.5 h-3.5 text-white animate-pulse" />
                   ) : (
-                    <VolumeX className="w-3.5 h-3.5 text-stone-400" />
+                    <VolumeX className="w-3.5 h-3.5 text-[#A1A1AA]" />
                   )}
                   <span className="hidden sm:inline font-sans">{voiceOn ? 'Voice Active' : 'Voice'}</span>
                 </button>
@@ -265,18 +265,18 @@ export const App: React.FC = () => {
                 {/* Editorial Tour */}
                 <button
                   onClick={() => setIsDemoTourOpen(true)}
-                  className="btn-gold-secondary px-3.5 py-1.5 text-xs rounded-xl"
+                  className="btn-secondary px-3.5 py-1.5 text-xs rounded-xl"
                 >
-                  <Play className="w-3 h-3 fill-current text-[#c9b8a0]" />
+                  <Play className="w-3 h-3 fill-current text-white" />
                   <span className="hidden sm:inline">Tour</span>
                 </button>
 
                 {/* Protocol Wire */}
                 <button
                   onClick={() => setIsWireTraceOpen(true)}
-                  className="hidden lg:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-white/10 hover:border-[#a78b71]/40 bg-white/[0.02] rounded-xl text-stone-300 font-mono text-[11px] transition-all"
+                  className="hidden lg:inline-flex items-center space-x-1.5 px-3 py-1.5 border border-[#1F1F1F] hover:border-[#404040] bg-[#0D0D0D] hover:bg-[#141414] rounded-xl text-[#A1A1AA] hover:text-white font-mono text-[11px] transition-all"
                 >
-                  <Zap className="w-3.5 h-3.5 text-[#c9b8a0]" />
+                  <Zap className="w-3.5 h-3.5 text-[#A1A1AA]" />
                   <span className="tracking-wider uppercase">Wire</span>
                 </button>
 
@@ -367,12 +367,12 @@ export const App: React.FC = () => {
         </main>
 
         {/* Editorial Architectural Footer */}
-        <footer className="border-t border-white/10 py-6 px-4 sm:px-8 text-slate-400 text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#080B11]/90 backdrop-blur-md">
-          <span className="tracking-[0.2em] uppercase font-mono text-[11px] text-slate-200 font-semibold flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#0C83FF]" />
+        <footer className="border-t border-[#1F1F1F] py-6 px-4 sm:px-8 text-[#A1A1AA] text-xs font-body flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#000000] backdrop-blur-md">
+          <span className="tracking-[0.2em] uppercase font-mono text-[11px] text-white font-semibold flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-white" />
             AgentPay · Autonomous Commerce Protocol
           </span>
-          <span className="text-slate-400 tracking-[0.15em] uppercase text-[10px] font-mono">
+          <span className="text-[#71717A] tracking-[0.15em] uppercase text-[10px] font-mono">
             Track 01 · Razorpay AI Architecture
           </span>
         </footer>

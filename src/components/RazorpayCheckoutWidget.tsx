@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, CheckCircle2, ShieldCheck, QrCode } from 'lucide-react';
+import { CreditCard, CheckCircle2, QrCode } from 'lucide-react';
 import { AgentTransactionOutcome } from '../types';
 import { RazorpayUpiQrModal } from './RazorpayUpiQrModal';
 import { RazorpayLogo } from './RazorpayLogo';
@@ -71,7 +71,7 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
           contact: '+919876543210',
         },
         theme: {
-          color: '#1A1A1A',
+          color: '#000000',
         },
       };
 
@@ -98,26 +98,26 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
   };
 
   return (
-    <div className="p-5 border border-[#1A1A1A]/12 bg-[#FAF8F5] space-y-3">
+    <div className="card-dark p-5 border border-[#1F1F1F] bg-[#0A0A0A] space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <RazorpayLogo variant="icon" height={18} />
-          <span className="font-serif text-sm font-bold text-[#1A1A1A]">Razorpay Test Gateway</span>
+          <span className="font-playfair italic text-sm font-bold text-white">Razorpay Test Gateway</span>
         </div>
         <RazorpayLogo variant="badge" height={14} />
       </div>
 
-      <p className="text-xs text-[#6C6863] font-sans">
+      <p className="text-xs text-stone-400 font-sans leading-relaxed">
         In addition to autonomous background settlement, you can launch the official Razorpay test popup or scan a live UPI QR code.
       </p>
 
       {paymentCompleted ? (
-        <div className="p-3 bg-emerald-50 border border-emerald-600/30 flex items-center justify-between text-xs animate-in">
-          <div className="flex items-center space-x-2 text-emerald-800 font-sans">
-            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-            <span>Payment Captured: <strong className="font-mono">{paymentId}</strong></span>
+        <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs animate-in rounded-xl">
+          <div className="flex items-center space-x-2 text-emerald-400 font-sans">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>Payment Captured: <strong className="font-mono text-white">{paymentId}</strong></span>
           </div>
-          <span className="font-sans text-emerald-800 uppercase font-bold text-[10px] bg-emerald-100 px-2 py-0.5 border border-emerald-600/30">
+          <span className="font-mono text-emerald-300 uppercase font-bold text-[10px] bg-emerald-500/20 px-2 py-0.5 border border-emerald-500/40 rounded">
             HMAC VERIFIED
           </span>
         </div>
@@ -126,7 +126,7 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
           <button
             onClick={handleLaunchCheckout}
             disabled={loading}
-            className="luxury-btn-primary h-10 text-xs flex items-center justify-center space-x-2"
+            className="btn-primary h-10 text-xs flex items-center justify-center space-x-2"
           >
             <CreditCard className="w-3.5 h-3.5" />
             <span>{loading ? 'Opening...' : 'Razorpay SDK Sheet'}</span>
@@ -134,9 +134,9 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
 
           <button
             onClick={() => setIsQrModalOpen(true)}
-            className="luxury-btn-secondary h-10 text-xs flex items-center justify-center space-x-2"
+            className="btn-secondary h-10 text-xs flex items-center justify-center space-x-2"
           >
-            <QrCode className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <QrCode className="w-3.5 h-3.5 text-zinc-300" />
             <span>Pay with UPI QR</span>
           </button>
         </div>
@@ -154,4 +154,3 @@ export const RazorpayCheckoutWidget: React.FC<RazorpayCheckoutWidgetProps> = ({
     </div>
   );
 };
-

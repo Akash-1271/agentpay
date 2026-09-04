@@ -243,13 +243,13 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
 
       {/* Filters & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex space-x-2 text-xs border-b border-white/10 pb-1">
+        <div className="flex space-x-2 text-xs border-b border-[#1F1F1F] pb-1">
           <button
             onClick={() => setFilter('ALL')}
             className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'ALL'
-                ? 'border-b-[#a78b71] text-[#e8d5b7] font-bold'
-                : 'border-b-transparent text-stone-400 hover:text-stone-200'
+                ? 'border-b-white text-white font-bold'
+                : 'border-b-transparent text-[#71717A] hover:text-white'
             }`}
           >
             All Ledger
@@ -259,7 +259,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
             className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'COMPLETED'
                 ? 'border-b-emerald-400 text-emerald-400 font-bold'
-                : 'border-b-transparent text-stone-400 hover:text-stone-200'
+                : 'border-b-transparent text-[#71717A] hover:text-white'
             }`}
           >
             Settled
@@ -268,8 +268,8 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
             onClick={() => setFilter('STEP_UP_REQUIRED')}
             className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'STEP_UP_REQUIRED'
-                ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-bold'
-                : 'border-b-transparent text-stone-400 hover:text-stone-200'
+                ? 'border-b-amber-400 text-amber-400 font-bold'
+                : 'border-b-transparent text-[#71717A] hover:text-white'
             }`}
           >
             Review Gated
@@ -279,7 +279,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
             className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'BLOCKED'
                 ? 'border-b-rose-400 text-rose-400 font-bold'
-                : 'border-b-transparent text-stone-400 hover:text-stone-200'
+                : 'border-b-transparent text-[#71717A] hover:text-white'
             }`}
           >
             Blocked
@@ -287,7 +287,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
         </div>
 
         <div className="luxury-input-wrapper w-full sm:w-64">
-          <Search className="w-4 h-4 text-[#c9b8a0] shrink-0" />
+          <Search className="w-4 h-4 text-[#71717A] shrink-0" />
           <input
             type="text"
             value={search}
@@ -299,8 +299,8 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
       </div>
 
       {/* Purchases Ledger with Glass Container */}
-      <div className="glass-gold p-0 overflow-hidden shadow-2xl">
-        <div className="divide-y divide-white/10">
+      <div className="card-dark p-0 overflow-hidden shadow-2xl">
+        <div className="divide-y divide-[#1F1F1F]">
           {filtered.map((item) => (
             <div
               key={item.id}
@@ -308,26 +308,26 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
               className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-white/[0.03] cursor-pointer transition-colors duration-200"
             >
               <div className="flex items-center space-x-4 min-w-0">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#a78b71]/20 bg-[#a78b71]/10 text-[#c9b8a0] shrink-0">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#1F1F1F] bg-[#141414] text-white shrink-0">
                   <ShoppingBag className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-playfair text-sm sm:text-base font-bold text-stone-100 truncate">
+                  <div className="font-sans text-sm sm:text-base font-semibold text-white truncate">
                     {item.productName}
                   </div>
-                  <div className="text-[11px] text-stone-400 font-sans mt-0.5 flex items-center gap-2">
+                  <div className="text-[11px] text-[#71717A] font-sans mt-0.5 flex items-center gap-2">
                     <span>{item.merchantName}</span>
                     <span>·</span>
                     <span>{new Date(item.timestamp).toLocaleDateString()}</span>
                     <span>·</span>
-                    <span className="font-mono text-[10px] text-[#a78b71] truncate max-w-[120px]">{item.enclaveHash.slice(0, 16)}...</span>
+                    <span className="font-mono text-[10px] text-[#A1A1AA] truncate max-w-[120px]">{item.enclaveHash.slice(0, 16)}...</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center space-x-3 shrink-0">
                 <div className="text-right">
-                  <div className="font-playfair text-base font-bold text-stone-100">
+                  <div className="font-playfair text-base font-bold text-white">
                     ₹{item.amount.toLocaleString()}
                   </div>
                 </div>
@@ -341,17 +341,17 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
 
                     <button
                       onClick={(e) => handleTrackDelivery(e, item)}
-                      className="btn-gold-secondary text-[10px] py-1 px-2.5 h-7 flex items-center space-x-1"
+                      className="btn-secondary text-[10px] py-1 px-2.5 h-7 flex items-center space-x-1 rounded-lg"
                       title="Track Order Delivery"
                     >
-                      <Truck className="w-3 h-3 text-[#c9b8a0]" />
+                      <Truck className="w-3.5 h-3.5 text-white" />
                       <span className="hidden sm:inline">Track</span>
                     </button>
                   </div>
                 )}
 
                 {item.status === 'STEP_UP_REQUIRED' && (
-                  <span className="px-2.5 py-1 border border-[#a78b71]/30 text-[#e8d5b7] bg-[#a78b71]/10 rounded-lg text-[9px] font-mono uppercase tracking-wider font-semibold flex items-center space-x-1">
+                  <span className="px-2.5 py-1 border border-amber-500/30 text-amber-400 bg-amber-500/10 rounded-lg text-[9px] font-mono uppercase tracking-wider font-semibold flex items-center space-x-1">
                     <AlertCircle className="w-3 h-3" />
                     <span>GATED</span>
                   </span>
@@ -364,7 +364,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
                   </span>
                 )}
 
-                <ChevronRight className="w-4 h-4 text-stone-500" />
+                <ChevronRight className="w-4 h-4 text-[#71717A]" />
               </div>
             </div>
           ))}

@@ -28,10 +28,10 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
   return (
     <div className="space-y-10 animate-in max-w-5xl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1F1F1F] pb-6">
         <div>
-          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c9b8a0] mb-2 flex items-center space-x-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#a78b71] animate-pulse"></span>
+          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 mb-2 flex items-center space-x-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
             <span>Resilience Testing</span>
           </div>
           <h1 className="font-playfair italic text-3xl sm:text-4xl text-white tracking-tight">
@@ -48,16 +48,16 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
         {/* Scenario 1: Stockout & Graceful Alternative */}
         <div
           onClick={() => setSelectedScenario('OUT_OF_STOCK')}
-          className={`glass-gold p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
-            selectedScenario === 'OUT_OF_STOCK' ? 'border-t-2 border-t-[#c9b8a0] shadow-[0_0_40px_rgba(167,139,113,0.15)]' : 'hover:border-[#a78b71]/40'
+          className={`card-dark p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
+            selectedScenario === 'OUT_OF_STOCK' ? 'border-t-2 border-t-white shadow-[0_0_30px_rgba(255,255,255,0.08)]' : 'hover:border-zinc-700'
           }`}
         >
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-xl border border-white/10 bg-white/[0.04] flex items-center justify-center text-[#c9b8a0]">
+              <div className="w-9 h-9 rounded-xl border border-white/10 bg-white/[0.04] flex items-center justify-center text-zinc-300">
                 <PackageX className="w-4 h-4" />
               </div>
-              <span className="text-[9px] font-mono uppercase font-bold px-2 py-0.5 border border-white/15 bg-white/[0.04] text-[#e8d5b7] rounded">
+              <span className="text-[9px] font-mono uppercase font-bold px-2 py-0.5 border border-white/15 bg-white/[0.04] text-zinc-200 rounded">
                 Graceful Alternative
               </span>
             </div>
@@ -82,7 +82,7 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
               e.stopPropagation();
               onRunFailureScenario('OUT_OF_STOCK');
             }}
-            className="btn-gold-primary w-full text-xs h-10 flex items-center justify-center space-x-1.5"
+            className="btn-primary w-full text-xs h-10 flex items-center justify-center space-x-1.5"
           >
             <RotateCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Simulate Stockout Flow</span>
@@ -92,8 +92,8 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
         {/* Scenario 2: Price Surge / Limit Exceeded */}
         <div
           onClick={() => setSelectedScenario('PRICE_SURGE')}
-          className={`glass-gold p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
-            selectedScenario === 'PRICE_SURGE' ? 'border-t-2 border-t-[#c9b8a0] shadow-[0_0_40px_rgba(167,139,113,0.15)]' : 'hover:border-[#a78b71]/40'
+          className={`card-dark p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
+            selectedScenario === 'PRICE_SURGE' ? 'border-t-2 border-t-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.1)]' : 'hover:border-zinc-700'
           }`}
         >
           <div className="space-y-3">
@@ -126,7 +126,7 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
               e.stopPropagation();
               onRunFailureScenario('PRICE_SURGE');
             }}
-            className="btn-gold-secondary w-full text-xs h-10 flex items-center justify-center space-x-1.5"
+            className="btn-secondary w-full text-xs h-10 flex items-center justify-center space-x-1.5"
           >
             <RotateCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Simulate Price Surge</span>
@@ -136,7 +136,7 @@ export const FailureSimulationPage: React.FC<FailureSimulationPageProps> = ({
         {/* Scenario 3: Daily Spending Ceiling Breach */}
         <div
           onClick={() => setSelectedScenario('BUDGET_BREACH')}
-          className={`glass-gold p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
+          className={`card-dark p-6 flex flex-col justify-between space-y-4 cursor-pointer transition-all duration-300 ${
             selectedScenario === 'BUDGET_BREACH' ? 'border-t-2 border-t-rose-500/60 shadow-[0_0_40px_rgba(244,63,94,0.15)]' : 'hover:border-rose-500/30'
           }`}
         >

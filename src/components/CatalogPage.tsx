@@ -72,10 +72,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
   return (
     <div className="space-y-10 animate-in">
       {/* Editorial Catalog Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1F1F1F] pb-6">
         <div>
-          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c9b8a0] mb-2 flex items-center space-x-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#a78b71] animate-pulse"></span>
+          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 mb-2 flex items-center space-x-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
             <span>Curated Machine-Readable Inventory</span>
           </div>
           <h1 className="font-playfair italic text-3xl sm:text-4xl text-white tracking-tight">
@@ -89,7 +89,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
         <button
           onClick={fetchCatalog}
           disabled={loading}
-          className="btn-gold-secondary self-start text-xs h-11 px-5 sm:self-auto flex items-center space-x-2"
+          className="btn-secondary self-start text-xs h-11 px-5 sm:self-auto flex items-center space-x-2"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Inventory</span>
@@ -98,8 +98,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
       {/* Filter & Search Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
-        <div className="flex items-center space-x-3 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 focus-within:border-[#a78b71]/50 focus-within:ring-2 focus-within:ring-[#a78b71]/20 transition-all flex-1 max-w-md">
-          <Search className="w-4 h-4 text-[#c9b8a0] shrink-0" />
+        <div className="flex items-center space-x-3 px-4 py-2.5 rounded-xl bg-[#0D0D0D] border border-[#1F1F1F] focus-within:border-white/40 focus-within:ring-1 focus-within:ring-white/20 transition-all flex-1 max-w-md">
+          <Search className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
             type="text"
             value={search}
@@ -109,15 +109,15 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
           />
         </div>
 
-        <div className="flex space-x-1.5 overflow-x-auto border-b border-white/10 pb-1 scrollbar-none">
+        <div className="flex space-x-1.5 overflow-x-auto border-b border-[#1F1F1F] pb-1 scrollbar-none">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 text-xs font-mono tracking-wider uppercase whitespace-nowrap transition-all duration-300 border-b-2 ${
                 selectedCategory === cat
-                  ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-semibold'
-                  : 'border-b-transparent text-stone-400 hover:text-stone-200'
+                  ? 'border-b-white text-white font-semibold'
+                  : 'border-b-transparent text-zinc-400 hover:text-white'
               }`}
             >
               {cat}
@@ -136,10 +136,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
           return (
             <div
               key={product.id}
-              className="glass-gold group flex flex-col justify-between p-0 overflow-hidden hover:border-[#a78b71]/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(167,139,113,0.12)]"
+              className="card-dark group flex flex-col justify-between p-0 overflow-hidden hover:border-zinc-700 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.04)]"
             >
               {/* Product Image Frame */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-white/10">
+              <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-[#1F1F1F]">
                 <img
                   src={imgSrc}
                   alt={product.name}
@@ -148,7 +148,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                 
                 {/* Category & Stock Floating Tags */}
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
-                  <span className="text-[9px] font-mono font-semibold uppercase tracking-[0.2em] px-2.5 py-1 bg-black/80 text-[#c9b8a0] border border-white/10 backdrop-blur-md rounded-md">
+                  <span className="text-[9px] font-mono font-semibold uppercase tracking-[0.2em] px-2.5 py-1 bg-black/80 text-zinc-300 border border-[#1F1F1F] backdrop-blur-md rounded-md">
                     {product.category}
                   </span>
                   <span
@@ -166,7 +166,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
               {/* Product Details Area */}
               <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <h3 className="font-playfair italic text-lg font-semibold text-white leading-snug tracking-tight group-hover:text-[#e8d5b7] transition-colors">
+                  <h3 className="font-playfair italic text-lg font-semibold text-white leading-snug tracking-tight group-hover:text-zinc-200 transition-colors">
                     {product.name}
                   </h3>
                   <p className="text-xs text-stone-400 line-clamp-2 leading-relaxed font-sans">
@@ -176,12 +176,12 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
                 <div className="space-y-3 pt-2">
                   {/* Store & Match Meta */}
-                  <div className="flex items-center justify-between border-t border-b border-white/10 py-2.5 text-[11px] font-sans">
+                  <div className="flex items-center justify-between border-t border-b border-[#1F1F1F] py-2.5 text-[11px] font-sans">
                     <span className="text-stone-400 flex items-center space-x-1.5">
-                      <Store className="w-3.5 h-3.5 text-[#c9b8a0] shrink-0" />
+                      <Store className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                       <span className="text-stone-200 font-medium">{product.merchantName}</span>
                     </span>
-                    <span className="text-[#c9b8a0] font-mono font-semibold">
+                    <span className="text-zinc-400 font-mono font-semibold">
                       Match: {aiScore}%
                     </span>
                   </div>
@@ -189,14 +189,14 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                   {/* Dynamic Bundles if present */}
                   {product.bundleDeals && product.bundleDeals.length > 0 && (
                     <div className="space-y-1">
-                      <div className="text-[9px] font-mono uppercase font-semibold text-[#c9b8a0] tracking-[0.2em] flex items-center space-x-1">
-                        <Sparkles className="w-3 h-3 text-[#a78b71] shrink-0" />
+                      <div className="text-[9px] font-mono uppercase font-semibold text-zinc-400 tracking-[0.2em] flex items-center space-x-1">
+                        <Sparkles className="w-3 h-3 text-zinc-300 shrink-0" />
                         <span>Dynamic Bundle Offer</span>
                       </div>
                       {product.bundleDeals.map((b, i) => (
-                        <div key={i} className="text-[11px] text-stone-200 flex justify-between p-2 bg-white/[0.02] border border-white/10 rounded-lg">
+                        <div key={i} className="text-[11px] text-stone-200 flex justify-between p-2 bg-white/[0.02] border border-[#1F1F1F] rounded-lg">
                           <span className="truncate max-w-[180px] font-sans">{b.addonName}</span>
-                          <span className="font-mono text-[#e8d5b7] font-semibold">-{b.bundleDiscountPct}%</span>
+                          <span className="font-mono text-white font-semibold">-{b.bundleDiscountPct}%</span>
                         </div>
                       ))}
                     </div>
@@ -204,7 +204,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                 </div>
 
                 {/* Price & Action Footer */}
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                <div className="pt-3 border-t border-[#1F1F1F] flex items-center justify-between">
                   <div>
                     <div className="text-[9px] text-stone-400 font-mono uppercase tracking-wider">Settlement Price</div>
                     <div className="font-playfair italic text-2xl font-bold text-white">
@@ -216,7 +216,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                     <button
                       type="button"
                       onClick={() => setSelectedMetaProduct(product)}
-                      className="border border-white/15 bg-white/[0.03] p-2 text-xs text-stone-300 hover:text-white hover:border-[#a78b71]/50 rounded-lg transition-colors"
+                      className="border border-[#1F1F1F] bg-white/[0.03] p-2 text-xs text-stone-300 hover:text-white hover:border-white/40 rounded-lg transition-colors"
                       title="View Machine-Readable JSON-LD Schema"
                     >
                       <FileCode className="w-3.5 h-3.5 shrink-0" />
@@ -226,7 +226,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                       type="button"
                       disabled={isOutOfStock}
                       onClick={() => onQuickBuy(product.name)}
-                      className="btn-gold-primary text-xs px-4 h-9 flex items-center space-x-1.5"
+                      className="btn-primary text-xs px-4 h-9 flex items-center space-x-1.5"
                     >
                       <span>Buy</span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -242,8 +242,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
       {/* AI Metadata / JSON-LD Modal */}
       {selectedMetaProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl glass-gold-elevated p-6 space-y-4 max-h-[85vh] overflow-y-auto border border-[#a78b71]/30">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div className="relative w-full max-w-xl card-dark p-6 space-y-4 max-h-[85vh] overflow-y-auto border border-[#1F1F1F]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1F1F1F]">
               <div>
                 <h3 className="font-playfair italic text-lg font-bold text-white">UAP Machine-Readable Catalog Schema</h3>
                 <p className="text-xs text-stone-400 font-mono mt-0.5">{selectedMetaProduct.id}</p>
@@ -256,7 +256,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
               </button>
             </div>
 
-            <div className="p-4 bg-[#0a0a0a]/90 text-stone-200 font-mono text-[11px] overflow-x-auto max-h-96 border border-white/10 rounded-xl">
+            <div className="p-4 bg-[#080808] text-stone-200 font-mono text-[11px] overflow-x-auto max-h-96 border border-[#1F1F1F] rounded-xl">
               <pre className="text-emerald-400">{JSON.stringify(selectedMetaProduct, null, 2)}</pre>
             </div>
           </div>

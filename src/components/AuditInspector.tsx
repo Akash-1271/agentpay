@@ -58,16 +58,16 @@ export const AuditInspector: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Header */}
-      <div className="glass-panel p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-emerald-500/20">
+      <div className="card-dark p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-[#1F1F1F]">
         <div>
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-zinc-300 text-xs font-semibold mb-3">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Immutable Explainability Trail</span>
           </div>
           <h2 className="text-2xl font-extrabold text-white">
             Cryptographic Fin-Ops Audit Ledger
           </h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-zinc-400 mt-1">
             Every prompt, discount negotiation, bounded policy gate, Razorpay order, and settlement webhook is signed and verifiable.
           </p>
         </div>
@@ -75,7 +75,7 @@ export const AuditInspector: React.FC = () => {
         <button
           onClick={fetchAudit}
           disabled={loading}
-          className="px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-bold text-slate-300 flex items-center space-x-2 transition-all"
+          className="btn-secondary px-4 py-2.5 rounded-xl text-xs font-bold text-zinc-200 flex items-center space-x-2 transition-all"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Audit Logs</span>
@@ -83,22 +83,22 @@ export const AuditInspector: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="glass-panel p-4 flex items-center space-x-3">
-        <Search className="w-4 h-4 text-slate-400" />
+      <div className="card-dark p-4 flex items-center space-x-3">
+        <Search className="w-4 h-4 text-zinc-400" />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Filter by action, agent, reasoning, or HMAC hash..."
-          className="w-full bg-transparent border-none text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none"
+          className="w-full bg-transparent border-none text-xs sm:text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none"
         />
       </div>
 
       {/* Audit Table / Stream */}
-      <div className="glass-panel overflow-hidden border-white/5">
+      <div className="card-dark overflow-hidden border-[#1F1F1F]">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#090b10] border-b border-white/5 text-slate-400 font-mono">
+            <thead className="bg-[#0D0D0D] border-b border-[#1F1F1F] text-zinc-400 font-mono">
               <tr>
                 <th className="py-3 px-4">Timestamp</th>
                 <th className="py-3 px-4">Action</th>
@@ -108,10 +108,10 @@ export const AuditInspector: React.FC = () => {
                 <th className="py-3 px-4 text-right">Verification</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-slate-300">
+            <tbody className="divide-y divide-[#1F1F1F] text-zinc-300">
               {filteredLedger.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-500">
+                  <td colSpan={6} className="py-8 text-center text-zinc-500">
                     No audit records match your query.
                   </td>
                 </tr>
@@ -124,7 +124,7 @@ export const AuditInspector: React.FC = () => {
                         onClick={() => setExpandedId(isExpanded ? null : rec.id)}
                         className="hover:bg-white/[0.02] cursor-pointer transition-colors"
                       >
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400 whitespace-nowrap">
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-400 whitespace-nowrap">
                           {new Date(rec.timestamp).toLocaleTimeString()}
                         </td>
                         <td className="py-3.5 px-4">
@@ -136,13 +136,13 @@ export const AuditInspector: React.FC = () => {
                             {rec.action}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-400">
                           {rec.agentId}
                         </td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-200">
+                        <td className="py-3.5 px-4 font-mono font-bold text-zinc-200">
                           {rec.amount ? `₹${rec.amount.toLocaleString()}` : '—'}
                         </td>
-                        <td className="py-3.5 px-4 max-w-xs sm:max-w-md truncate text-slate-300">
+                        <td className="py-3.5 px-4 max-w-xs sm:max-w-md truncate text-zinc-300">
                           {rec.reasoning}
                         </td>
                         <td className="py-3.5 px-4 text-right font-mono text-[10px] text-emerald-400">
@@ -155,9 +155,9 @@ export const AuditInspector: React.FC = () => {
 
                       {isExpanded && (
                         <tr className="bg-black/50">
-                          <td colSpan={6} className="p-4 border-y border-white/10">
-                            <div className="p-3 rounded-lg bg-[#090b10] border border-white/5 font-mono text-[11px] space-y-2">
-                              <div className="flex justify-between text-slate-400">
+                          <td colSpan={6} className="p-4 border-y border-[#1F1F1F]">
+                            <div className="p-3 rounded-lg bg-[#080808] border border-[#1F1F1F] font-mono text-[11px] space-y-2">
+                              <div className="flex justify-between text-zinc-400">
                                 <span>Record ID: {rec.id}</span>
                                 <span>Full Signature: {rec.signature}</span>
                               </div>

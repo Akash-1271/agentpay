@@ -92,13 +92,13 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
     <div className="space-y-8 animate-in max-w-4xl mx-auto">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1F1F1F] pb-6">
         <div>
           <div className="luxury-eyebrow mb-2">ENCLAVE POLICY BOUNDARIES</div>
-          <h1 className="font-playfair text-3xl sm:text-4xl text-stone-100 font-bold tracking-tight">
+          <h1 className="font-playfair text-3xl sm:text-4xl text-white font-bold tracking-tight">
             Spending Limits & Mandates
           </h1>
-          <p className="text-xs sm:text-sm text-stone-400 mt-1 font-sans leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#A1A1AA] mt-1 font-sans leading-relaxed">
             Configure bounded financial constraints. The buyer agent mathematically cannot breach these parameters.
           </p>
         </div>
@@ -106,7 +106,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
         <button
           onClick={handleSave}
           disabled={saving}
-          className="btn-gold-primary text-xs h-10 px-6 self-start sm:self-auto flex items-center gap-2"
+          className="btn-primary text-xs h-10 px-6 self-start sm:self-auto flex items-center gap-2 rounded-xl"
         >
           <Save className="w-3.5 h-3.5 shrink-0" />
           <span>{saving ? 'Saving...' : 'Save Limits'}</span>
@@ -121,17 +121,17 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
       )}
 
       {/* Control 1: Max per single purchase */}
-      <div className="glass-gold p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+      <div className="card-dark p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1F1F1F] pb-3">
           <div>
-            <h3 className="font-playfair text-base font-bold text-stone-100">
+            <h3 className="font-playfair text-base font-bold text-white">
               Autonomous Approval Threshold
             </h3>
-            <p className="text-xs text-stone-400 font-sans mt-0.5">
+            <p className="text-xs text-[#A1A1AA] font-sans mt-0.5">
               Purchases exceeding this threshold trigger biometric passkey gating.
             </p>
           </div>
-          <div className="font-playfair text-2xl font-bold text-stone-100">
+          <div className="font-playfair text-2xl font-bold text-white">
             ₹{maxAutoTx.toLocaleString()}
           </div>
         </div>
@@ -143,23 +143,23 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           step="500"
           value={maxAutoTx}
           onChange={(e) => setMaxAutoTx(Number(e.target.value))}
-          className="w-full accent-[#a78b71] cursor-pointer h-2 bg-black/60 rounded-lg"
+          className="w-full accent-white cursor-pointer h-2 bg-[#141414] rounded-lg"
         />
 
-        <div className="flex justify-between text-[10px] font-mono text-stone-400">
+        <div className="flex justify-between text-[10px] font-mono text-[#71717A]">
           <span>Min: ₹500</span>
-          <span className="text-[#e8d5b7] font-bold">Current: ₹{maxAutoTx.toLocaleString()}</span>
+          <span className="text-white font-bold">Current: ₹{maxAutoTx.toLocaleString()}</span>
           <span>Max: ₹10,000</span>
         </div>
 
         {/* Live Interactive Sandbox Split Matrix */}
-        <div className="pt-3 border-t border-white/10 space-y-3">
+        <div className="pt-3 border-t border-[#1F1F1F] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-[#c9b8a0] uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#c9b8a0]" />
+            <span className="text-[10px] font-mono font-bold text-[#A1A1AA] uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-white" />
               LIVE ENCLAVE SIMULATION MATRIX
             </span>
-            <span className="text-[10px] font-mono text-stone-400">
+            <span className="text-[10px] font-mono text-[#71717A]">
               {autoApprovedItems.length} Instant · {gatedItems.length} Gated
             </span>
           </div>
@@ -174,7 +174,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
               </div>
               <div className="space-y-1.5 text-xs font-sans">
                 {autoApprovedItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-stone-200 text-[11px] bg-black/40 px-2.5 py-1 rounded border border-white/5">
+                  <div key={idx} className="flex items-center justify-between text-[#D4D4D8] text-[11px] bg-[#0A0A0A] px-2.5 py-1 rounded border border-[#1F1F1F]">
                     <span className="truncate">{item.name}</span>
                     <strong className="font-mono text-emerald-400 ml-2">₹{item.price.toLocaleString()}</strong>
                   </div>
@@ -183,16 +183,16 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
             </div>
 
             {/* Step-Up Required Column */}
-            <div className="p-3.5 bg-[#a78b71]/10 border border-[#a78b71]/30 rounded-xl space-y-2">
-              <div className="text-[10px] font-mono uppercase font-bold text-[#e8d5b7] flex items-center gap-1">
-                <Lock className="w-3 h-3 text-[#c9b8a0]" />
+            <div className="p-3.5 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono uppercase font-bold text-amber-400 flex items-center gap-1">
+                <Lock className="w-3 h-3 text-amber-400" />
                 <span>Passkey Step-Up (&gt; ₹{maxAutoTx.toLocaleString()})</span>
               </div>
               <div className="space-y-1.5 text-xs font-sans">
                 {gatedItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-stone-200 text-[11px] bg-black/40 px-2.5 py-1 rounded border border-white/5">
+                  <div key={idx} className="flex items-center justify-between text-[#D4D4D8] text-[11px] bg-[#0A0A0A] px-2.5 py-1 rounded border border-[#1F1F1F]">
                     <span className="truncate">{item.name}</span>
-                    <strong className="font-mono text-[#e8d5b7] ml-2">₹{item.price.toLocaleString()}</strong>
+                    <strong className="font-mono text-amber-400 ml-2">₹{item.price.toLocaleString()}</strong>
                   </div>
                 ))}
               </div>
@@ -204,17 +204,17 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
       </div>
 
       {/* Control 2: Daily budget ceiling */}
-      <div className="glass-gold p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+      <div className="card-dark p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1F1F1F] pb-3">
           <div>
-            <h3 className="font-playfair text-base font-bold text-stone-100">
+            <h3 className="font-playfair text-base font-bold text-white">
               Daily Spending Ceiling
             </h3>
-            <p className="text-xs text-stone-400 font-sans mt-0.5">
+            <p className="text-xs text-[#A1A1AA] font-sans mt-0.5">
               Hard limit on aggregate money movement allowed within any 24-hour cycle.
             </p>
           </div>
-          <div className="font-playfair text-2xl font-bold text-stone-100">
+          <div className="font-playfair text-2xl font-bold text-white">
             ₹{dailyCeiling.toLocaleString()}
           </div>
         </div>
@@ -226,23 +226,23 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           step="5000"
           value={dailyCeiling}
           onChange={(e) => setDailyCeiling(Number(e.target.value))}
-          className="w-full accent-[#a78b71] cursor-pointer h-2 bg-black/60 rounded-lg"
+          className="w-full accent-white cursor-pointer h-2 bg-[#141414] rounded-lg"
         />
 
-        <div className="flex justify-between text-[10px] font-mono text-stone-400">
+        <div className="flex justify-between text-[10px] font-mono text-[#71717A]">
           <span>Min: ₹5,000/day</span>
-          <span className="text-[#e8d5b7] font-bold">Current: ₹{dailyCeiling.toLocaleString()}/day</span>
+          <span className="text-white font-bold">Current: ₹{dailyCeiling.toLocaleString()}/day</span>
           <span>Max: ₹100,000/day</span>
         </div>
       </div>
 
       {/* Control 3: Approved Stores */}
-      <div className="glass-gold p-6 space-y-4">
-        <div className="border-b border-white/10 pb-3">
-          <h3 className="font-playfair text-base font-bold text-stone-100">
+      <div className="card-dark p-6 space-y-4">
+        <div className="border-b border-[#1F1F1F] pb-3">
+          <h3 className="font-playfair text-base font-bold text-white">
             Authorized Merchant Whitelist
           </h3>
-          <p className="text-xs text-stone-400 font-sans mt-0.5">
+          <p className="text-xs text-[#A1A1AA] font-sans mt-0.5">
             The buyer agent will only execute transactions with verified UAP merchants.
           </p>
         </div>
@@ -251,13 +251,13 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           {merchants.map((store) => (
             <span
               key={store}
-              className="inline-flex items-center space-x-2 px-3 py-1.5 border border-[#a78b71]/30 bg-[#a78b71]/10 rounded-xl text-xs font-sans text-[#e8d5b7] shadow-sm"
+              className="inline-flex items-center space-x-2 px-3 py-1.5 border border-[#1F1F1F] bg-[#141414] rounded-xl text-xs font-sans text-white shadow-sm"
             >
               <span>{store}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveStore(store)}
-                className="text-stone-400 hover:text-rose-400 transition-colors"
+                className="text-[#71717A] hover:text-rose-400 transition-colors"
               >
                 <X className="w-3.5 h-3.5 shrink-0" />
               </button>
@@ -278,7 +278,7 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
           <button
             type="submit"
             disabled={!newStore.trim()}
-            className="btn-gold-secondary text-xs h-10 px-5 shrink-0 flex items-center gap-1.5"
+            className="btn-secondary text-xs h-10 px-5 shrink-0 flex items-center gap-1.5 rounded-xl"
           >
             <Plus className="w-3.5 h-3.5 shrink-0" />
             <span>Add Store</span>
@@ -290,18 +290,18 @@ export const PolicyEnginePage: React.FC<PolicyEnginePageProps> = ({
       <div className="pt-2">
         <button
           onClick={() => setShowTechnical(!showTechnical)}
-          className="font-sans text-xs text-[#c9b8a0] hover:text-[#e8d5b7] flex items-center space-x-1.5 tracking-wider uppercase font-semibold transition-colors"
+          className="font-sans text-xs text-[#A1A1AA] hover:text-white flex items-center space-x-1.5 tracking-wider uppercase font-semibold transition-colors"
         >
           <span>{showTechnical ? 'Hide Enclave Mandate' : 'View Cryptographic AP2 Mandate (JSON)'}</span>
-          {showTechnical ? <ChevronUp className="w-3.5 h-3.5 shrink-0 text-[#c9b8a0]" /> : <ChevronDown className="w-3.5 h-3.5 shrink-0 text-[#c9b8a0]" />}
+          {showTechnical ? <ChevronUp className="w-3.5 h-3.5 shrink-0 text-white" /> : <ChevronDown className="w-3.5 h-3.5 shrink-0 text-[#71717A]" />}
         </button>
 
         {showTechnical && (
-          <div className="mt-3 p-5 border border-[#a78b71]/20 bg-black/80 space-y-2 text-xs font-mono text-[#e8d5b7] animate-in shadow-2xl rounded-2xl">
-            <div className="text-[#c9b8a0] uppercase text-[10px] font-bold tracking-widest pb-1 border-b border-white/10">
+          <div className="mt-3 p-5 border border-[#1F1F1F] bg-[#080808] space-y-2 text-xs font-mono text-[#D4D4D8] animate-in shadow-2xl rounded-2xl">
+            <div className="text-[#71717A] uppercase text-[10px] font-bold tracking-widest pb-1 border-b border-[#1F1F1F]">
               Hardware-Signed Mandate Payload
             </div>
-            <pre className="overflow-x-auto text-[11px] leading-relaxed text-[#e8d5b7]">
+            <pre className="overflow-x-auto text-[11px] leading-relaxed text-[#D4D4D8]">
               {JSON.stringify(
                 {
                   mandateId: mandate?.mandateId || 'mandate_user_main_001',

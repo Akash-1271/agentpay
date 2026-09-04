@@ -76,10 +76,10 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
   return (
     <div className="space-y-10 animate-in max-w-5xl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1F1F1F] pb-6">
         <div>
           <div className="flex items-center space-x-2.5 mb-2">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c9b8a0]">Commerce Optimization</span>
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400">Commerce Optimization</span>
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 border border-emerald-500/30 text-emerald-300 bg-emerald-500/10 rounded">
               Yield Engine
             </span>
@@ -95,7 +95,7 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
         <button
           onClick={loadData}
           disabled={loading}
-          className="btn-gold-secondary text-xs h-11 px-5 flex items-center space-x-1.5 self-start sm:self-auto"
+          className="btn-secondary text-xs h-11 px-5 flex items-center space-x-1.5 self-start sm:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Analytics</span>
@@ -105,8 +105,8 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
       {/* Metrics Row */}
       {metrics && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+          <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
               AOV Lift (Bundles)
             </div>
             <div className="font-playfair italic text-3xl font-bold text-emerald-400">
@@ -117,8 +117,8 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
             </div>
           </div>
 
-          <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+          <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
               Autonomous Conversion
             </div>
             <div className="font-playfair italic text-3xl font-bold text-white">
@@ -129,11 +129,11 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
             </div>
           </div>
 
-          <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+          <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
               Cart Recovery Rate
             </div>
-            <div className="font-playfair italic text-3xl font-bold text-[#e8d5b7]">
+            <div className="font-playfair italic text-3xl font-bold text-white">
               {metrics.recoveryRatePct}%
             </div>
             <div className="text-[11px] text-stone-400 font-mono">
@@ -141,8 +141,8 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
             </div>
           </div>
 
-          <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+          <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
               Upsell Acceptance
             </div>
             <div className="font-playfair italic text-3xl font-bold text-white">
@@ -156,13 +156,13 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-white/10 space-x-6 text-xs font-mono uppercase tracking-wider">
+      <div className="flex border-b border-[#1F1F1F] space-x-6 text-xs font-mono uppercase tracking-wider">
         <button
           onClick={() => setActiveTab('recovery')}
           className={`pb-3 transition-all duration-300 border-b-2 ${
             activeTab === 'recovery'
-              ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-semibold'
-              : 'border-b-transparent text-stone-400 hover:text-stone-200'
+              ? 'border-b-white text-white font-semibold'
+              : 'border-b-transparent text-zinc-400 hover:text-white'
           }`}
         >
           Abandoned Cart Recovery
@@ -171,8 +171,8 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
           onClick={() => setActiveTab('ledger')}
           className={`pb-3 transition-all duration-300 border-b-2 ${
             activeTab === 'ledger'
-              ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-semibold'
-              : 'border-b-transparent text-stone-400 hover:text-stone-200'
+              ? 'border-b-white text-white font-semibold'
+              : 'border-b-transparent text-zinc-400 hover:text-white'
           }`}
         >
           Double-Entry FinOps Ledger
@@ -181,8 +181,8 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
           onClick={() => setActiveTab('importer')}
           className={`pb-3 transition-all duration-300 border-b-2 ${
             activeTab === 'importer'
-              ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-semibold'
-              : 'border-b-transparent text-stone-400 hover:text-stone-200'
+              ? 'border-b-white text-white font-semibold'
+              : 'border-b-transparent text-zinc-400 hover:text-white'
           }`}
         >
           CSV Catalog Importer
@@ -201,12 +201,12 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
             {carts.map((cart) => (
               <div
                 key={cart.cartId}
-                className="glass-gold p-5 space-y-3 hover:border-[#a78b71]/40 transition-all"
+                className="card-dark p-5 space-y-3 hover:border-zinc-700 transition-all"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="font-mono text-xs text-[#c9b8a0]">{cart.cartId}</span>
+                      <span className="font-mono text-xs text-zinc-400">{cart.cartId}</span>
                       <span className="font-playfair italic font-bold text-white text-base">{cart.item?.name}</span>
                       <span
                         className={`text-[9px] font-mono uppercase font-bold px-2 py-0.5 border rounded ${
@@ -233,7 +233,7 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
                       <button
                         onClick={() => handleRecover(cart.cartId)}
                         disabled={recoveringId === cart.cartId}
-                        className="btn-gold-primary text-xs h-9 px-4 flex items-center space-x-1.5"
+                        className="btn-primary text-xs h-9 px-4 flex items-center space-x-1.5"
                       >
                         <Send className={`w-3.5 h-3.5 ${recoveringId === cart.cartId ? 'animate-spin' : ''}`} />
                         <span>Send Recovery</span>
@@ -244,7 +244,7 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
 
                 {/* AI Recovery Message Preview */}
                 <div className="p-3 bg-black/40 border border-white/10 rounded-lg text-xs font-mono text-stone-200 space-y-1">
-                  <div className="text-[10px] text-[#c9b8a0] uppercase tracking-wider font-semibold">AI Generated Recovery SMS / WhatsApp Message:</div>
+                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">AI Generated Recovery SMS / WhatsApp Message:</div>
                   <p className="text-stone-300 text-[11px] font-sans">{cart.recoveryMessage}</p>
                 </div>
               </div>
@@ -264,15 +264,15 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
             {ledger?.balances && (
               <div className="flex items-center space-x-4 font-mono text-xs">
                 <span className="text-stone-400">Wallet: <strong className="text-emerald-400 font-bold">₹{ledger.balances.PRINCIPAL_SPENDABLE_WALLET?.toLocaleString()}</strong></span>
-                <span className="text-stone-400">Merchant: <strong className="text-[#e8d5b7] font-bold">₹{ledger.balances.MERCHANT_SETTLEMENT_ACCOUNT?.toLocaleString()}</strong></span>
+                <span className="text-stone-400">Merchant: <strong className="text-white font-bold">₹{ledger.balances.MERCHANT_SETTLEMENT_ACCOUNT?.toLocaleString()}</strong></span>
               </div>
             )}
           </div>
 
-          <div className="glass-gold p-0 overflow-hidden">
+          <div className="card-dark p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-white/[0.02] text-[#c9b8a0] uppercase font-mono text-[10px] tracking-wider border-b border-white/10">
+                <thead className="bg-white/[0.02] text-zinc-400 uppercase font-mono text-[10px] tracking-wider border-b border-[#1F1F1F]">
                   <tr>
                     <th className="p-3.5">Journal ID</th>
                     <th className="p-3.5">Timestamp</th>
@@ -323,26 +323,26 @@ prod_head_03,Bose QuietComfort 45 ANC,Audio,19999,6,merch_bose_india,Bose Author
 
       {/* Tab 3: CSV Catalog Importer */}
       {activeTab === 'importer' && (
-        <div className="glass-gold p-6 space-y-4">
+        <div className="card-dark p-6 space-y-4">
           <div>
             <h3 className="font-playfair italic text-lg font-bold text-white">Import Custom Products via CSV</h3>
             <p className="text-xs text-stone-400 font-sans mt-0.5">Instantly make any merchant catalog machine-readable and discoverable by AI buyer agents.</p>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[11px] font-mono uppercase text-[#c9b8a0] font-semibold tracking-wider">CSV Data (Comma-Separated)</label>
+            <label className="text-[11px] font-mono uppercase text-zinc-400 font-semibold tracking-wider">CSV Data (Comma-Separated)</label>
             <textarea
               rows={6}
               value={csvInput}
               onChange={(e) => setCsvInput(e.target.value)}
-              className="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-xs font-mono text-stone-200 focus:outline-none focus:border-[#a78b71]/50 focus:ring-1 focus:ring-[#a78b71]/20"
+              className="w-full p-3 bg-black/40 border border-[#1F1F1F] rounded-xl text-xs font-mono text-stone-200 focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
             />
           </div>
 
           <div className="flex items-center justify-between">
             <button
               onClick={handleCsvImport}
-              className="btn-gold-primary text-xs h-11 px-5 flex items-center space-x-1.5"
+              className="btn-primary text-xs h-11 px-5 flex items-center space-x-1.5"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Import to Universal Catalog</span>

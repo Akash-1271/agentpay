@@ -71,24 +71,24 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
-      <div className="relative w-full max-w-xl bg-[#FFFFFF] border-2 border-[#1A1A1A] shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-black/80 backdrop-blur-md animate-in">
+      <div className="relative w-full max-w-xl bg-[#0A0A0A] border border-[#1F1F1F] shadow-[0_24px_64px_rgba(0,0,0,0.9)] overflow-hidden rounded-2xl">
         
-        {/* Top Gold Accent Bar */}
-        <div className="h-1 bg-[#D4AF37] w-full" />
+        {/* Top Monochrome Accent Bar */}
+        <div className="h-1 bg-white/20 w-full" />
 
         {/* Search Input */}
-        <div className="flex items-center px-5 py-4 border-b border-[#1A1A1A]/12 bg-[#FAF8F5]">
-          <Search className="w-4 h-4 text-[#D4AF37] mr-3 shrink-0" />
+        <div className="flex items-center px-5 py-4 border-b border-[#1F1F1F] bg-[#0D0D0D]">
+          <Search className="w-4 h-4 text-[#A1A1AA] mr-3 shrink-0" />
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search commands, navigate, or dispatch intent..."
-            className="w-full bg-transparent text-sm text-[#1A1A1A] placeholder-[#6C6863] focus:outline-none font-sans"
+            className="w-full bg-transparent text-sm text-white placeholder-[#71717A] focus:outline-none font-sans"
           />
-          <span className="text-[10px] font-mono text-[#6C6863] px-2 py-0.5 border border-[#1A1A1A]/20 bg-[#FFFFFF]">
+          <span className="text-[10px] font-mono text-[#71717A] px-2 py-0.5 border border-[#1F1F1F] bg-[#141414] rounded-md">
             ESC
           </span>
         </div>
@@ -96,7 +96,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         {/* Results List */}
         <div className="max-h-72 overflow-y-auto p-2 space-y-1 text-xs">
           {filtered.length === 0 ? (
-            <div className="py-8 text-center text-[#6C6863] text-xs font-sans">
+            <div className="py-8 text-center text-[#71717A] text-xs font-sans">
               No matching commands located.
             </div>
           ) : (
@@ -106,22 +106,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 <button
                   key={idx}
                   onClick={() => handleSelect(item)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-left text-[#1A1A1A] hover:bg-[#FAF8F5] transition-all border border-transparent hover:border-[#1A1A1A]/10 group"
+                  className="w-full flex items-center justify-between px-4 py-3 text-left text-white hover:bg-[#141414] transition-all border border-transparent hover:border-[#1F1F1F] rounded-xl group"
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 border border-[#1A1A1A]/15 bg-[#FAF8F5] flex items-center justify-center text-[#1A1A1A]">
-                      <Icon className="w-3 h-3 text-[#D4AF37]" />
+                    <div className="w-6 h-6 border border-[#1F1F1F] bg-[#141414] flex items-center justify-center text-white rounded-lg">
+                      <Icon className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-xs font-sans font-medium text-[#1A1A1A]">{item.label}</span>
+                    <span className="text-xs font-sans font-medium text-[#D4D4D8] group-hover:text-white">{item.label}</span>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#1A1A1A]/30 group-hover:text-[#1A1A1A] transition-colors" />
+                  <ArrowRight className="w-3.5 h-3.5 text-[#52525B] group-hover:text-white transition-colors" />
                 </button>
               );
             })
           )}
         </div>
 
-        <div className="px-5 py-2.5 bg-[#FAF8F5] border-t border-[#1A1A1A]/10 text-[10px] font-sans font-semibold uppercase tracking-[0.2em] text-[#6C6863] flex justify-between">
+        <div className="px-5 py-2.5 bg-[#0D0D0D] border-t border-[#1F1F1F] text-[10px] font-sans font-semibold uppercase tracking-[0.2em] text-[#71717A] flex justify-between">
           <span>AgentPay Command Engine</span>
           <span>Quick Actions</span>
         </div>
@@ -130,4 +130,3 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     </div>
   );
 };
-

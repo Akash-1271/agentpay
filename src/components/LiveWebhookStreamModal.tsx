@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Zap,
   X,
@@ -162,28 +162,28 @@ export const LiveWebhookStreamModal: React.FC<LiveWebhookStreamModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/70 backdrop-blur-sm animate-in">
-      <div className="relative w-full max-w-4xl max-h-[85vh] bg-[#FFFFFF] border-2 border-[#1A1A1A] shadow-[0_16px_48px_rgba(0,0,0,0.25)] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
+      <div className="relative w-full max-w-4xl max-h-[85vh] bg-[#0A0A0A] border border-[#1F1F1F] shadow-[0_24px_64px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden rounded-2xl">
         
-        {/* Top Gold Accent Bar */}
-        <div className="h-1 bg-[#D4AF37] w-full" />
+        {/* Top Monochrome Accent Bar */}
+        <div className="h-1 bg-white/20 w-full" />
 
         {/* Header */}
-        <div className="p-5 border-b border-[#1A1A1A]/12 bg-[#FAF8F5] flex items-center justify-between">
+        <div className="p-5 border-b border-[#1F1F1F] bg-[#0D0D0D] flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 border border-[#1A1A1A]/20 bg-[#FFFFFF] flex items-center justify-center shrink-0">
-              <Radio className="w-5 h-5 text-[#D4AF37] animate-pulse" />
+            <div className="w-9 h-9 border border-[#1F1F1F] bg-[#141414] flex items-center justify-center shrink-0 rounded-xl">
+              <Radio className="w-5 h-5 text-white animate-pulse" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-serif text-lg font-bold text-[#1A1A1A]">
+                <h3 className="font-playfair text-lg font-bold text-white">
                   Live Razorpay Webhook & Event Telemetry
                 </h3>
-                <span className="px-2 py-0.5 text-[9px] font-mono bg-emerald-50 text-emerald-800 border border-emerald-600/30 font-bold">
+                <span className="px-2 py-0.5 text-[9px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold rounded-md">
                   LIVE STREAM ACTIVE
                 </span>
               </div>
-              <p className="text-xs text-[#6C6863] mt-0.5 font-sans">
+              <p className="text-xs text-[#A1A1AA] mt-0.5 font-sans">
                 Real-time cryptographic webhooks dispatched by Razorpay and Bounded Spending Enclaves.
               </p>
             </div>
@@ -192,15 +192,15 @@ export const LiveWebhookStreamModal: React.FC<LiveWebhookStreamModalProps> = ({
           <div className="flex items-center space-x-3">
             <button
               onClick={handleSimulateWebhook}
-              className="luxury-btn-secondary text-xs h-9 px-3 flex items-center space-x-1.5"
+              className="btn-secondary text-xs h-9 px-3 flex items-center space-x-1.5 rounded-xl"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <RefreshCw className="w-3.5 h-3.5 text-white" />
               <span>Simulate Webhook</span>
             </button>
 
             <button
               onClick={onClose}
-              className="p-1.5 text-[#6C6863] hover:text-[#1A1A1A]"
+              className="p-1.5 text-[#71717A] hover:text-white rounded-lg hover:bg-white/5 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -211,29 +211,29 @@ export const LiveWebhookStreamModal: React.FC<LiveWebhookStreamModalProps> = ({
         <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden">
           
           {/* Left Column: Event Feed */}
-          <div className="md:col-span-5 border-r border-[#1A1A1A]/12 overflow-y-auto p-3 space-y-2 bg-[#FAF8F5]">
-            <div className="text-[10px] font-sans font-semibold uppercase tracking-[0.18em] text-[#6C6863] px-2 py-1">
+          <div className="md:col-span-5 border-r border-[#1F1F1F] overflow-y-auto p-3 space-y-2 bg-[#0A0A0A]">
+            <div className="text-[10px] font-sans font-semibold uppercase tracking-[0.18em] text-[#71717A] px-2 py-1">
               Event Stream ({events.length})
             </div>
             {events.map((evt) => (
               <button
                 key={evt.id}
                 onClick={() => setSelectedEvent(evt)}
-                className={`w-full text-left p-3 border transition-all ${
+                className={`w-full text-left p-3 border rounded-xl transition-all ${
                   selectedEvent.id === evt.id
-                    ? 'border-[#1A1A1A] bg-[#FFFFFF] shadow-sm'
-                    : 'border-[#1A1A1A]/10 hover:border-[#1A1A1A]/30 bg-[#FAF8F5]'
+                    ? 'border-white/20 bg-[#141414] shadow-sm'
+                    : 'border-[#1F1F1F] hover:border-[#333333] bg-[#0D0D0D]'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-[#1A1A1A]">
+                  <span className="font-mono text-xs font-bold text-white">
                     {evt.event}
                   </span>
-                  <span className="text-[10px] text-[#6C6863] font-mono">{evt.timestamp}</span>
+                  <span className="text-[10px] text-[#71717A] font-mono">{evt.timestamp}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs mt-1.5">
-                  <span className="text-[#6C6863] font-mono text-[11px]">{evt.id}</span>
-                  <span className="font-serif font-bold text-[#1A1A1A]">
+                  <span className="text-[#A1A1AA] font-mono text-[11px]">{evt.id}</span>
+                  <span className="font-playfair font-bold text-white">
                     ₹{evt.amount.toLocaleString()}
                   </span>
                 </div>
@@ -242,22 +242,22 @@ export const LiveWebhookStreamModal: React.FC<LiveWebhookStreamModalProps> = ({
           </div>
 
           {/* Right Column: JSON Payload Viewer */}
-          <div className="md:col-span-7 flex flex-col overflow-hidden bg-[#FFFFFF]">
-            <div className="p-3 border-b border-[#1A1A1A]/10 bg-[#FAF8F5] flex items-center justify-between">
-              <span className="font-mono text-xs text-[#1A1A1A] font-bold">
+          <div className="md:col-span-7 flex flex-col overflow-hidden bg-[#0A0A0A]">
+            <div className="p-3 border-b border-[#1F1F1F] bg-[#0D0D0D] flex items-center justify-between">
+              <span className="font-mono text-xs text-white font-bold">
                 Payload: {selectedEvent.id}
               </span>
               <button
                 onClick={handleCopy}
-                className="luxury-btn-secondary text-[11px] py-1 px-2.5 h-7 flex items-center space-x-1"
+                className="btn-secondary text-[11px] py-1 px-2.5 h-7 flex items-center space-x-1 rounded-lg"
               >
-                {copied ? <Check className="w-3 h-3 text-emerald-700" /> : <Copy className="w-3 h-3 text-[#1A1A1A]" />}
+                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-white" />}
                 <span>{copied ? 'Copied' : 'Copy JSON'}</span>
               </button>
             </div>
 
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-[#1A1A1A] bg-[#FAF8F5]">
-              <pre className="text-[11px] leading-relaxed text-[#1A1A1A]">
+            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs bg-[#080808]">
+              <pre className="text-[11px] leading-relaxed text-[#D4D4D8]">
                 {JSON.stringify(selectedEvent.payload, null, 2)}
               </pre>
             </div>
@@ -269,4 +269,3 @@ export const LiveWebhookStreamModal: React.FC<LiveWebhookStreamModalProps> = ({
     </div>
   );
 };
-

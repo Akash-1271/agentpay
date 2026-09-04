@@ -39,10 +39,10 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
   return (
     <div className="space-y-10 animate-in max-w-5xl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1F1F1F] pb-6">
         <div>
           <div className="flex items-center space-x-2.5 mb-2">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c9b8a0]">Deterministic Verification</span>
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400">Deterministic Verification</span>
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 border border-emerald-500/30 text-emerald-300 bg-emerald-500/10 rounded">
               50-Batch Stress Test
             </span>
@@ -60,7 +60,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
             value={batchSize}
             onChange={(e) => setBatchSize(parseInt(e.target.value, 10))}
             disabled={running}
-            className="px-3 py-2 bg-black/40 border border-white/10 text-xs font-mono text-stone-200 rounded-xl focus:outline-none focus:border-[#a78b71]/50 h-11"
+            className="px-3 py-2 bg-black/40 border border-[#1F1F1F] text-xs font-mono text-stone-200 rounded-xl focus:outline-none focus:border-white/40 h-11"
           >
             <option value={25} className="bg-[#0a0a0a]">25 Transactions</option>
             <option value={50} className="bg-[#0a0a0a]">50 Transactions (Standard)</option>
@@ -70,7 +70,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
           <button
             onClick={handleRun}
             disabled={running}
-            className="btn-gold-primary h-11 px-5 text-xs flex items-center space-x-1.5"
+            className="btn-primary h-11 px-5 text-xs flex items-center space-x-1.5"
           >
             <Play className={`w-3.5 h-3.5 ${running ? 'animate-spin' : ''}`} />
             <span>{running ? 'Executing 50-Batch...' : 'Run Benchmark'}</span>
@@ -83,8 +83,8 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Metric 1: Policy Adherence */}
-            <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+            <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
                 Policy Adherence
               </div>
               <div className="font-playfair italic text-3xl font-bold text-emerald-400">
@@ -96,8 +96,8 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
             </div>
 
             {/* Metric 2: Cryptographic Audit */}
-            <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+            <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
                 Audit Completeness
               </div>
               <div className="font-playfair italic text-3xl font-bold text-emerald-400">
@@ -109,8 +109,8 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
             </div>
 
             {/* Metric 3: Avg Latency */}
-            <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+            <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
                 Average Latency
               </div>
               <div className="font-playfair italic text-3xl font-bold text-white">
@@ -122,11 +122,11 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
             </div>
 
             {/* Metric 4: GMV Processed */}
-            <div className="glass-gold p-6 space-y-2 hover:border-[#a78b71]/40 transition-all">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0]">
+            <div className="card-dark p-6 space-y-2 hover:border-zinc-700 transition-all">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
                 Settled GMV
               </div>
-              <div className="font-playfair italic text-3xl font-bold text-[#e8d5b7]">
+              <div className="font-playfair italic text-3xl font-bold text-white">
                 ₹{metrics.totalGmvProcessed.toLocaleString()}
               </div>
               <div className="text-[11px] text-stone-400 font-mono">
@@ -136,35 +136,35 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
           </div>
 
           {/* Breakdown Summary Strip */}
-          <div className="glass-gold p-6 space-y-3">
+          <div className="card-dark p-6 space-y-3">
             <div className="flex items-center justify-between text-xs font-playfair italic font-bold text-white">
               <span className="text-sm">Batch Results Breakdown</span>
               <span className="font-mono text-stone-400">{metrics.totalEvaluated} total evaluated</span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 bg-white/[0.02] border border-white/10 rounded-xl">
-                <div className="text-[#c9b8a0] font-mono text-[10px] uppercase">Auto-Approved</div>
+              <div className="p-3 bg-white/[0.02] border border-[#1F1F1F] rounded-xl">
+                <div className="text-zinc-400 font-mono text-[10px] uppercase">Auto-Approved</div>
                 <div className="text-lg font-playfair italic font-bold text-emerald-400 mt-0.5">{metrics.autoApprovedSettled}</div>
               </div>
-              <div className="p-3 bg-white/[0.02] border border-white/10 rounded-xl">
-                <div className="text-[#c9b8a0] font-mono text-[10px] uppercase">Step-Up Gated</div>
+              <div className="p-3 bg-white/[0.02] border border-[#1F1F1F] rounded-xl">
+                <div className="text-zinc-400 font-mono text-[10px] uppercase">Step-Up Gated</div>
                 <div className="text-lg font-playfair italic font-bold text-amber-300 mt-0.5">{metrics.stepUpGated}</div>
               </div>
-              <div className="p-3 bg-white/[0.02] border border-white/10 rounded-xl">
-                <div className="text-[#c9b8a0] font-mono text-[10px] uppercase">Policy Blocked</div>
+              <div className="p-3 bg-white/[0.02] border border-[#1F1F1F] rounded-xl">
+                <div className="text-zinc-400 font-mono text-[10px] uppercase">Policy Blocked</div>
                 <div className="text-lg font-playfair italic font-bold text-rose-400 mt-0.5">{metrics.policyBlocked}</div>
               </div>
-              <div className="p-3 bg-white/[0.02] border border-white/10 rounded-xl">
-                <div className="text-[#c9b8a0] font-mono text-[10px] uppercase">Stockout Recovered</div>
+              <div className="p-3 bg-white/[0.02] border border-[#1F1F1F] rounded-xl">
+                <div className="text-zinc-400 font-mono text-[10px] uppercase">Stockout Recovered</div>
                 <div className="text-lg font-playfair italic font-bold text-stone-200 mt-0.5">{metrics.stockoutRecovered}</div>
               </div>
             </div>
           </div>
 
           {/* Honest Exception Triage Queue */}
-          <div className="glass-gold p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div className="card-dark p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1F1F1F]">
               <div>
                 <h3 className="font-playfair italic text-lg font-bold text-white">Honest Exception Triage Queue</h3>
                 <p className="text-xs text-stone-400 font-sans mt-0.5">Verifiable log of every gated or blocked edge case during batch execution</p>
@@ -176,7 +176,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
               {metrics.honestExceptions.slice(0, 8).map((ex: any, idx: number) => (
                 <div
                   key={idx}
-                  className="p-3 bg-white/[0.02] border border-white/10 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  className="p-3 bg-white/[0.02] border border-[#1F1F1F] rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center space-x-2">
@@ -187,7 +187,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
                           ex.policyCode === 'REQUIRES_STEP_UP'
                             ? 'border-amber-500/30 text-amber-300 bg-amber-500/10'
                             : ex.policyCode === 'STOCKOUT_REROUTED'
-                            ? 'border-white/20 text-[#e8d5b7] bg-white/[0.04]'
+                            ? 'border-white/20 text-white bg-white/[0.04]'
                             : 'border-rose-500/30 text-rose-300 bg-rose-500/10'
                         }`}
                       >
@@ -199,7 +199,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
 
                   <div className="text-right flex-shrink-0 font-mono text-[11px]">
                     <div className="font-playfair italic text-sm font-bold text-white">₹{ex.amount.toLocaleString()}</div>
-                    <div className="text-[9px] text-[#c9b8a0] truncate max-w-[120px]">{ex.enclaveHash}</div>
+                    <div className="text-[9px] text-zinc-400 truncate max-w-[120px]">{ex.enclaveHash}</div>
                   </div>
                 </div>
               ))}
@@ -207,8 +207,8 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
           </div>
         </div>
       ) : (
-        <div className="glass-gold p-12 text-center space-y-4">
-          <Activity className="w-10 h-10 text-[#c9b8a0] mx-auto opacity-70" />
+        <div className="card-dark p-12 text-center space-y-4">
+          <Activity className="w-10 h-10 text-zinc-400 mx-auto opacity-70" />
           <div className="max-w-md mx-auto">
             <h3 className="font-playfair italic text-lg font-bold text-white">Ready to Run Benchmark Suite</h3>
             <p className="text-xs text-stone-400 mt-1 font-sans">
@@ -218,7 +218,7 @@ export const BenchmarkRunner: React.FC<BenchmarkRunnerProps> = ({ onRefreshEncla
           <button
             onClick={handleRun}
             disabled={running}
-            className="btn-gold-primary h-11 px-6 text-xs inline-flex items-center space-x-2"
+            className="btn-primary h-11 px-6 text-xs inline-flex items-center space-x-2"
           >
             <Play className="w-3.5 h-3.5" />
             <span>Launch 50-Transaction Benchmark</span>
