@@ -71,23 +71,25 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
   return (
     <div className="space-y-10 animate-in">
-      
-      {/* Editorial Lookbook Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
+      {/* Editorial Catalog Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <div className="luxury-eyebrow mb-2">Curated Machine-Readable Inventory</div>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c9b8a0] mb-2 flex items-center space-x-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#a78b71] animate-pulse"></span>
+            <span>Curated Machine-Readable Inventory</span>
+          </div>
+          <h1 className="font-playfair italic text-3xl sm:text-4xl text-white tracking-tight">
             Merchant Catalog & Lookbook
           </h1>
-          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
-            Machine-readable inventory designed for autonomous discovery, bundle yield incentives, and instant Razorpay checkout.
+          <p className="text-xs sm:text-sm text-stone-400 mt-1.5 font-sans leading-relaxed">
+            Machine-readable inventory structured for autonomous discovery, bundle yield incentives, and instant Razorpay AP2 execution.
           </p>
         </div>
 
         <button
           onClick={fetchCatalog}
           disabled={loading}
-          className="luxury-btn-secondary self-start text-xs h-11 px-5 sm:self-auto"
+          className="btn-gold-secondary self-start text-xs h-11 px-5 sm:self-auto flex items-center space-x-2"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Inventory</span>
@@ -96,26 +98,26 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
       {/* Filter & Search Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
-        <div className="luxury-input-wrapper flex-1 max-w-md">
-          <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
+        <div className="flex items-center space-x-3 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 focus-within:border-[#a78b71]/50 focus-within:ring-2 focus-within:ring-[#a78b71]/20 transition-all flex-1 max-w-md">
+          <Search className="w-4 h-4 text-[#c9b8a0] shrink-0" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search catalog by name, category, merchant, specs..."
-            className="luxury-input text-xs sm:text-sm"
+            placeholder="Search catalog by item, merchant, tags..."
+            className="bg-transparent border-none outline-none text-xs sm:text-sm text-stone-100 placeholder:text-stone-500 w-full"
           />
         </div>
 
-        <div className="flex space-x-1.5 overflow-x-auto border-b border-[#1A1A1A]/15 pb-1">
+        <div className="flex space-x-1.5 overflow-x-auto border-b border-white/10 pb-1 scrollbar-none">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 text-xs font-sans tracking-[0.15em] uppercase whitespace-nowrap transition-all duration-300 border-b-2 ${
+              className={`px-3 py-1.5 text-xs font-mono tracking-wider uppercase whitespace-nowrap transition-all duration-300 border-b-2 ${
                 selectedCategory === cat
-                  ? 'border-b-[#1A1A1A] text-[#1A1A1A] font-bold'
-                  : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                  ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-semibold'
+                  : 'border-b-transparent text-stone-400 hover:text-stone-200'
               }`}
             >
               {cat}
@@ -124,8 +126,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
         </div>
       </div>
 
-      {/* Editorial Product Grid with Grayscale-to-Color Cinematic Images */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Luxury Glass Product Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((product) => {
           const isOutOfStock = product.stock <= 0;
           const aiScore = Math.round(product.rating * 20);
@@ -134,29 +136,29 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
           return (
             <div
               key={product.id}
-              className="luxury-card group flex flex-col justify-between p-0 overflow-hidden"
+              className="glass-gold group flex flex-col justify-between p-0 overflow-hidden hover:border-[#a78b71]/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(167,139,113,0.12)]"
             >
               {/* Product Image Frame */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#EBE5DE] border-b border-[#1A1A1A]/10">
+              <div className="relative aspect-[4/3] overflow-hidden bg-black/40 border-b border-white/10">
                 <img
                   src={imgSrc}
                   alt={product.name}
-                  className="luxury-image w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                 />
                 
                 {/* Category & Stock Floating Tags */}
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
-                  <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] px-2.5 py-1 bg-[#1A1A1A]/90 text-[#FFFFFF] backdrop-blur-md">
+                  <span className="text-[9px] font-mono font-semibold uppercase tracking-[0.2em] px-2.5 py-1 bg-black/80 text-[#c9b8a0] border border-white/10 backdrop-blur-md rounded-md">
                     {product.category}
                   </span>
                   <span
-                    className={`text-[9px] font-mono font-bold px-2 py-0.5 border backdrop-blur-md ${
+                    className={`text-[9px] font-mono font-bold px-2 py-0.5 border backdrop-blur-md rounded-md ${
                       isOutOfStock
-                        ? 'bg-rose-500/90 text-white border-rose-600'
-                        : 'bg-[#FFFFFF]/90 text-[#1A1A1A] border-[#1A1A1A]/20'
+                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                     }`}
                   >
-                    {isOutOfStock ? '0 (Stockout)' : `${product.stock} units`}
+                    {isOutOfStock ? '0 (Out of stock)' : `${product.stock} in stock`}
                   </span>
                 </div>
               </div>
@@ -164,22 +166,22 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
               {/* Product Details Area */}
               <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <h3 className="font-serif text-lg font-bold text-[#1A1A1A] leading-snug tracking-tight">
+                  <h3 className="font-playfair italic text-lg font-semibold text-white leading-snug tracking-tight group-hover:text-[#e8d5b7] transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-[#6C6863] line-clamp-2 leading-relaxed font-sans">
+                  <p className="text-xs text-stone-400 line-clamp-2 leading-relaxed font-sans">
                     {product.description}
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-2">
                   {/* Store & Match Meta */}
-                  <div className="flex items-center justify-between border-t border-b border-[#1A1A1A]/10 py-2 text-[11px] font-sans">
-                    <span className="text-[#6C6863] flex items-center space-x-1.5">
-                      <Store className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
-                      <span className="text-[#1A1A1A] font-semibold">{product.merchantName}</span>
+                  <div className="flex items-center justify-between border-t border-b border-white/10 py-2.5 text-[11px] font-sans">
+                    <span className="text-stone-400 flex items-center space-x-1.5">
+                      <Store className="w-3.5 h-3.5 text-[#c9b8a0] shrink-0" />
+                      <span className="text-stone-200 font-medium">{product.merchantName}</span>
                     </span>
-                    <span className="text-[#1A1A1A] font-mono font-semibold">
+                    <span className="text-[#c9b8a0] font-mono font-semibold">
                       Match: {aiScore}%
                     </span>
                   </div>
@@ -187,14 +189,14 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                   {/* Dynamic Bundles if present */}
                   {product.bundleDeals && product.bundleDeals.length > 0 && (
                     <div className="space-y-1">
-                      <div className="text-[9px] font-sans uppercase font-semibold text-[#6C6863] tracking-[0.2em] flex items-center space-x-1">
-                        <Sparkles className="w-3 h-3 text-[#D4AF37] shrink-0" />
+                      <div className="text-[9px] font-mono uppercase font-semibold text-[#c9b8a0] tracking-[0.2em] flex items-center space-x-1">
+                        <Sparkles className="w-3 h-3 text-[#a78b71] shrink-0" />
                         <span>Dynamic Bundle Offer</span>
                       </div>
                       {product.bundleDeals.map((b, i) => (
-                        <div key={i} className="text-[11px] text-[#1A1A1A] flex justify-between p-2 bg-[#FAF8F5] border border-[#1A1A1A]/10">
+                        <div key={i} className="text-[11px] text-stone-200 flex justify-between p-2 bg-white/[0.02] border border-white/10 rounded-lg">
                           <span className="truncate max-w-[180px] font-sans">{b.addonName}</span>
-                          <span className="font-mono text-[#D4AF37] font-bold">-{b.bundleDiscountPct}%</span>
+                          <span className="font-mono text-[#e8d5b7] font-semibold">-{b.bundleDiscountPct}%</span>
                         </div>
                       ))}
                     </div>
@@ -202,10 +204,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                 </div>
 
                 {/* Price & Action Footer */}
-                <div className="pt-3 border-t border-[#1A1A1A]/12 flex items-center justify-between">
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
                   <div>
-                    <div className="text-[9px] text-[#6C6863] font-mono uppercase tracking-wider">AP2 Settlement</div>
-                    <div className="font-serif text-2xl font-bold text-[#1A1A1A]">
+                    <div className="text-[9px] text-stone-400 font-mono uppercase tracking-wider">Settlement Price</div>
+                    <div className="font-playfair italic text-2xl font-bold text-white">
                       ₹{product.price.toLocaleString()}
                     </div>
                   </div>
@@ -214,7 +216,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                     <button
                       type="button"
                       onClick={() => setSelectedMetaProduct(product)}
-                      className="border border-[#1A1A1A]/20 bg-transparent p-2 text-xs text-[#1A1A1A] hover:bg-[#EBE5DE] transition-colors"
+                      className="border border-white/15 bg-white/[0.03] p-2 text-xs text-stone-300 hover:text-white hover:border-[#a78b71]/50 rounded-lg transition-colors"
                       title="View Machine-Readable JSON-LD Schema"
                     >
                       <FileCode className="w-3.5 h-3.5 shrink-0" />
@@ -224,7 +226,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
                       type="button"
                       disabled={isOutOfStock}
                       onClick={() => onQuickBuy(product.name)}
-                      className="luxury-btn-primary text-xs px-4 h-10 flex items-center space-x-1.5"
+                      className="btn-gold-primary text-xs px-4 h-9 flex items-center space-x-1.5"
                     >
                       <span>Buy</span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -239,22 +241,22 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ onQuickBuy }) => {
 
       {/* AI Metadata / JSON-LD Modal */}
       {selectedMetaProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1A1A]/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl bg-[#FFFFFF] border-2 border-[#1A1A1A] p-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-[0_12px_40px_rgba(0,0,0,0.2)]">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1A1A1A]/15">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl glass-gold-elevated p-6 space-y-4 max-h-[85vh] overflow-y-auto border border-[#a78b71]/30">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div>
-                <h3 className="font-serif text-base font-bold text-[#1A1A1A]">UAP Machine-Readable Catalog Schema</h3>
-                <p className="text-xs text-[#6C6863] font-mono">{selectedMetaProduct.id}</p>
+                <h3 className="font-playfair italic text-lg font-bold text-white">UAP Machine-Readable Catalog Schema</h3>
+                <p className="text-xs text-stone-400 font-mono mt-0.5">{selectedMetaProduct.id}</p>
               </div>
               <button
                 onClick={() => setSelectedMetaProduct(null)}
-                className="p-1 text-[#6C6863] hover:text-[#1A1A1A]"
+                className="p-1 text-stone-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-4 bg-[#1A1A1A] text-[#F9F8F6] font-mono text-[11px] overflow-x-auto max-h-96 border border-[#1A1A1A]">
+            <div className="p-4 bg-[#0a0a0a]/90 text-stone-200 font-mono text-[11px] overflow-x-auto max-h-96 border border-white/10 rounded-xl">
               <pre className="text-emerald-400">{JSON.stringify(selectedMetaProduct, null, 2)}</pre>
             </div>
           </div>

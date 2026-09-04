@@ -2,25 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Dark Luxury & Electric Blue Design Tokens ── */
+/* ── Luxury Gold-on-Black Design Tokens ── */
 :root {
-  --bg-deep: #080B11;             /* Deep Ground */
-  --bg-secondary: #0E131F;        /* Secondary Ground */
+  --bg-deep: #0a0a0a;             /* Dark Base Ground */
+  --bg-secondary: #121212;        /* Secondary Ground */
   --surface-glass: rgba(255, 255, 255, 0.03); /* Elevated Luxury Glass */
-  --surface-card: #131929;       /* Card Surface */
-  --surface-hover: #1A2238;      /* Hover Elevation */
+  --surface-card: rgba(255, 255, 255, 0.03);  /* Glass Card */
+  --surface-hover: rgba(255, 255, 255, 0.05); /* Hover Elevation */
   --ink-primary: #F1F5F9;        /* Primary Ink */
   --ink-bone: #EDE7DC;           /* Warm Bone Ink */
   --ink-secondary: #94A3B8;      /* Secondary Slate Ink */
-  --hairline: rgba(255, 255, 255, 0.09); /* Precision Sub-pixel Hairline */
-  --hairline-hover: rgba(255, 255, 255, 0.18);
-  --accent-blue: #0C83FF;        /* Primary Action Electric Blue */
-  --accent-cyan: #38BDF8;        /* Soft Cyan Highlight */
-  --accent-amber: #E8913C;       /* Restrained Warm Accent */
+  --hairline: rgba(255, 255, 255, 0.1); /* Precision Sub-pixel Hairline */
+  --hairline-hover: rgba(167, 139, 113, 0.4);
+  
+  /* Gold Accent Spectrum */
+  --gold-base: #a78b71;          /* Base Gold */
+  --gold-light: #c9b8a0;         /* Light Gold */
+  --gold-hover: #e8d5b7;         /* Hover Gold */
+  --gold-dark: #876b54;          /* Restrained Bronze */
+  
   --color-success: #10B981;      /* Functional Success */
-  --color-warning: #F59E0B;      /* Functional Warning / Gated */
+  --color-warning: #c9b8a0;      /* Functional Step-Up Gold */
   --color-danger: #F43F5E;       /* Functional Danger / Blocked */
-  --color-recovered: #A855F7;    /* Functional Recovery */
+  --color-recovered: #a78b71;    /* Functional Recovery */
   font-family: 'Inter', -apple-system, sans-serif;
   color-scheme: dark;
 }
@@ -31,7 +35,7 @@
 
 html {
   min-width: 320px;
-  background-color: var(--bg-deep);
+  background-color: #0a0a0a;
   color: var(--ink-primary);
   scroll-behavior: smooth;
 }
@@ -41,23 +45,46 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--ink-primary);
-  background-color: var(--bg-deep);
+  background-color: #0a0a0a;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: 'Inter', -apple-system, sans-serif;
   line-height: 1.6;
 }
 
+/* ── Radial Dot Grid Overlay (32px spacing, white at 8% opacity) ── */
+.dot-grid-bg {
+  background-color: #0a0a0a;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
 /* ── Typography Utilities ── */
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+.font-playfair-normal {
+  font-family: 'Playfair Display', serif;
+}
+
 .font-display {
-  font-family: 'Syne', sans-serif;
-  letter-spacing: -0.025em;
-  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
 }
 
 .font-headline {
-  font-family: 'Syne', 'Inter', sans-serif;
-  letter-spacing: -0.02em;
+  font-family: 'Playfair Display', serif;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+.font-sans {
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .font-mono {
@@ -71,51 +98,74 @@ body {
   letter-spacing: 0.16em;
 }
 
-/* ── Subtle Film Grain Overlay (Landing Only) ── */
-.film-grain-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 40;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+/* ── Glassmorphism Utility Classes ── */
+.glass-gold {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Deactivate Straining Noise and Grid Overlays ── */
-.paper-noise-overlay {
-  display: none !important;
+.glass-gold:hover {
+  border-color: rgba(167, 139, 113, 0.4);
+  box-shadow: 0 0 28px rgba(167, 139, 113, 0.12);
 }
 
-.architectural-gridlines {
-  display: none !important;
+.glass-gold-elevated {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(167, 139, 113, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 0 80px rgba(167, 139, 113, 0.15);
 }
 
-/* ── Universal Dark Theme Fallback Overrides for Legacy Inline Styles ── */
-[class*="bg-[#FFFFFF]"] {
-  background-color: #0E131F !important;
-}
-[class*="bg-[#FAF8F5]"] {
-  background-color: #131929 !important;
-}
-[class*="bg-[#F9F8F6]"] {
-  background-color: #080B11 !important;
-}
-[class*="bg-[#EBE5DE]"] {
-  background-color: #1A2238 !important;
-}
-[class*="border-[#1A1A1A]"] {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-[class*="text-[#1A1A1A]"] {
-  color: #F1F5F9 !important;
-}
-[class*="text-[#6C6863]"] {
-  color: #94A3B8 !important;
+.glass-panel-luxury {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── High-Performance Razorpay Action Buttons ── */
+.glass-panel-luxury:hover {
+  border-color: rgba(167, 139, 113, 0.35);
+}
+
+/* ── Luxury Cards ── */
+.luxury-card,
+.art-deco-card,
+.fintech-card,
+.editorial-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.75rem;
+}
+
+.luxury-card:hover,
+.art-deco-card:hover,
+.fintech-card:hover,
+.editorial-card:hover {
+  border-color: rgba(167, 139, 113, 0.4);
+  box-shadow: 0 8px 32px rgba(167, 139, 113, 0.15);
+}
+
+.luxury-card-gold,
+.featured-card {
+  border-top: 2px solid #a78b71;
+}
+
+/* ── Gold Action Buttons ── */
+.btn-gold-primary,
 .luxury-btn-primary,
 .art-deco-btn,
 .btn-primary,
@@ -126,42 +176,43 @@ body {
   justify-content: center;
   gap: 0.625rem;
   padding: 0.75rem 1.75rem;
-  background: linear-gradient(135deg, #0C83FF 0%, #0066CC 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(12, 131, 255, 0.5);
-  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #c9b8a0 0%, #a78b71 100%);
+  color: #0a0a0a;
+  border: 1px solid rgba(232, 213, 183, 0.6);
+  border-radius: 14px;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(12, 131, 255, 0.3);
-  transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 16px rgba(167, 139, 113, 0.35);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
 }
 
+.btn-gold-primary:hover:not(:disabled),
 .luxury-btn-primary:hover:not(:disabled),
 .art-deco-btn:hover:not(:disabled),
 .btn-primary:hover:not(:disabled),
 .premium-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1A8CFF 0%, #0C75E6 100%);
-  border-color: #38BDF8;
-  box-shadow: 0 6px 24px rgba(12, 131, 255, 0.45);
+  background: linear-gradient(135deg, #e8d5b7 0%, #c9b8a0 100%);
+  border-color: #e8d5b7;
+  box-shadow: 0 6px 24px rgba(167, 139, 113, 0.5);
   transform: translateY(-1px);
 }
 
-.luxury-btn-primary:disabled,
-.art-deco-btn:disabled,
-.btn-primary:disabled {
+.btn-gold-primary:disabled,
+.luxury-btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* Secondary Button (Sleek Dark Glass) */
+/* Secondary Button (Gold-tinted Dark Glass) */
+.btn-gold-secondary,
 .luxury-btn-secondary,
 .art-deco-btn-secondary,
 .btn-secondary,
@@ -172,37 +223,32 @@ body {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background-color: rgba(255, 255, 255, 0.04);
-  color: #F1F5F9;
+  background-color: rgba(255, 255, 255, 0.03);
+  color: #e8d5b7;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
+  border-radius: 14px;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 500;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
   cursor: pointer;
-  backdrop-blur: 8px;
-  transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.btn-gold-secondary:hover:not(:disabled),
 .luxury-btn-secondary:hover:not(:disabled),
 .art-deco-btn-secondary:hover:not(:disabled),
 .btn-secondary:hover:not(:disabled),
 .premium-button-secondary:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(167, 139, 113, 0.1);
+  border-color: rgba(167, 139, 113, 0.4);
   color: #FFFFFF;
   transform: translateY(-1px);
 }
 
-.luxury-btn-secondary:disabled,
-.art-deco-btn-secondary:disabled,
-.btn-secondary:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Link / Ghost Button */
+/* Ghost Button */
 .btn-ghost,
 .luxury-btn-link {
   display: inline-flex;
@@ -210,23 +256,23 @@ body {
   gap: 0.375rem;
   background: transparent;
   border: none;
-  color: #94A3B8;
+  color: #c9b8a0;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 500;
   font-size: 0.75rem;
   cursor: pointer;
   padding: 0.375rem 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   transition: color 200ms ease, background-color 200ms ease;
 }
 
 .btn-ghost:hover,
 .luxury-btn-link:hover {
-  color: #38BDF8;
-  background-color: rgba(12, 131, 255, 0.1);
+  color: #e8d5b7;
+  background-color: rgba(167, 139, 113, 0.15);
 }
 
-/* ── Modern Dark Inputs ── */
+/* ── Modern Glass Inputs ── */
 .luxury-input-wrapper,
 .art-deco-input-wrapper {
   display: flex;
@@ -236,15 +282,15 @@ body {
   padding: 0.65rem 1rem;
   background-color: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
-  transition: all 250ms ease;
+  border-radius: 14px;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .luxury-input-wrapper:focus-within,
 .art-deco-input-wrapper:focus-within {
-  border-color: #0C83FF;
-  background-color: rgba(12, 131, 255, 0.04);
-  box-shadow: 0 0 16px rgba(12, 131, 255, 0.2);
+  border-color: #a78b71;
+  background-color: rgba(167, 139, 113, 0.05);
+  box-shadow: 0 0 20px rgba(167, 139, 113, 0.25);
 }
 
 .luxury-input,
@@ -262,52 +308,13 @@ body {
 }
 
 .luxury-input::placeholder,
-.art-deco-input::placeholder,
-.editorial-input::placeholder,
-.premium-input::placeholder {
-  color: #64748B;
+.art-deco-input::placeholder {
+  color: #78716c;
 }
 
 .luxury-input:focus,
-.art-deco-input:focus,
-.editorial-input:focus,
-.premium-input:focus {
+.art-deco-input:focus {
   outline: none;
-}
-
-/* ── Dark Obsidian Cards & Surfaces ── */
-.luxury-card,
-.art-deco-card,
-.fintech-card,
-.editorial-card {
-  position: relative;
-  background: #0E131F;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
-  padding: 1.75rem;
-}
-
-.luxury-card:hover,
-.art-deco-card:hover,
-.fintech-card:hover,
-.editorial-card:hover {
-  border-color: rgba(12, 131, 255, 0.35);
-  box-shadow: 0 8px 32px rgba(12, 131, 255, 0.12);
-}
-
-.luxury-card-gold,
-.featured-card {
-  border-top: 2px solid #0C83FF;
-}
-
-/* Dark Panels */
-.luxury-dark-panel {
-  background-color: #131929;
-  color: #F1F5F9;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
 }
 
 /* ── Eyebrow / Overline Badge ── */
@@ -316,11 +323,11 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #38BDF8;
+  color: #c9b8a0;
   font-family: 'Inter', -apple-system, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -330,7 +337,7 @@ body {
   display: inline-block;
   width: 0.75rem;
   height: 2px;
-  background-color: #0C83FF;
+  background-color: #a78b71;
   border-radius: 2px;
 }
 
@@ -355,41 +362,48 @@ body {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ── Geometric Icon Squares ── */
-.art-deco-diamond,
-.luxury-icon-square {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #131929;
-  color: #38BDF8;
-  transition: all 250ms ease;
+/* ── Neural SVG Animations ── */
+@keyframes pulse-branch {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
 }
 
-.art-deco-diamond:hover,
-.luxury-icon-square:hover {
-  border-color: #0C83FF;
-  color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(12, 131, 255, 0.3);
-  background: #0C83FF;
+@keyframes neural-dash {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
-/* ── Dark Luxury Glass Panel Utility ── */
-.glass-panel-luxury {
-  background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 1rem;
+.neural-branch {
+  animation: pulse-branch 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-.glass-panel-luxury:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+.neural-flow-dash {
+  stroke-dasharray: 5 15;
+  animation: neural-dash 10s linear infinite;
+}
+
+/* ── Active Step Soft Ambient Pulse in Gold ── */
+.pulse-soft {
+  animation: pulse-soft-kf 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-soft-kf {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.02);
+  }
 }
 
 /* ── Failure State Gentle Shake Animation ── */
@@ -412,35 +426,27 @@ body {
   }
 }
 
-/* ── Active Step Soft Ambient Pulse ── */
-.pulse-soft {
-  animation: pulse-soft-kf 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+/* ── Universal Overrides for Legacy Inline Light Colors ── */
+[class*="bg-[#FFFFFF]"] {
+  background-color: rgba(255, 255, 255, 0.03) !important;
 }
-
-@keyframes pulse-soft-kf {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.75;
-    transform: scale(1.02);
-  }
+[class*="bg-[#FAF8F5]"] {
+  background-color: rgba(255, 255, 255, 0.03) !important;
 }
-
-/* ── Connective Path Pulse ── */
-.connective-flow {
-  stroke-dasharray: 6, 6;
-  animation: connective-flow-kf 24s linear infinite;
+[class*="bg-[#F9F8F6]"] {
+  background-color: #0a0a0a !important;
 }
-
-@keyframes connective-flow-kf {
-  from {
-    stroke-dashoffset: 200;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
+[class*="bg-[#EBE5DE]"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+[class*="border-[#1A1A1A]"] {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+[class*="text-[#1A1A1A]"] {
+  color: #F1F5F9 !important;
+}
+[class*="text-[#6C6863]"] {
+  color: #94A3B8 !important;
 }
 
 /* ── Accessibility: Prefers Reduced Motion ── */
@@ -455,7 +461,8 @@ body {
   }
   .shake-gentle,
   .pulse-soft,
-  .connective-flow {
+  .neural-branch,
+  .neural-flow-dash {
     animation: none !important;
   }
 }
