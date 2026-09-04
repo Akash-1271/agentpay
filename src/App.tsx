@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar, NavSection } from './components/Sidebar';
-import { LandingPage } from './components/LandingPage';
+import { CinematicLanding } from './components/landing/CinematicLanding';
 import { DashboardOverview } from './components/DashboardOverview';
 import { AiAgentPage } from './components/AiAgentPage';
 import { TransactionsPage } from './components/TransactionsPage';
@@ -149,25 +149,35 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#080B11] text-slate-100 flex flex-col selection:bg-[#0C83FF]/30 selection:text-white font-body antialiased relative">
+    <div className="min-h-screen bg-[#080B11] text-slate-100 flex flex-col selection:bg-[#0C83FF]/30 selection:text-white font-sans antialiased relative">
       
-      {/* Modern Redesigned Sidebar Navigation */}
-      <Sidebar
-        currentSection={currentSection}
-        onSelectSection={setCurrentSection}
-        mandate={mandate}
-        dailySpent={dailySpent}
-        onOpenApiDocs={() => setIsApiDocsOpen(true)}
-        onOpenWireTrace={() => setIsWireTraceOpen(true)}
-        isOpenMobile={isMobileNavOpen}
-        onToggleMobile={() => setIsMobileNavOpen(!isMobileNavOpen)}
-      />
+      {/* ── A. Full-Bleed Cinematic Landing Page ── */}
+      {currentSection === 'landing' ? (
+        <CinematicLanding
+          onNavigate={setCurrentSection}
+          onRunLiveDemo={(prompt) => {
+            setCurrentSection('agent');
+            handleRunTransaction(prompt, { autoAcceptBundles: true });
+          }}
+        />
+      ) : (
+        /* ── B. Product App Shell (Sidebar + Workspace) ── */
+        <div className="flex-1 flex flex-col min-h-screen relative">
+          <Sidebar
+            currentSection={currentSection}
+            onSelectSection={setCurrentSection}
+            mandate={mandate}
+            dailySpent={dailySpent}
+            onOpenApiDocs={() => setIsApiDocsOpen(true)}
+            onOpenWireTrace={() => setIsWireTraceOpen(true)}
+            isOpenMobile={isMobileNavOpen}
+            onToggleMobile={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          />
 
-      {/* Main Content Layout with 72-unit Offset */}
-      <div className="flex-1 lg:pl-72 flex flex-col min-w-0 relative z-10">
-        
-        {/* Top App Header */}
-        <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0A0E17]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+          {/* Main Content Layout with 72-unit Offset */}
+          <div className="flex-1 lg:pl-72 flex flex-col min-w-0 relative z-10">
+            {/* Top App Header */}
+            <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0A0E17]/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsMobileNavOpen(true)}
@@ -265,16 +275,6 @@ export const App: React.FC = () => {
 
         {/* Main Content Router */}
         <main className="flex-1 px-4 sm:px-8 lg:px-12 py-10 max-w-7xl w-full mx-auto">
-          {currentSection === 'landing' && (
-            <LandingPage
-              onNavigate={setCurrentSection}
-              onRunLiveDemo={(prompt) => {
-                setCurrentSection('agent');
-                handleRunTransaction(prompt, { autoAcceptBundles: true });
-              }}
-            />
-          )}
-
           {currentSection === 'overview' && (
             <DashboardOverview
               mandate={mandate}
@@ -351,8 +351,8 @@ export const App: React.FC = () => {
           </span>
         </footer>
       </div>
-
-      {/* Modals & Overlays */}
+    </div>
+  )}
       {isStepUpOpen && lastOutcome && (
         <StepUpModal
           outcome={lastOutcome}

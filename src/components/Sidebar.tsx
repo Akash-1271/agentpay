@@ -134,26 +134,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Primary Navigation Container with Custom Minimal Scrollbar */}
         <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Primary navigation">
           
-          {/* Landing Editorial Shortcut */}
+          {/* Cinematic Landing Switcher */}
           <button
             type="button"
             onClick={() => selectSection('landing')}
-            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left text-xs font-sans transition-all duration-200 border ${
+            className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-xs font-sans transition-all duration-200 border group hover:scale-[1.01] ${
               currentSection === 'landing'
                 ? 'bg-[#0C83FF]/15 text-[#38BDF8] border-[#0C83FF]/40 shadow-[0_2px_12px_rgba(12,131,255,0.15)]'
-                : 'bg-transparent text-slate-400 border-transparent hover:text-slate-100 hover:bg-white/5'
+                : 'bg-white/[0.02] text-slate-300 border-white/10 hover:text-white hover:bg-white/5 hover:border-white/20'
             }`}
           >
             <div className="flex items-center gap-3">
-              <div className={`p-1.5 rounded-lg ${currentSection === 'landing' ? 'bg-[#0C83FF]/20 text-[#38BDF8]' : 'bg-white/5 text-slate-400'}`}>
-                <BookOpen className="w-3.5 h-3.5" />
+              <div className={`p-2 rounded-lg ${currentSection === 'landing' ? 'bg-[#0C83FF] text-white' : 'bg-white/5 text-slate-400 group-hover:text-slate-200'}`}>
+                <Sparkles className="w-3.5 h-3.5 text-[#0C83FF] group-hover:animate-spin" />
               </div>
               <div>
-                <span className="font-semibold block text-xs">Editorial Overview</span>
-                <span className="text-[10px] text-slate-400 font-sans">Landing Lookbook</span>
+                <span className="font-display font-bold block text-xs tracking-tight">Cinematic Film</span>
+                <span className="text-[10px] text-slate-400 font-mono">Portal · Iris · Field</span>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-[#38BDF8] font-semibold tracking-wider">VOL. 01</span>
+            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#38BDF8] border border-white/10 font-semibold tracking-wider">
+              4 STAGES
+            </span>
           </button>
 
           {/* Core Protocol Section */}
