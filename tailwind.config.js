@@ -11,6 +11,21 @@ export default {
         surface: '#0E131F',
         'surface-elevated': '#131929',
         'surface-border': 'rgba(255, 255, 255, 0.08)',
+        ground: {
+          deep: '#080B11',
+          secondary: '#0E131F',
+        },
+        ink: {
+          primary: '#F1F5F9',
+          bone: '#EDE7DC',
+          secondary: '#94A3B8',
+          muted: '#64748B',
+        },
+        accent: {
+          blue: '#0C83FF',
+          cyan: '#38BDF8',
+          amber: '#E8913C',
+        },
         // Backwards compatibility mappings for existing templates
         alabaster: '#080B11',
         charcoal: '#F1F5F9',
@@ -40,12 +55,13 @@ export default {
         },
       },
       fontFamily: {
-        serif: ['"Inter"', '-apple-system', 'sans-serif'],
-        headline: ['"Inter"', '-apple-system', 'sans-serif'],
-        deco: ['"Inter"', '-apple-system', 'sans-serif'],
+        display: ['"Syne"', 'sans-serif'],
+        headline: ['"Syne"', '"Inter"', 'sans-serif'],
+        serif: ['"Syne"', '"Inter"', 'sans-serif'],
+        deco: ['"Syne"', 'sans-serif'],
         sans: ['"Inter"', '-apple-system', 'sans-serif'],
         body: ['"Inter"', '-apple-system', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        mono: ['"IBM Plex Mono"', '"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
         'hero-img': '0 8px 32px rgba(0, 0, 0, 0.4)',

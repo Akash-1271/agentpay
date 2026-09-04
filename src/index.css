@@ -2,22 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Razorpay Dark Obsidian & Electric Blue Design Tokens (Eye-Strain Free) ── */
+/* ── Dark Luxury & Electric Blue Design Tokens ── */
 :root {
-  --bg: #080B11;                 /* Deep Midnight Obsidian Canvas */
-  --foreground: #F1F5F9;         /* Slate-100 High-Legibility Text */
-  --surface: #0E131F;            /* Elevated Obsidian Surface */
-  --surface-card: #131929;       /* Surface Card Container */
-  --surface-hover: #1A2238;      /* Interactive Hover Elevation */
-  --muted-bg: #1A2238;           /* Muted Badge / Code Elevation */
-  --muted-fg: #94A3B8;           /* Slate-400 Soothing Subtitle/Meta */
-  --border: rgba(255, 255, 255, 0.08); /* Precise Sub-pixel Dark Border */
-  --border-strong: rgba(12, 131, 255, 0.4); /* Razorpay Electric Focus Border */
-  --accent: #0C83FF;             /* Razorpay Electric Blue */
-  --accent-light: #38BDF8;       /* Razorpay Cyan Glow */
-  --accent-fg: #FFFFFF;          /* Crisp White Text over Blue */
-  --razorpay-glow: rgba(12, 131, 255, 0.22);
-  --emerald-glow: rgba(16, 185, 129, 0.22);
+  --bg-deep: #080B11;             /* Deep Ground */
+  --bg-secondary: #0E131F;        /* Secondary Ground */
+  --surface-glass: rgba(255, 255, 255, 0.03); /* Elevated Luxury Glass */
+  --surface-card: #131929;       /* Card Surface */
+  --surface-hover: #1A2238;      /* Hover Elevation */
+  --ink-primary: #F1F5F9;        /* Primary Ink */
+  --ink-bone: #EDE7DC;           /* Warm Bone Ink */
+  --ink-secondary: #94A3B8;      /* Secondary Slate Ink */
+  --hairline: rgba(255, 255, 255, 0.09); /* Precision Sub-pixel Hairline */
+  --hairline-hover: rgba(255, 255, 255, 0.18);
+  --accent-blue: #0C83FF;        /* Primary Action Electric Blue */
+  --accent-cyan: #38BDF8;        /* Soft Cyan Highlight */
+  --accent-amber: #E8913C;       /* Restrained Warm Accent */
+  --color-success: #10B981;      /* Functional Success */
+  --color-warning: #F59E0B;      /* Functional Warning / Gated */
+  --color-danger: #F43F5E;       /* Functional Danger / Blocked */
+  --color-recovered: #A855F7;    /* Functional Recovery */
   font-family: 'Inter', -apple-system, sans-serif;
   color-scheme: dark;
 }
@@ -28,8 +31,8 @@
 
 html {
   min-width: 320px;
-  background-color: var(--bg);
-  color: var(--foreground);
+  background-color: var(--bg-deep);
+  color: var(--ink-primary);
   scroll-behavior: smooth;
 }
 
@@ -37,12 +40,47 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  color: var(--foreground);
-  background-color: var(--bg);
+  color: var(--ink-primary);
+  background-color: var(--bg-deep);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: 'Inter', -apple-system, sans-serif;
   line-height: 1.6;
+}
+
+/* ── Typography Utilities ── */
+.font-display {
+  font-family: 'Syne', sans-serif;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+.font-headline {
+  font-family: 'Syne', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.mono-furniture {
+  font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* ── Subtle Film Grain Overlay (Landing Only) ── */
+.film-grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* ── Deactivate Straining Noise and Grid Overlays ── */
@@ -75,26 +113,6 @@ body {
 }
 [class*="text-[#6C6863]"] {
   color: #94A3B8 !important;
-}
-
-/* ── Typography Utilities (Clean & Legible) ── */
-.font-headline,
-.font-serif,
-.font-deco,
-.font-body,
-.font-sans {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.font-mono {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
-
-/* Mixed Accent Cadence */
-.mixed-italic {
-  font-style: normal;
-  color: #38BDF8;
-  font-weight: 600;
 }
 
 /* ── High-Performance Razorpay Action Buttons ── */
@@ -361,39 +379,84 @@ body {
   background: #0C83FF;
 }
 
-/* ── Animations ── */
-.animate-in {
-  animation: obsidian-fade-up 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+/* ── Dark Luxury Glass Panel Utility ── */
+.glass-panel-luxury {
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1rem;
 }
 
-@keyframes obsidian-fade-up {
+.glass-panel-luxury:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Failure State Gentle Shake Animation ── */
+.shake-gentle {
+  animation: gentle-shake 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes gentle-shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+/* ── Active Step Soft Ambient Pulse ── */
+.pulse-soft {
+  animation: pulse-soft-kf 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-soft-kf {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.02);
+  }
+}
+
+/* ── Connective Path Pulse ── */
+.connective-flow {
+  stroke-dasharray: 6, 6;
+  animation: connective-flow-kf 24s linear infinite;
+}
+
+@keyframes connective-flow-kf {
   from {
-    opacity: 0;
-    transform: translateY(12px);
+    stroke-dashoffset: 200;
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    stroke-dashoffset: 0;
   }
 }
 
-/* ── Custom Dark Scrollbars ── */
-::-webkit-scrollbar {
-  width: 0.4rem;
-  height: 0.4rem;
-}
-::-webkit-scrollbar-track {
-  background: #080B11;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #0C83FF;
+/* ── Accessibility: Prefers Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .shake-gentle,
+  .pulse-soft,
+  .connective-flow {
+    animation: none !important;
+  }
 }
 
-::selection {
-  background: rgba(12, 131, 255, 0.35);
-  color: #FFFFFF;
-}
