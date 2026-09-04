@@ -162,10 +162,12 @@ export class AgentPayDatabase {
       }
 
       this.db = new Database(CONFIG.DB_PATH);
-      try {
-        this.db.pragma('journal_mode = WAL');
-      } catch (_) {
-        this.db.pragma('journal_mode = DELETE');
+      if (CONFIG.DB_PATH !== ':memory:') {
+        try {
+          this.db.pragma('journal_mode = WAL');
+        } catch (_) {
+          this.db.pragma('journal_mode = DELETE');
+        }
       }
       this.db.pragma('foreign_keys = ON');
       this.initSchema();
@@ -405,8 +407,13 @@ export class AgentPayDatabase {
     // 3. Seed Catalog Products from catalog.json if empty
     const productCount = db.prepare('SELECT COUNT(*) as count FROM catalog_products').get() as { count: number };
     if (productCount.count === 0) {
-      const catalogPath = path.join(__dirname, '..', 'data', 'catalog.json');
-      if (fs.existsSync(catalogPath)) {
+      const candidatePaths = [
+        path.join(process.cwd(), 'server', 'data', 'catalog.json'),
+        path.join(__dirname, '..', 'data', 'catalog.json'),
+        path.join(__dirname, 'data', 'catalog.json'),
+      ];
+      const catalogPath = candidatePaths.find((p) => fs.existsSync(p));
+      if (catalogPath) {
         try {
           const raw = fs.readFileSync(catalogPath, 'utf8');
           const products = JSON.parse(raw);
