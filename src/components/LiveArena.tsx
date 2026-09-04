@@ -124,22 +124,22 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
       case 'BuyerAgent':
         return {
           icon: Bot,
-          color: 'text-[#38BDF8]',
-          bg: 'bg-[#0C83FF]/10 border-[#0C83FF]/30',
+          color: 'text-[#e8d5b7]',
+          bg: 'bg-[#a78b71]/10 border-[#a78b71]/30',
           title: 'Buyer Agent (UAP Concierge)',
         };
       case 'MerchantAgent':
         return {
           icon: Store,
-          color: 'text-purple-400',
-          bg: 'bg-purple-500/10 border-purple-500/30',
+          color: 'text-[#c9b8a0]',
+          bg: 'bg-[#c9b8a0]/10 border-[#c9b8a0]/30',
           title: 'Merchant Yield Agent (AP2)',
         };
       case 'SpendingEnclave':
         return {
           icon: ShieldCheck,
-          color: 'text-amber-400',
-          bg: 'bg-amber-500/10 border-amber-500/30',
+          color: 'text-[#e8d5b7]',
+          bg: 'bg-[#a78b71]/20 border-[#a78b71]/40',
           title: 'Bounded Spending Enclave',
         };
       case 'RazorpayGateway':
@@ -152,7 +152,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
       default:
         return {
           icon: Bot,
-          color: 'text-slate-400',
+          color: 'text-stone-400',
           bg: 'bg-white/5 border-white/10',
           title: agent,
         };
@@ -168,14 +168,14 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
       <section className="transition-all duration-300 ease-out">
         {isPromptCollapsed && (lastOutcome || loading) ? (
           // Collapsed Upward Prompt Strip
-          <div className="p-4 rounded-2xl bg-[#0E131F] border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+          <div className="p-4 rounded-2xl glass-gold flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
             <div className="flex items-center space-x-3 truncate">
-              <div className="w-2 h-2 rounded-full bg-[#0C83FF] animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#c9b8a0] animate-pulse" />
               <div className="truncate">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#38BDF8] block">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#c9b8a0] block font-bold">
                   ACTIVE INTENT DISPATCH
                 </span>
-                <span className="text-sm font-semibold text-white truncate block">
+                <span className="font-playfair text-base font-bold text-stone-100 truncate block">
                   "{inputPrompt}"
                 </span>
               </div>
@@ -183,7 +183,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
             <button
               onClick={() => setIsPromptCollapsed(false)}
-              className="luxury-btn-secondary h-8 px-3 text-[11px] shrink-0 self-end sm:self-auto"
+              className="btn-gold-secondary h-8 px-3 text-[11px] shrink-0 self-end sm:self-auto flex items-center"
             >
               <Edit3 className="w-3 h-3 mr-1" />
               <span>Modify Intent</span>
@@ -191,18 +191,18 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
           </div>
         ) : (
           // Full-Size Prompt Input Card
-          <div className="p-6 sm:p-8 rounded-2xl bg-[#0E131F] border border-white/10 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#0C83FF]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="glass-gold-elevated p-6 sm:p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-[#a78b71]/5 rounded-full blur-3xl pointer-events-none" />
 
             <div className="max-w-3xl mb-6">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#0C83FF]/10 border border-[#0C83FF]/20 text-[#38BDF8] text-[11px] font-mono tracking-wider uppercase mb-3">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#a78b71]/10 border border-[#a78b71]/20 text-[#e8d5b7] text-[10px] font-mono tracking-wider uppercase mb-3 font-semibold">
+                <Sparkles className="w-3.5 h-3.5 text-[#c9b8a0]" />
                 <span>Autonomous ReAct Commerce Arena</span>
               </div>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-100 tracking-tight">
                 Dispatch Natural Language Purchase Intent
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1 font-sans leading-relaxed">
+              <p className="text-xs sm:text-sm text-stone-400 mt-1 font-sans leading-relaxed">
                 The agent parses specifications, scans the UAP catalog, executes hardware enclave bounds verification, and captures settlement on Razorpay.
               </p>
             </div>
@@ -214,17 +214,17 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                   type="text"
                   value={inputPrompt}
                   onChange={(e) => setInputPrompt(e.target.value)}
-                  placeholder="e.g. Search Amazon for running shoes under ₹2,000..."
-                  className="w-full pl-5 pr-32 py-4 bg-[#080B11] border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#0C83FF] focus:ring-2 focus:ring-[#0C83FF]/20 text-sm font-medium shadow-inner transition-all"
+                  placeholder="e.g. Search Amazon for Nike running shoes under ₹2,000..."
+                  className="w-full pl-5 pr-36 py-4 bg-black/50 border border-white/10 rounded-2xl text-stone-100 placeholder-stone-500 focus:outline-none focus:border-[#a78b71] focus:ring-2 focus:ring-[#a78b71]/20 text-sm font-medium shadow-inner transition-all"
                 />
                 <button
                   type="submit"
                   disabled={loading || !inputPrompt.trim()}
-                  className="absolute right-2 px-6 py-2.5 luxury-btn-primary h-10 text-xs shrink-0"
+                  className="absolute right-2 px-5 py-2.5 btn-gold-primary h-10 text-xs shrink-0"
                 >
                   {loading ? (
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-black animate-ping" />
                       <span>Reasoning...</span>
                     </span>
                   ) : (
@@ -236,13 +236,13 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+              <div className="flex items-center justify-between text-xs text-stone-400 pt-1">
                 <label className="flex items-center space-x-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={includeBundles}
                     onChange={(e) => setIncludeBundles(e.target.checked)}
-                    className="rounded border-slate-700 bg-[#080B11] text-[#0C83FF] focus:ring-[#0C83FF]"
+                    className="rounded border-stone-700 bg-black text-[#a78b71] focus:ring-[#a78b71]"
                   />
                   <span className="text-[11px] font-sans">
                     Enable Merchant Agent dynamic upsell negotiations (AOV Maximizer)
@@ -251,9 +251,9 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
               </div>
             </form>
 
-            {/* Example Chips with Gentle Scale + Micro-bounce */}
+            {/* Example Chips in Gold-Tinted Glass */}
             <div className="mt-6 pt-5 border-t border-white/10">
-              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 mb-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#c9b8a0] mb-3 font-semibold">
                 Curated Scenario Chips (Buildathon Criteria)
               </div>
               <div className="flex flex-wrap gap-2.5">
@@ -263,10 +263,10 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                     type="button"
                     onClick={() => handleSelectChip(chip)}
                     disabled={loading}
-                    className="px-3.5 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-[#0C83FF]/40 text-xs font-sans text-slate-200 transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] flex items-center gap-2 group shadow-sm"
+                    className="px-3.5 py-2 rounded-xl bg-white/[0.02] hover:bg-[#a78b71]/10 border border-white/10 hover:border-[#a78b71]/40 text-xs font-sans text-stone-200 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 group shadow-sm"
                   >
                     <span>{chip.label}</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-slate-400 group-hover:text-[#38BDF8] border border-white/5">
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#a78b71]/10 text-[#c9b8a0] border border-[#a78b71]/20 font-semibold">
                       {chip.badge}
                     </span>
                   </button>
@@ -284,15 +284,15 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left: Staggered Reasoning Timeline (7 cols) */}
-          <div className="lg:col-span-7 p-6 rounded-2xl bg-[#0E131F] border border-white/10 space-y-5 shadow-xl">
+          <div className="lg:col-span-7 p-6 rounded-2xl glass-gold space-y-5 shadow-xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center space-x-2">
-                <Layers className="w-4 h-4 text-[#0C83FF]" />
-                <h3 className="font-display text-base font-bold text-white tracking-tight">
+                <Layers className="w-4 h-4 text-[#c9b8a0]" />
+                <h3 className="font-playfair text-base font-bold text-stone-100 tracking-tight">
                   Cryptographic Reasoning Trail
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400 tracking-wider">
+              <span className="text-[10px] font-mono text-[#c9b8a0] tracking-wider">
                 ID: {lastOutcome.transactionId}
               </span>
             </div>
@@ -313,8 +313,8 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                     }}
                     className={`p-4 rounded-xl border transition-all duration-300 animate-in ${
                       isLast && loading
-                        ? 'border-[#0C83FF] bg-[#131929] pulse-soft'
-                        : 'border-white/5 bg-[#080B11]/90 hover:border-white/15'
+                        ? 'border-[#a78b71] bg-[#a78b71]/15 shadow-[0_0_24px_rgba(167,139,113,0.3)] pulse-soft'
+                        : 'border-white/5 bg-black/40 hover:border-white/15'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -325,10 +325,10 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-bold text-slate-200">
+                            <span className="text-xs font-bold text-stone-200">
                               {meta.title}
                             </span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white/5 text-slate-400 rounded">
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white/5 text-stone-400 rounded">
                               {step.action}
                             </span>
                             <span
@@ -336,9 +336,9 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                                 step.status === 'SUCCESS'
                                   ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
                                   : step.status === 'GATED'
-                                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                                  ? 'bg-[#a78b71]/15 text-[#e8d5b7] border border-[#a78b71]/30'
                                   : step.status === 'RECOVERED'
-                                  ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30'
+                                  ? 'bg-[#c9b8a0]/15 text-[#e8d5b7] border border-[#c9b8a0]/30'
                                   : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
                               }`}
                             >
@@ -346,7 +346,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                             </span>
                           </div>
 
-                          <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                          <p className="text-xs text-stone-300 font-sans leading-relaxed">
                             {step.detail}
                           </p>
                         </div>
@@ -355,7 +355,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                       {step.payload && (
                         <button
                           onClick={() => toggleStepExpand(idx)}
-                          className="text-slate-500 hover:text-slate-300 p-1 shrink-0"
+                          className="text-stone-500 hover:text-stone-300 p-1 shrink-0"
                           title="Toggle technical payload"
                         >
                           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -365,7 +365,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
                     {/* Expandable JSON Payload */}
                     {isExpanded && step.payload && (
-                      <div className="mt-3 p-3 rounded-lg bg-black/60 border border-white/5 text-[10px] font-mono text-emerald-400 overflow-x-auto max-h-48">
+                      <div className="mt-3 p-3 rounded-lg bg-black/80 border border-white/10 text-[10px] font-mono text-[#c9b8a0] overflow-x-auto max-h-48">
                         <pre>{JSON.stringify(step.payload, null, 2)}</pre>
                       </div>
                     )}
@@ -375,19 +375,19 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
             </div>
           </div>
 
-          {/* Right: Outcome Card with Scale-in from 0.95 and Failure Shake (5 cols) */}
+          {/* Right: Outcome Card in Elevated Glass */}
           <div
-            className={`lg:col-span-5 p-6 rounded-2xl bg-[#0E131F] border border-white/10 space-y-6 shadow-2xl transition-transform duration-300 ease-out transform scale-100 ${
+            className={`lg:col-span-5 p-6 rounded-2xl glass-gold-elevated space-y-6 shadow-2xl transition-transform duration-300 ease-out transform scale-100 ${
               hasShaken ? 'shake-gentle' : ''
             }`}
           >
             {/* Settlement Status Header */}
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#c9b8a0] block font-bold">
                   ENCLAVE OUTCOME
                 </span>
-                <h4 className="font-display text-lg font-bold text-white tracking-tight mt-0.5">
+                <h4 className="font-playfair text-lg font-bold text-stone-100 tracking-tight mt-0.5">
                   {lastOutcome.status === 'COMPLETED' && 'Settled on Razorpay'}
                   {lastOutcome.status === 'FAILED_RECOVERED' && 'Recovered & Settled'}
                   {lastOutcome.status === 'STEP_UP_REQUIRED' && 'Human Authorization Gated'}
@@ -400,7 +400,7 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                   lastOutcome.status === 'COMPLETED'
                     ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
                     : lastOutcome.status === 'STEP_UP_REQUIRED'
-                    ? 'bg-amber-500/15 border-amber-500/30 text-amber-300'
+                    ? 'bg-[#a78b71]/20 border-[#a78b71]/40 text-[#e8d5b7]'
                     : 'bg-rose-500/15 border-rose-500/30 text-rose-300'
                 }`}
               >
@@ -410,19 +410,19 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
             {/* Step-Up Passkey Banner */}
             {lastOutcome.status === 'STEP_UP_REQUIRED' && (
-              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center space-y-3">
-                <AlertTriangle className="w-7 h-7 text-amber-400 mx-auto" />
+              <div className="p-4 rounded-xl bg-[#a78b71]/10 border border-[#a78b71]/30 text-center space-y-3">
+                <AlertTriangle className="w-7 h-7 text-[#c9b8a0] mx-auto" />
                 <div>
-                  <h5 className="text-xs font-bold text-amber-200">
+                  <h5 className="text-xs font-bold text-[#e8d5b7]">
                     Threshold Limit Exceeded (₹2,000)
                   </h5>
-                  <p className="text-[11px] text-amber-300/80 mt-1 font-sans">
+                  <p className="text-[11px] text-stone-400 mt-1 font-sans">
                     Single transaction exceeds autonomous authorization. Requires cryptographic human passkey to finalize settlement.
                   </p>
                 </div>
                 <button
                   onClick={onOpenStepUpModal}
-                  className="luxury-btn-primary w-full h-10 text-xs"
+                  className="btn-gold-primary w-full h-10 text-xs"
                 >
                   Authorize via Passkey Modal
                 </button>
@@ -446,16 +446,16 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
             {/* Product & Quote Breakdown */}
             {lastOutcome.selectedProduct && lastOutcome.quote && (
-              <div className="p-4 rounded-xl bg-[#080B11] border border-white/5 space-y-3 text-xs">
+              <div className="p-4 rounded-xl bg-black/50 border border-white/5 space-y-3 text-xs">
                 <div className="flex justify-between items-center pb-2 border-b border-white/5">
-                  <span className="text-slate-400">Locked Product</span>
-                  <span className="font-semibold text-white truncate max-w-[180px]">
+                  <span className="text-stone-400">Locked Product</span>
+                  <span className="font-semibold text-stone-100 truncate max-w-[180px]">
                     {lastOutcome.selectedProduct.name}
                   </span>
                 </div>
 
                 {lastOutcome.quote.items.map((item, i) => (
-                  <div key={i} className="flex justify-between text-slate-300">
+                  <div key={i} className="flex justify-between text-stone-300">
                     <span className="truncate max-w-[180px]">{item.name}</span>
                     <span className="font-mono">₹{item.unitPrice.toLocaleString()}</span>
                   </div>
@@ -469,8 +469,8 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
                 )}
 
                 <div className="flex justify-between items-center pt-2 border-t border-white/10 text-sm font-bold">
-                  <span className="text-white">Net Settlement Total</span>
-                  <span className="text-[#38BDF8] font-mono text-base">
+                  <span className="text-stone-200">Net Settlement Total</span>
+                  <span className="text-[#e8d5b7] font-playfair font-bold text-base">
                     ₹{lastOutcome.quote.netAmount.toLocaleString()}
                   </span>
                 </div>
@@ -479,27 +479,27 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
 
             {/* Razorpay Test Order Trigger & UPI QR */}
             {lastOutcome.razorpayOrder && (
-              <div className="p-4 rounded-xl bg-[#0C83FF]/5 border border-[#0C83FF]/20 space-y-3">
+              <div className="p-4 rounded-xl bg-[#a78b71]/5 border border-[#a78b71]/20 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <CreditCard className="w-4 h-4 text-[#0C83FF]" />
-                    <span className="text-xs font-bold text-slate-200">Razorpay Test Order</span>
+                    <CreditCard className="w-4 h-4 text-[#c9b8a0]" />
+                    <span className="text-xs font-bold text-stone-200">Razorpay Test Order</span>
                   </div>
-                  <span className="text-[10px] font-mono bg-[#0C83FF]/20 text-[#38BDF8] px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono bg-[#a78b71]/15 text-[#e8d5b7] px-2 py-0.5 rounded">
                     {lastOutcome.razorpayOrder.id}
                   </span>
                 </div>
 
                 {lastOutcome.upiQr && (
-                  <div className="flex items-center space-x-3 p-2 rounded-lg bg-black/40 border border-white/5">
+                  <div className="flex items-center space-x-3 p-2 rounded-lg bg-black/60 border border-white/5">
                     <img
                       src={lastOutcome.upiQr.qrDataUrl}
                       alt="UPI QR"
                       className="w-14 h-14 rounded bg-white p-1"
                     />
                     <div className="text-[11px] space-y-1">
-                      <div className="font-semibold text-slate-200">NPCI / UPI Intent URI</div>
-                      <div className="text-slate-400 font-mono truncate max-w-[200px]">
+                      <div className="font-semibold text-stone-200">NPCI / UPI Intent URI</div>
+                      <div className="text-stone-400 font-mono truncate max-w-[200px]">
                         {lastOutcome.upiQr.upiUri}
                       </div>
                     </div>
@@ -520,9 +520,9 @@ export const LiveArena: React.FC<LiveArenaProps> = ({
               <div className="flex justify-end pt-1">
                 <button
                   onClick={() => setIsFulfillmentOpen(true)}
-                  className="luxury-btn-secondary h-9 px-4 text-xs"
+                  className="btn-gold-secondary h-9 px-4 text-xs"
                 >
-                  <Truck className="w-3.5 h-3.5 mr-1.5 text-[#0C83FF]" />
+                  <Truck className="w-3.5 h-3.5 mr-1.5 text-[#c9b8a0]" />
                   <span>Logistics & Tax Invoice</span>
                 </button>
               </div>

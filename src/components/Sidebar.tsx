@@ -89,33 +89,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
           type="button"
           aria-label="Close navigation"
           onClick={onToggleMobile}
-          className="fixed inset-0 z-40 bg-[#1A1A1A]/60 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden transition-opacity"
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-white/10 bg-[#0A0E17] transition-transform duration-300 ease-out lg:translate-x-0 ${
-          isOpenMobile ? 'translate-x-0 shadow-[0_16px_48px_rgba(0,0,0,0.5)]' : '-translate-x-full'
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl transition-transform duration-300 ease-out lg:translate-x-0 ${
+          isOpenMobile ? 'translate-x-0 shadow-[0_16px_48px_rgba(0,0,0,0.8)]' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-20 items-center justify-between border-b border-white/10 px-6 bg-[#0A0E17]">
+        <div className="flex h-20 items-center justify-between border-b border-white/10 px-5 bg-transparent">
           <button
             type="button"
             onClick={() => selectSection('landing')}
             className="flex items-center gap-3 text-left group"
           >
-            <div className="w-9 h-9 shrink-0 flex items-center justify-center border border-white/15 bg-[#131929] rounded-xl shadow-[0_2px_8px_rgba(12,131,255,0.1)] group-hover:border-[#0C83FF] transition-colors">
-              <RazorpayLogo variant="icon" height={18} />
+            <div className="w-9 h-9 shrink-0 flex items-center justify-center border border-[#a78b71]/30 bg-[#a78b71]/10 rounded-xl shadow-[0_0_15px_rgba(167,139,113,0.15)] group-hover:border-[#c9b8a0] transition-colors">
+              <RazorpayLogo variant="icon" height={16} />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-lg font-bold text-slate-100 tracking-tight">
-                  <span className="text-[#38BDF8] font-normal">Agent</span>Pay
+                <span className="font-playfair text-xl font-bold tracking-tight text-stone-100">
+                  Agent<span className="text-[#c9b8a0] italic">Pay</span>
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 ring-2 ring-emerald-400/20 animate-pulse" />
               </div>
-              <span className="block text-[9px] font-mono tracking-wider text-slate-400 uppercase">
+              <span className="block text-[9px] font-mono tracking-[0.18em] text-[#a78b71] uppercase">
                 Autonomous Commerce
               </span>
             </div>
@@ -125,47 +125,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             aria-label="Close navigation"
             onClick={onToggleMobile}
-            className="p-2 text-slate-400 hover:text-slate-100 hover:bg-white/5 rounded-lg lg:hidden shrink-0 transition-colors"
+            className="p-1.5 text-stone-400 hover:text-stone-100 hover:bg-white/5 rounded-lg lg:hidden shrink-0 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Primary Navigation Container with Custom Minimal Scrollbar */}
-        <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Primary navigation">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5" aria-label="Primary navigation">
           
           {/* Cinematic Landing Switcher */}
           <button
             type="button"
             onClick={() => selectSection('landing')}
-            className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-xs font-sans transition-all duration-200 border group hover:scale-[1.01] ${
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs transition-all duration-200 border group ${
               currentSection === 'landing'
-                ? 'bg-[#0C83FF]/15 text-[#38BDF8] border-[#0C83FF]/40 shadow-[0_2px_12px_rgba(12,131,255,0.15)]'
-                : 'bg-white/[0.02] text-slate-300 border-white/10 hover:text-white hover:bg-white/5 hover:border-white/20'
+                ? 'bg-[#a78b71]/15 text-[#e8d5b7] border-[#a78b71]/40 shadow-[0_2px_16px_rgba(167,139,113,0.18)]'
+                : 'bg-white/[0.02] text-stone-300 border-white/10 hover:text-white hover:bg-white/5 hover:border-white/20'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${currentSection === 'landing' ? 'bg-[#0C83FF] text-white' : 'bg-white/5 text-slate-400 group-hover:text-slate-200'}`}>
-                <Sparkles className="w-3.5 h-3.5 text-[#0C83FF] group-hover:animate-spin" />
+            <div className="flex items-center gap-2.5">
+              <div className={`p-1.5 rounded-lg ${currentSection === 'landing' ? 'bg-[#a78b71] text-black' : 'bg-white/5 text-[#c9b8a0] group-hover:text-stone-100'}`}>
+                <Sparkles className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="font-display font-bold block text-xs tracking-tight">Cinematic Film</span>
-                <span className="text-[10px] text-slate-400 font-mono">Portal · Iris · Field</span>
+                <span className="font-playfair text-xs tracking-tight block text-stone-100 font-bold">Cinematic Film</span>
+                <span className="text-[9px] text-stone-400 font-mono">Portal · Iris · Field</span>
               </div>
             </div>
-            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#38BDF8] border border-white/10 font-semibold tracking-wider">
-              4 STAGES
+            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#a78b71]/10 text-[#c9b8a0] border border-[#a78b71]/20 font-semibold tracking-wider">
+              FILM
             </span>
           </button>
 
           {/* Core Protocol Section */}
           <div className="space-y-1">
-            <div className="px-3 pb-2 flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold text-[#38BDF8] uppercase tracking-[0.2em] flex items-center gap-1.5">
-                <span className="w-2 h-px bg-[#0C83FF]" />
-                CORE PROTOCOL
+            <div className="px-3 pb-1.5 flex items-center justify-between">
+              <span className="text-[9px] font-mono font-bold text-[#c9b8a0] uppercase tracking-[0.2em] flex items-center gap-1.5">
+                <span className="w-1.5 h-px bg-[#a78b71]" />
+                CORE MODULES
               </span>
-              <span className="text-[9px] font-mono text-slate-400">01–06</span>
+              <span className="text-[9px] font-mono text-stone-500">01–06</span>
             </div>
 
             {mainNavItems.map((item) => {
@@ -177,29 +177,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => selectSection(item.id)}
-                  className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left text-xs font-sans transition-all duration-200 border ${
+                  className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-all duration-200 border ${
                     isActive
-                      ? 'bg-[#0C83FF]/15 text-[#38BDF8] border-[#0C83FF]/40 shadow-[0_4px_16px_rgba(12,131,255,0.15)]'
-                      : 'bg-transparent text-slate-400 border-transparent hover:text-slate-100 hover:bg-white/5'
+                      ? 'border-l-2 border-l-[#a78b71] border-t-white/5 border-r-white/5 border-b-white/5 bg-[#a78b71]/10 text-[#e8d5b7] shadow-[0_2px_16px_rgba(167,139,113,0.12)]'
+                      : 'border-transparent text-stone-400 hover:text-stone-100 hover:bg-white/[0.03]'
                   }`}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
                       className={`p-1.5 rounded-lg transition-colors ${
                         isActive
-                          ? 'bg-[#0C83FF] text-white shadow-[0_0_12px_rgba(12,131,255,0.4)]'
-                          : 'bg-white/5 text-slate-400 group-hover:text-slate-200 group-hover:bg-white/10'
+                          ? 'bg-[#a78b71] text-black shadow-[0_0_12px_rgba(167,139,113,0.4)]'
+                          : 'bg-white/5 text-[#a78b71] group-hover:text-stone-200 group-hover:bg-white/10'
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5 shrink-0" />
                     </div>
 
                     <div className="min-w-0">
-                      <span className={`block font-semibold text-xs tracking-tight truncate ${isActive ? 'text-slate-100' : 'text-slate-300'}`}>
+                      <span className={`block text-[11px] font-medium tracking-wide uppercase truncate ${isActive ? 'text-stone-100 font-semibold' : 'text-stone-300'}`}>
                         {item.label}
                       </span>
                       {item.sublabel && (
-                        <span className="block text-[10px] text-slate-400 truncate font-sans">
+                        <span className="block text-[9px] text-stone-500 truncate font-sans">
                           {item.sublabel}
                         </span>
                       )}
@@ -207,10 +207,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
 
                   <span
-                    className={`font-mono text-[11px] font-bold px-2 py-0.5 rounded-md border shrink-0 transition-colors ${
+                    className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 transition-colors ${
                       isActive
-                        ? 'bg-[#0C83FF]/20 text-[#38BDF8] border-[#0C83FF]/30'
-                        : 'bg-transparent text-slate-400/60 border-transparent group-hover:text-slate-300'
+                        ? 'bg-[#a78b71]/20 text-[#e8d5b7] border-[#a78b71]/30'
+                        : 'bg-transparent text-stone-500 border-transparent group-hover:text-stone-400'
                     }`}
                   >
                     {item.numeral}
@@ -221,13 +221,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Architecture Section */}
-          <div className="pt-3 border-t border-white/10 space-y-1">
-            <div className="px-3 pb-2 flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold text-[#38BDF8] uppercase tracking-[0.2em] flex items-center gap-1.5">
-                <span className="w-2 h-px bg-[#0C83FF]" />
-                ARCHITECTURE
+          <div className="pt-2 border-t border-white/10 space-y-1">
+            <div className="px-3 pb-1.5 flex items-center justify-between">
+              <span className="text-[9px] font-mono font-bold text-[#c9b8a0] uppercase tracking-[0.2em] flex items-center gap-1.5">
+                <span className="w-1.5 h-px bg-[#a78b71]" />
+                AUDIT & BENCHMARKS
               </span>
-              <span className="text-[9px] font-mono text-slate-400">07–09</span>
+              <span className="text-[9px] font-mono text-stone-500">07–09</span>
             </div>
 
             {advancedNavItems.map((item) => {
@@ -239,29 +239,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => selectSection(item.id)}
-                  className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left text-xs font-sans transition-all duration-200 border ${
+                  className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-all duration-200 border ${
                     isActive
-                      ? 'bg-[#0C83FF]/15 text-[#38BDF8] border-[#0C83FF]/40 shadow-[0_4px_16px_rgba(12,131,255,0.15)]'
-                      : 'bg-transparent text-slate-400 border-transparent hover:text-slate-100 hover:bg-white/5'
+                      ? 'border-l-2 border-l-[#a78b71] border-t-white/5 border-r-white/5 border-b-white/5 bg-[#a78b71]/10 text-[#e8d5b7] shadow-[0_2px_16px_rgba(167,139,113,0.12)]'
+                      : 'border-transparent text-stone-400 hover:text-stone-100 hover:bg-white/[0.03]'
                   }`}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
                       className={`p-1.5 rounded-lg transition-colors ${
                         isActive
-                          ? 'bg-[#0C83FF] text-white shadow-[0_0_12px_rgba(12,131,255,0.4)]'
-                          : 'bg-white/5 text-slate-400 group-hover:text-slate-200 group-hover:bg-white/10'
+                          ? 'bg-[#a78b71] text-black shadow-[0_0_12px_rgba(167,139,113,0.4)]'
+                          : 'bg-white/5 text-[#a78b71] group-hover:text-stone-200 group-hover:bg-white/10'
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5 shrink-0" />
                     </div>
 
                     <div className="min-w-0">
-                      <span className={`block font-semibold text-xs tracking-tight truncate ${isActive ? 'text-slate-100' : 'text-slate-300'}`}>
+                      <span className={`block text-[11px] font-medium tracking-wide uppercase truncate ${isActive ? 'text-stone-100 font-semibold' : 'text-stone-300'}`}>
                         {item.label}
                       </span>
                       {item.sublabel && (
-                        <span className="block text-[10px] text-slate-400 truncate font-sans">
+                        <span className="block text-[9px] text-stone-500 truncate font-sans">
                           {item.sublabel}
                         </span>
                       )}
@@ -269,10 +269,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
 
                   <span
-                    className={`font-mono text-[11px] font-bold px-2 py-0.5 rounded-md border shrink-0 transition-colors ${
+                    className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 transition-colors ${
                       isActive
-                        ? 'bg-[#0C83FF]/20 text-[#38BDF8] border-[#0C83FF]/30'
-                        : 'bg-transparent text-slate-400/60 border-transparent group-hover:text-slate-300'
+                        ? 'bg-[#a78b71]/20 text-[#e8d5b7] border-[#a78b71]/30'
+                        : 'bg-transparent text-stone-500 border-transparent group-hover:text-stone-400'
                     }`}
                   >
                     {item.numeral}
@@ -285,41 +285,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* Spending Meter & Protocol Utilities */}
-        <div className="border-t border-white/10 p-4 space-y-3 bg-[#080B11]/90">
+        <div className="border-t border-white/10 p-3.5 space-y-3 bg-[#0a0a0a]/95">
           
-          <div className="p-3 bg-[#0E131F] border border-white/10 rounded-xl space-y-2 shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+          <div className="p-3 bg-white/[0.03] border border-white/10 rounded-2xl space-y-2 shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Enclave Budget</span>
-              <span className="text-slate-100 font-bold font-mono text-xs">₹{dailySpent.toLocaleString()}</span>
+              <span className="font-mono text-[9px] text-[#c9b8a0] uppercase tracking-wider font-semibold">Enclave Budget</span>
+              <span className="text-stone-100 font-bold font-mono text-xs">₹{dailySpent.toLocaleString()}</span>
             </div>
 
             <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-700 ${
-                  spendPercent > 85 ? 'bg-rose-500' : spendPercent > 60 ? 'bg-amber-400' : 'bg-[#0C83FF]'
-                }`}
+                className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-[#a78b71] to-[#e8d5b7]"
                 style={{ width: `${spendPercent}%` }}
               />
             </div>
 
-            <div className="text-[9px] font-mono text-slate-400 flex justify-between tracking-wider">
+            <div className="text-[9px] font-mono text-stone-400 flex justify-between tracking-wider">
               <span>Cap: ₹{dailyCeiling.toLocaleString()}</span>
-              <span className="font-semibold text-slate-200">{spendPercent}% Used</span>
+              <span className="font-semibold text-[#e8d5b7]">{spendPercent}% Used</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-1 text-[11px] font-mono text-slate-400">
+          <div className="flex items-center justify-between px-1 text-[11px] font-mono text-stone-400">
             <button
               onClick={onOpenWireTrace}
-              className="hover:text-[#38BDF8] hover:underline flex items-center gap-1 transition-colors"
+              className="hover:text-[#e8d5b7] flex items-center gap-1.5 transition-colors"
             >
-              <Zap className="w-3 h-3 text-[#0C83FF]" />
-              <span>Wire Trace</span>
+              <Zap className="w-3 h-3 text-[#c9b8a0]" />
+              <span className="text-[10px] uppercase tracking-wider">Wire Trace</span>
             </button>
             <span className="text-white/20">·</span>
             <button
               onClick={onOpenApiDocs}
-              className="hover:text-[#38BDF8] hover:underline transition-colors"
+              className="hover:text-[#e8d5b7] text-[10px] uppercase tracking-wider transition-colors"
             >
               API Docs
             </button>

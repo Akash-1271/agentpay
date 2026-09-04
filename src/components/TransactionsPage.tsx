@@ -221,21 +221,21 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
   };
 
   return (
-    <div className="space-y-10 animate-in max-w-5xl">
+    <div className="space-y-8 animate-in max-w-5xl mx-auto">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1A1A1A]/12 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
         <div>
           <div className="luxury-eyebrow mb-2">
-            Cryptographic Enclave Proofs
+            ENCLAVE SETTLEMENT JOURNAL
           </div>
           <div className="flex items-center space-x-3">
-            <h1 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] tracking-tight">
+            <h1 className="font-playfair text-3xl sm:text-4xl text-stone-100 font-bold tracking-tight">
               History & Audit Ledger
             </h1>
             <RazorpayLogo variant="badge" height={16} />
           </div>
-          <p className="text-xs sm:text-sm text-[#6C6863] mt-1.5 font-sans leading-relaxed">
+          <p className="text-xs sm:text-sm text-stone-400 mt-1 font-sans leading-relaxed">
             Review all autonomous orders, cryptographic enclave hashes, and Razorpay payment proofs.
           </p>
         </div>
@@ -243,43 +243,43 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
 
       {/* Filters & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex space-x-2 text-xs border-b border-[#1A1A1A]/15 pb-1">
+        <div className="flex space-x-2 text-xs border-b border-white/10 pb-1">
           <button
             onClick={() => setFilter('ALL')}
-            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'ALL'
-                ? 'border-b-[#1A1A1A] text-[#1A1A1A] font-bold'
-                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-b-[#a78b71] text-[#e8d5b7] font-bold'
+                : 'border-b-transparent text-stone-400 hover:text-stone-200'
             }`}
           >
             All Ledger
           </button>
           <button
             onClick={() => setFilter('COMPLETED')}
-            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'COMPLETED'
-                ? 'border-b-emerald-700 text-emerald-800 font-bold'
-                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-b-emerald-400 text-emerald-400 font-bold'
+                : 'border-b-transparent text-stone-400 hover:text-stone-200'
             }`}
           >
             Settled
           </button>
           <button
             onClick={() => setFilter('STEP_UP_REQUIRED')}
-            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'STEP_UP_REQUIRED'
-                ? 'border-b-amber-700 text-amber-800 font-bold'
-                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-b-[#c9b8a0] text-[#e8d5b7] font-bold'
+                : 'border-b-transparent text-stone-400 hover:text-stone-200'
             }`}
           >
             Review Gated
           </button>
           <button
             onClick={() => setFilter('BLOCKED')}
-            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.15em] transition-all border-b-2 ${
+            className={`px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] transition-all border-b-2 ${
               filter === 'BLOCKED'
-                ? 'border-b-rose-700 text-rose-800 font-bold'
-                : 'border-b-transparent text-[#6C6863] hover:text-[#1A1A1A]'
+                ? 'border-b-rose-400 text-rose-400 font-bold'
+                : 'border-b-transparent text-stone-400 hover:text-stone-200'
             }`}
           >
             Blocked
@@ -287,7 +287,7 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
         </div>
 
         <div className="luxury-input-wrapper w-full sm:w-64">
-          <Search className="w-4 h-4 text-[#D4AF37] shrink-0" />
+          <Search className="w-4 h-4 text-[#c9b8a0] shrink-0" />
           <input
             type="text"
             value={search}
@@ -298,69 +298,73 @@ export const TransactionsPage: React.FC<TransactionsPageProps> = ({ auditLedger 
         </div>
       </div>
 
-      {/* Purchases Ledger with Editorial Top-Border Style */}
-      <div className="luxury-card p-0 overflow-hidden">
-        <div className="divide-y divide-[#1A1A1A]/10">
+      {/* Purchases Ledger with Glass Container */}
+      <div className="glass-gold p-0 overflow-hidden shadow-2xl">
+        <div className="divide-y divide-white/10">
           {filtered.map((item) => (
             <div
               key={item.id}
               onClick={() => setSelectedTx(item)}
-              className="p-5 flex items-center justify-between gap-4 hover:bg-[#FAF8F5] cursor-pointer transition-colors duration-300"
+              className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-white/[0.03] cursor-pointer transition-colors duration-200"
             >
-              <div className="flex items-center space-x-4">
-                <div className="w-9 h-9 flex items-center justify-center border border-[#1A1A1A]/15 bg-[#FAF8F5] text-[#1A1A1A] shrink-0">
-                  <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+              <div className="flex items-center space-x-4 min-w-0">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#a78b71]/20 bg-[#a78b71]/10 text-[#c9b8a0] shrink-0">
+                  <ShoppingBag className="w-4 h-4" />
                 </div>
-                <div>
-                  <div className="font-serif text-sm font-bold text-[#1A1A1A]">
+                <div className="min-w-0">
+                  <div className="font-playfair text-sm sm:text-base font-bold text-stone-100 truncate">
                     {item.productName}
                   </div>
-                  <div className="text-xs text-[#6C6863] font-sans mt-0.5">
-                    {item.merchantName} · {new Date(item.timestamp).toLocaleDateString()}
+                  <div className="text-[11px] text-stone-400 font-sans mt-0.5 flex items-center gap-2">
+                    <span>{item.merchantName}</span>
+                    <span>·</span>
+                    <span>{new Date(item.timestamp).toLocaleDateString()}</span>
+                    <span>·</span>
+                    <span className="font-mono text-[10px] text-[#a78b71] truncate max-w-[120px]">{item.enclaveHash.slice(0, 16)}...</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 shrink-0">
                 <div className="text-right">
-                  <div className="font-serif text-base font-bold text-[#1A1A1A]">
+                  <div className="font-playfair text-base font-bold text-stone-100">
                     ₹{item.amount.toLocaleString()}
                   </div>
                 </div>
 
                 {item.status === 'COMPLETED' && (
                   <div className="flex items-center space-x-2">
-                    <span className="px-3 py-1 border border-emerald-600/30 text-emerald-800 bg-emerald-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
+                    <span className="px-2.5 py-1 border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 rounded-lg text-[9px] font-mono uppercase tracking-wider font-semibold flex items-center space-x-1">
                       <CheckCircle2 className="w-3 h-3" />
                       <span>PAID</span>
                     </span>
 
                     <button
                       onClick={(e) => handleTrackDelivery(e, item)}
-                      className="luxury-btn-secondary text-[10px] py-1 px-3 h-8 flex items-center space-x-1"
+                      className="btn-gold-secondary text-[10px] py-1 px-2.5 h-7 flex items-center space-x-1"
                       title="Track Order Delivery"
                     >
-                      <Truck className="w-3 h-3 text-[#D4AF37]" />
+                      <Truck className="w-3 h-3 text-[#c9b8a0]" />
                       <span className="hidden sm:inline">Track</span>
                     </button>
                   </div>
                 )}
 
                 {item.status === 'STEP_UP_REQUIRED' && (
-                  <span className="px-3 py-1 border border-amber-600/30 text-amber-800 bg-amber-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
+                  <span className="px-2.5 py-1 border border-[#a78b71]/30 text-[#e8d5b7] bg-[#a78b71]/10 rounded-lg text-[9px] font-mono uppercase tracking-wider font-semibold flex items-center space-x-1">
                     <AlertCircle className="w-3 h-3" />
                     <span>GATED</span>
                   </span>
                 )}
 
                 {item.status === 'BLOCKED' && (
-                  <span className="px-3 py-1 border border-rose-600/30 text-rose-800 bg-rose-50 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold flex items-center space-x-1">
+                  <span className="px-2.5 py-1 border border-rose-500/30 text-rose-400 bg-rose-500/10 rounded-lg text-[9px] font-mono uppercase tracking-wider font-semibold flex items-center space-x-1">
                     <XCircle className="w-3 h-3" />
                     <span>BLOCKED</span>
                   </span>
                 )}
 
-                <ChevronRight className="w-4 h-4 text-[#1A1A1A]/40" />
+                <ChevronRight className="w-4 h-4 text-stone-500" />
               </div>
             </div>
           ))}
