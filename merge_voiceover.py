@@ -30,8 +30,9 @@ def main():
 
     # Available video cuts
     video_cuts = [
-        os.path.join(workspace, "agentpay-pitch-demo.mp4"),
-        os.path.join(workspace, "agentpay-pitch-demo-3min.mp4")
+        os.path.join(workspace, "agentpay-pitch-demo-5min.mp4"),
+        os.path.join(workspace, "agentpay-pitch-demo-3min.mp4"),
+        os.path.join(workspace, "agentpay-pitch-demo.mp4")
     ]
     existing_videos = [v for v in video_cuts if os.path.exists(v)]
 
