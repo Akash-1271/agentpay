@@ -30,5 +30,8 @@ server/data/*.db*
 # Media and video recordings
 *.mp4
 *.m4a
+*.mp3
+*.wav
 *.webm
+unify_authors.sh
 
